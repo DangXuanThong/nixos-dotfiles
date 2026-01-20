@@ -1,5 +1,6 @@
 ### Config files for [MangoHud](https://github.com/flightlessmango/MangoHud), located at `~/.config/MangoHud/`
 
+
 | Name | Description
 | ---- | -
 | [MangoHud.conf](./MangoHud.conf) | Default config for other games
