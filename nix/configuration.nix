@@ -88,7 +88,12 @@
     fastfetch
     bat
     eza
+    ghostty
     tzdata
+  ];
+  environment.plasma6.excludePackages = with pkgs; [
+    kdePackages.konsole
+    kdePackages.spectacle
   ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -98,9 +103,9 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       kdePackages.kate
-      ghostty
       prismlauncher
       jetbrains.idea
+      flameshot
     ];
     shell = pkgs.fish;
   };
