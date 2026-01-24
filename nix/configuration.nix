@@ -19,36 +19,38 @@
   # Set your time zone.
   time.timeZone = "Asia/Ho_Chi_Minh";
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_GB.UTF-8";
-    LC_IDENTIFICATION = "en_GB.UTF-8";
-    LC_MEASUREMENT = "en_GB.UTF-8";
-    LC_MONETARY = "en_GB.UTF-8";
-    LC_NAME = "en_GB.UTF-8";
-    LC_NUMERIC = "en_GB.UTF-8";
-    LC_PAPER = "en_GB.UTF-8";
-    LC_TELEPHONE = "en_GB.UTF-8";
-    LC_TIME = "en_GB.UTF-8";
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    extraLocaleSettings = {
+      LC_ADDRESS = "en_GB.UTF-8";
+      LC_IDENTIFICATION = "en_GB.UTF-8";
+      LC_MEASUREMENT = "en_GB.UTF-8";
+      LC_MONETARY = "en_GB.UTF-8";
+      LC_NAME = "en_GB.UTF-8";
+      LC_NUMERIC = "en_GB.UTF-8";
+      LC_PAPER = "en_GB.UTF-8";
+      LC_TELEPHONE = "en_GB.UTF-8";
+      LC_TIME = "en_GB.UTF-8";
+    };
+  };
+
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Ensure graphics support for Vulkan/Intel
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [ mangohud ];
   };
 
   services = {
-    # Enable the X11 windowing system.
-    # You can disable this if you're only using the Wayland session.
-    xserver.enable = false;
-    # Configure keymap in X11
-    xserver.xkb = {
-      layout = "us";
-      variant = "";
-    };
-
     # Enable the KDE Plasma Desktop Environment.
     displayManager.sddm.enable = true;
     desktopManager.plasma6.enable = true;
     # Enable CUPS to print documents.
     printing.enable = true;
     # Enable sound with pipewire.
-    pulseaudio.enable = false;
     pipewire = {
       enable = true;
       alsa.enable = true;
@@ -64,17 +66,6 @@
     timesyncd.enable = true;
   };
   security.rtkit.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.penguin = {
-    isNormalUser = true;
-    description = "Penguin";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      kdePackages.kate
-    ];
-    shell = pkgs.fish;
-  };
 
   programs = {
     firefox.enable = true;
@@ -93,31 +84,26 @@
     };
   };
 
-  # Ensure graphics support for Vulkan/Intel
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
-      mangohud          # MangoHud 64-bit
-    ];
-    extraPackages32 = with pkgs; [
-      mangohud          # MangoHud 32-bit for 32-bit games/Proton
-    ];
-  };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   environment.systemPackages = with pkgs; [
     fastfetch
     bat
     eza
-    ghostty
-    protonplus
-    prismlauncher
-    jetbrains.idea
     tzdata
   ];
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.penguin = {
+    isNormalUser = true;
+    description = "Penguin";
+    extraGroups = [ "networkmanager" "wheel" ];
+    packages = with pkgs; [
+      kdePackages.kate
+      ghostty
+      prismlauncher
+      jetbrains.idea
+    ];
+    shell = pkgs.fish;
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
