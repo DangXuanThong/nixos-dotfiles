@@ -68,20 +68,16 @@
   security.rtkit.enable = true;
 
   programs = {
-    firefox.enable = true;
     fish.enable = true;
-    java = {
-      enable = true;
-      package = pkgs.jdk25;
-    };
-    git.enable = true;
     steam = {
       enable = true;
       extraCompatPackages = with pkgs; [
         #proton-ge-bin      # community packaged Proton-GE
         protonplus
       ];
+      gamescopeSession.enable = true;
     };
+    gamemode.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
@@ -101,12 +97,6 @@
     isNormalUser = true;
     description = "Penguin";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      kdePackages.kate
-      prismlauncher
-      jetbrains.idea
-      flameshot
-    ];
     shell = pkgs.fish;
   };
 
