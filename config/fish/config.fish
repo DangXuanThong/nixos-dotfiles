@@ -1,5 +1,5 @@
 ## Source from conf.d before our fish config
-source ./conf.d/done.fish
+source ~/.config/fish/conf.d/done.fish
 
 
 ## Set values
