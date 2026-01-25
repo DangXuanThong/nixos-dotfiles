@@ -36,6 +36,8 @@
     bat
     eza
     kdePackages.kate
+    flameshot
+    jetbrains.idea
     prismlauncher
     jetbrains.idea
     flameshot
@@ -43,6 +45,17 @@
     jetbrains-runner
     nodejs
   ];
+
+  home.file = {
+    # Fish config
+    ".config/fish" = {
+      source = ../config/fish;
+      recursive = true;
+    };
+
+    # MangoHud config
+    ".config/MangoHud".source = ../config/MangoHud;
+  };
 
   # This value determines the home Manager release that your
   # configuration is compatible with. This helps avoid breakage
