@@ -1,2 +1,1 @@
-# OSSync
-This repository contains configs and programs that I use across different OS/Linux distro
+`nixos-dotfile` is where I store my [NixOS](https://github.com/NixOS/nixpkgs) configuration files, with [Flakes](https://wiki.nixos.org/wiki/Flakes) and [Home Manager](https://github.com/nix-community/home-manager)
