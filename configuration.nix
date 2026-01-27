@@ -80,9 +80,6 @@
         #proton-ge-bin      # community packaged Proton-GE
         protonplus
       ];
-      package = pkgs.steam.override {
-        extraPkgs = pkgs: with pkgs; [ mangohud ];
-      };
       gamescopeSession.enable = true;
     };
     gamemode.enable = true;
