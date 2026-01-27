@@ -23,7 +23,7 @@
     fish = {
       enable = true;
       shellAliases = {
-        nix-rebuild = "sudo nixos-rebuild switch";
+        nix-rebuild = "sudo nixos-rebuild switch --flake ~/.config/nixos-dotfiles";
       };
     };
     ghostty.enableFishIntegration = true;
