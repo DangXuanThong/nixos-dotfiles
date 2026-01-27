@@ -3,44 +3,45 @@
 {
   home.username = "penguin";
   home.homeDirectory = "/home/penguin";
-
-  # Import files from the current configuration directory into the Nix store,
-  # and create symbolic links pointing to those store files in the Home directory.
-  # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
-
-  # Import the scripts directory into the Nix store,
-  # and recursively generate symbolic links in the Home directory pointing to the files in the store.
-  # home.file.".config/i3/scripts" = {
-  #   source = ./scripts;
-  #   recursive = true;   # link recursively
-  #   executable = true;  # make all files executable
-  # };
-
-  # encode the file content in nix configuration file directly
-  # home.file.".xxx".text = ''
-  #     xxx
-  # '';
+  home.shell.enableFishIntegration = true;
 
   programs = {
+    # Gaming
+    mangohud.enable = true;
+    # Dev
     git = {
       enable = true;
       settings.user.name = "Dang Xuan Thong";
       settings.user.email = "dangxuanthongvn@gmail.com";
     };
-    firefox.enable = true;
     java = {
       enable = true;
       package = pkgs.jdk25;
     };
-    mangohud.enable = true;
+    vscode.enable = true;
+    # Other
+    fish = {
+      enable = true;
+      shellAliases = {
+        nix-rebuild = "sudo nixos-rebuild switch";
+      };
+    };
+    ghostty.enableFishIntegration = true;
+    firefox.enable = true;
   };
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
+    fastfetch
+    bat
+    eza
     kdePackages.kate
-    flameshot
-    jetbrains.idea
     prismlauncher
+    jetbrains.idea
+    flameshot
+    jetbrains.datagrip
+    jetbrains-runner
+    nodejs
   ];
 
   # This value determines the home Manager release that your

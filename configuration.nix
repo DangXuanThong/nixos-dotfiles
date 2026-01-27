@@ -56,9 +56,6 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      # use the example session manager (no others are packaged yet so this is enabled by default,
-      # no need to redefine it in your config for now)
-      #media-session.enable = true;
     };
 
     # List services that you want to enable:
@@ -68,24 +65,34 @@
   security.rtkit.enable = true;
 
   programs = {
-    fish.enable = true;
+    bash = {
+      interactiveShellInit = ''
+        if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+        then
+          shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+          exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+        fi
+      '';
+    };
     steam = {
       enable = true;
       extraCompatPackages = with pkgs; [
         #proton-ge-bin      # community packaged Proton-GE
         protonplus
       ];
+      package = pkgs.steam.override {
+        extraPkgs = pkgs: with pkgs; [ mangohud ];
+      };
       gamescopeSession.enable = true;
     };
     gamemode.enable = true;
+    npm.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
-    fastfetch
-    bat
-    eza
     ghostty
     tzdata
+    nil
   ];
   environment.plasma6.excludePackages = with pkgs; [
     kdePackages.konsole
@@ -97,8 +104,22 @@
     isNormalUser = true;
     description = "Penguin";
     extraGroups = [ "networkmanager" "wheel" ];
-    shell = pkgs.fish;
   };
+
+  virtualisation.docker = {
+    enable = false;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+      daemon.settings = {
+        data-root = "/run/media/penguin/Data/VM/DockerDesktop";
+      };
+    };
+  };
+
+  fonts.packages = with pkgs; [
+    inter
+  ];
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
