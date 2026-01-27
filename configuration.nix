@@ -34,6 +34,13 @@
     };
   };
 
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.penguin = {
+    isNormalUser = true;
+    description = "Penguin";
+    extraGroups = [ "networkmanager" "wheel" ];
+  };
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -95,13 +102,6 @@
     kdePackages.konsole
     kdePackages.spectacle
   ];
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.penguin = {
-    isNormalUser = true;
-    description = "Penguin";
-    extraGroups = [ "networkmanager" "wheel" ];
-  };
 
   virtualisation.docker = {
     enable = false;
