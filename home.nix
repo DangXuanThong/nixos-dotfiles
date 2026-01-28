@@ -23,7 +23,7 @@
     fish = {
       enable = true;
       shellAliases = {
-        nix-rebuild = "sudo nixos-rebuild switch --flake ~/.config/nixos-dotfiles --impure";
+        # nix-rebuild = "sudo nixos-rebuild switch --flake ~/.config/nixos-dotfiles --impure";
       };
       plugins = with pkgs; [
         # { name = "done"; src = fishPlugins.done; }
@@ -51,10 +51,8 @@
   ];
 
   xdg.configFile = {
-    "fish" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-dotfiles/config/fish";
-      recursive = true;
-    };
+    "fish".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-dotfiles/config/fish";
+    "MangoHud".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-dotfiles/config/MangoHud";
   };
 
   # This value determines the home Manager release that your
