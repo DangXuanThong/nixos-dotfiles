@@ -1,5 +1,15 @@
 { config, pkgs, ... }:
 
+let
+  dotfiles = "${config.home.homeDirectory}/.config/nixos-dotfiles/config";
+  create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
+  # Standard .config/directory
+  configs = {
+    MangoHud = "MangoHud";
+    ghostty = "ghostty";
+  };
+in
+
 {
   home.username = "penguin";
   home.homeDirectory = "/home/penguin";
@@ -122,10 +132,11 @@
     nodejs
   ];
 
-  xdg.configFile = {
-    "MangoHud".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-dotfiles/config/MangoHud";
-    "ghostty".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-dotfiles/config/ghostty";
-  };
+  # Iterate over xdg configs and map them accordingly
+  xdg.configFile = builtins.mapAttrs (name: subpath: {
+    source = create_symlink "${dotfiles}/${subpath}";
+    recursive = true;
+  }) configs;
 
   # This value determines the home Manager release that your
   # configuration is compatible with. This helps avoid breakage
