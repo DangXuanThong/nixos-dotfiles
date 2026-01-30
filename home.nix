@@ -124,6 +124,7 @@
 
   xdg.configFile = {
     "MangoHud".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-dotfiles/config/MangoHud";
+    "ghostty".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-dotfiles/config/ghostty";
   };
 
   # This value determines the home Manager release that your
