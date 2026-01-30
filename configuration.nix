@@ -51,6 +51,15 @@
     extraPackages = with pkgs; [ mangohud ];
   };
 
+  hardware.bluetooth = {
+    enable = true;
+    settings = {
+      General = {
+        Experimental = true;
+      };
+    };
+  };
+
   services = {
     # Enable the KDE Plasma Desktop Environment.
     displayManager.sddm.enable = true;
@@ -119,6 +128,7 @@
 
   fonts.packages = with pkgs; [
     inter
+    nerd-fonts.jetbrains-mono
   ];
 
   # Open ports in the firewall.
