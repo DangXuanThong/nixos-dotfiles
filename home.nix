@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  dotfiles = "${config.home.homeDirectory}/.config/nixos-dotfiles/config";
+  dotfiles = "${config.home.homeDirectory}/nixos-dotfiles/config";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
   # Standard .config/directory
   configs = {
@@ -61,7 +61,8 @@ in
         egrep = "egrep --color=auto";
         jctl = "journalctl -p 3 -xb";  # Get the error messages from journalctl
 
-        nix-rebuild = "sudo nixos-rebuild switch --flake ~/.config/nixos-dotfiles --impure";
+        nix-rebuild = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles --impure";
+        nix-update = "nix flake update --flake ~/nixos-dotfiles && nix-rebuild";
       };
       interactiveShellInit = ''
         function fish_greeting
