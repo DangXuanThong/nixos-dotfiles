@@ -11,6 +11,15 @@ let
 in
 
 {
+  # This value determines the home Manager release that your
+  # configuration is compatible with. This helps avoid breakage
+  # when a new home Manager release introduces backwards
+  # incompatible changes.
+  #
+  # You can update home Manager without changing this value. See
+  # the home Manager release notes for a list of state version
+  # changes in each release.
+  home.stateVersion = "25.11";
   home.username = "penguin";
   home.homeDirectory = "/home/penguin";
   home.shell.enableFishIntegration = true;
@@ -139,13 +148,9 @@ in
     recursive = true;
   }) configs;
 
-  # This value determines the home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update home Manager without changing this value. See
-  # the home Manager release notes for a list of state version
-  # changes in each release.
-  home.stateVersion = "25.11";
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
 }
