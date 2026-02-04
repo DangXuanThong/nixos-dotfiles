@@ -136,7 +136,6 @@ in
     flameshot
     jetbrains.idea
     prismlauncher
-    flameshot
     jetbrains.datagrip
     jetbrains-runner
     nodejs
