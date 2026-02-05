@@ -139,6 +139,7 @@ in
     jetbrains.datagrip
     jetbrains-runner
     nodejs
+    protonplus
   ];
 
   # Iterate over xdg configs and map them accordingly

@@ -110,7 +110,6 @@
       enable = true;
       extraCompatPackages = with pkgs; [
         #proton-ge-bin      # community packaged Proton-GE
-        protonplus
       ];
       gamescopeSession.enable = true;
     };
