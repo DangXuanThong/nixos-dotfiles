@@ -41,7 +41,7 @@
   users.users.penguin = {
     isNormalUser = true;
     description = "Penguin";
-    extraGroups = [ "networkmanager" "wheel" "docker" "gamemode" ];
+    extraGroups = [ "networkmanager" "wheel" "gamemode" "docker" ];
   };
 
   # Ensure graphics support for Vulkan/Intel
@@ -119,11 +119,12 @@
   virtualisation.virtualbox.host.enableExtensionPack = true;
   users.extraGroups.vboxusers.members = [ "penguin" ];
   virtualisation.docker = {
-    enable = false;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
+    enable = true;
+    daemon.settings = {
+      experimental = true;
+      data-root = "/run/media/penguin/Docker";
     };
+    enableOnBoot = false;
   };
 
   fonts.packages = with pkgs; [
