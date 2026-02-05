@@ -19,6 +19,20 @@
     # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   };
 
+  # Config auto mount external drives
+  fileSystems = {
+    "/run/media/penguin/Data" = {
+      device = "/dev/disk/by-uuid/0F2C121B0F2C121B";
+      fsType = "ntfs3";
+      options = [ "nofail" "uid=1000" "gid=1000" "windows_names" ];
+    };
+    "/run/media/penguin/Docker" = {
+      device = "/dev/disk/by-uuid/bfc0adbc-1fdc-a64a-9371-c577db51e4f6";
+      fsType = "ext4";
+      options = [ "nofail" ];
+    };
+  };
+
   # Set your time zone.
   time.timeZone = "Asia/Ho_Chi_Minh";
   # Select internationalisation properties.
