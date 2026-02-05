@@ -2,6 +2,9 @@
 
 {
   imports = [ /etc/nixos/hardware-configuration.nix ];
+  system.stateVersion = "25.11";
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true; # Allow unfree packages
 
   # Bootloader.
   boot.loader = {
@@ -14,6 +17,20 @@
     networkmanager.enable = true;
     hostName = "Nix-PC";
     # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  };
+
+  # Config auto mount external drives
+  fileSystems = {
+    "/run/media/penguin/Data" = {
+      device = "/dev/disk/by-uuid/0F2C121B0F2C121B";
+      fsType = "ntfs3";
+      options = [ "nofail" "uid=1000" "gid=1000" "windows_names" ];
+    };
+    "/run/media/penguin/Docker" = {
+      device = "/dev/disk/by-uuid/bfc0adbc-1fdc-a64a-9371-c577db51e4f6";
+      fsType = "ext4";
+      options = [ "nofail" ];
+    };
   };
 
   # Set your time zone.
@@ -38,12 +55,8 @@
   users.users.penguin = {
     isNormalUser = true;
     description = "Penguin";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "gamemode" "docker" ];
   };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Ensure graphics support for Vulkan/Intel
   hardware.graphics = {
@@ -61,8 +74,11 @@
   };
 
   services = {
+    displayManager.sddm = {
+      enable = true;
+      wayland.enable = true;
+    };
     # Enable the KDE Plasma Desktop Environment.
-    displayManager.sddm.enable = true;
     desktopManager.plasma6.enable = true;
     # Enable CUPS to print documents.
     printing.enable = true;
@@ -94,12 +110,12 @@
       enable = true;
       extraCompatPackages = with pkgs; [
         #proton-ge-bin      # community packaged Proton-GE
-        protonplus
       ];
       gamescopeSession.enable = true;
     };
     gamemode.enable = true;
     npm.enable = true;
+    partition-manager.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
@@ -116,14 +132,12 @@
   virtualisation.virtualbox.host.enableExtensionPack = true;
   users.extraGroups.vboxusers.members = [ "penguin" ];
   virtualisation.docker = {
-    enable = false;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-      daemon.settings = {
-        data-root = "/run/media/penguin/Data/VM/DockerDesktop";
-      };
+    enable = true;
+    daemon.settings = {
+      experimental = true;
+      data-root = "/run/media/penguin/Docker";
     };
+    enableOnBoot = false;
   };
 
   fonts.packages = with pkgs; [
@@ -136,12 +150,4 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.11"; # Did you read the comment?
 }
