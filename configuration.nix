@@ -16,7 +16,11 @@
     # Enable networking
     networkmanager.enable = true;
     hostName = "Nix-PC";
-    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    # Open ports in the firewall.
+    # firewall.allowedTCPPorts = [ ... ];
+    # firewall.allowedUDPPorts = [ ... ];
+    # Or disable the firewall altogether.
+    # firewall.enable = false;
   };
 
   # Config auto mount external drives
@@ -77,6 +81,7 @@
     displayManager.sddm = {
       enable = true;
       wayland.enable = true;
+      theme = "sddm-astronaut-theme";
     };
     # Enable the KDE Plasma Desktop Environment.
     desktopManager.plasma6.enable = true;
@@ -122,6 +127,10 @@
     ghostty
     tzdata
     nil
+    kdePackages.qtmultimedia
+    (sddm-astronaut.override {
+      embeddedTheme = "purple_leaves";
+    })
   ];
   environment.plasma6.excludePackages = with pkgs; [
     kdePackages.konsole
@@ -144,10 +153,4 @@
     inter
     nerd-fonts.jetbrains-mono
   ];
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 }
