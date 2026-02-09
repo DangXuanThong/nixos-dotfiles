@@ -36,6 +36,7 @@
 
       nix-rebuild = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles --impure";
       nix-update = "nix flake update --flake ~/nixos-dotfiles && nix-rebuild";
+      nix-cleanup = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +5 && sudo nix-collect-garbage -d";
     };
     interactiveShellInit = ''
       function fish_greeting
@@ -46,8 +47,6 @@
       # Set settings for https://github.com/franciscolourenco/done
       set -U __done_min_cmd_duration 10000
       set -U __done_notification_urgency_level low
-      # Workaround for variables interpolation not work with default command on NixOS
-      set -U __done_notification_command "notify-send --hint=int:transient:1 --urgency=\$urgency --icon=\"com.mitchellh.ghostty\" --app-name=fish --expire-time=\$__done_notification_duration \"\$title\" \"\$message\""
 
       # Add ~/.local/bin to PATH
       if test -d ~/.local/bin
@@ -62,9 +61,7 @@
       end
     '';
     functions = {
-      backup.body = ''
-        cp $filename $filename.bak
-      '';
+      backup.body = "cp $filename $filename.bak";
       # Copy DIR1 DIR2
       copy.body = ''
         function copy
