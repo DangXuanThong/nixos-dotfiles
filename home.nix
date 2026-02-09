@@ -13,6 +13,7 @@ in
 {
   imports = [
     ./modules/fish.nix
+    ./modules/flatpak.nix
   ];
 
   # This value determines the home Manager release that your
