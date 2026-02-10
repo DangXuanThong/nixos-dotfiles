@@ -55,6 +55,7 @@ in
     jetbrains-runner
     nodejs
     protonplus
+    kdePackages.filelight
   ];
 
   # Iterate over xdg configs and map them accordingly
