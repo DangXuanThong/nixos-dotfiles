@@ -117,6 +117,21 @@
       ];
       gamescopeSession.enable = true;
     };
+    chromium = {
+      enable = true;
+      enablePlasmaBrowserIntegration = true;
+      extensions = [
+        "eimadpbcbfnmbkopoojfekhnkhdbieeh" # dark reader
+        "aapbdbdomjkkjkaonfhkkikfgjllcleb" # translate
+        "bgnkhhnnamicmpeenaelnjfhikgbkllg" # adguard
+        "nngceckbapebfimnlniiiahkandclblb" # bitwarden
+      ];
+      initialPrefs = {
+        "homepage_is_newtabpage" = true;
+        "browser.show_home_button" = true;
+        "bookmark_bar.show_on_all_tabs" = true;
+      };
+    };
     gamemode.enable = true;
     npm.enable = true;
     partition-manager.enable = true;
@@ -130,6 +145,7 @@
     (sddm-astronaut.override {
       embeddedTheme = "purple_leaves";
     })
+    (vivaldi.override { enableWidevine = true; })
   ];
   environment.plasma6.excludePackages = with pkgs; [
     kdePackages.konsole
