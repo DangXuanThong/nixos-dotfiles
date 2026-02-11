@@ -154,12 +154,12 @@
 
   virtualisation = {
     docker = {
-    enable = true;
-    daemon.settings = {
-      experimental = true;
-      data-root = "/run/media/penguin/Docker";
-    };
-    enableOnBoot = false;
+      enable = true;
+      daemon.settings = {
+        experimental = true;
+        data-root = "/run/media/penguin/Docker";
+      };
+      enableOnBoot = false;
     };
     virtualbox.host.enable = true;
   };
