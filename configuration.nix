@@ -86,6 +86,9 @@
     desktopManager.plasma6.enable = true;
     # Enable CUPS to print documents.
     printing.enable = true;
+    printing.drivers = [
+      (pkgs.callPackage ./printers/Canon/LBP6030/LBP6030PrinterDriver.nix {})
+    ];
     # Enable sound with pipewire.
     pipewire = {
       enable = true;
