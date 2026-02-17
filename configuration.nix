@@ -15,7 +15,6 @@
   boot.kernel.sysctl."kernel.sysrq" = 1;
 
   networking = {
-    # Enable networking
     networkmanager.enable = true;
     hostName = "Nix-PC";
     # Open ports in the firewall.
@@ -117,9 +116,9 @@
     };
     steam = {
       enable = true;
-      extraCompatPackages = with pkgs; [
-        #proton-ge-bin      # community packaged Proton-GE
-      ];
+      # extraCompatPackages = [ pkgs.proton-ge-bin ];
+      remotePlay.openFirewall = true;  # Open ports in the firewall for Steam Remote Play
+      dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server hosting
       gamescopeSession.enable = true;
     };
     chromium = {
