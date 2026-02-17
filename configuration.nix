@@ -11,6 +11,8 @@
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
   };
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernel.sysctl."kernel.sysrq" = 1;
 
   networking = {
     # Enable networking
@@ -149,6 +151,8 @@
       embeddedTheme = "purple_leaves";
     })
     (vivaldi.override { enableWidevine = true; })
+    wl-clipboard
+    waydroid-helper
   ];
   environment.plasma6.excludePackages = with pkgs; [
     kdePackages.konsole
@@ -165,6 +169,13 @@
       enableOnBoot = false;
     };
     virtualbox.host.enable = true;
+    waydroid.enable = true;
+    waydroid.package = pkgs.waydroid-nftables;
+  };
+
+  systemd = {
+    packages = [ pkgs.waydroid-helper ];
+    services.waydroid-mount.wantedBy = [ "multi-user.target" ];
   };
 
   fonts.packages = with pkgs; [
