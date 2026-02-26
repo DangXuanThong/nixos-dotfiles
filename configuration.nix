@@ -6,14 +6,16 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true; # Allow unfree packages
 
-  # Bootloader.
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
+  boot = {
+    # Bootloader.
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    kernelPackages = pkgs.linuxPackages_zen;
+    kernel.sysctl."kernel.sysrq" = 1;
+    kernelModules = [ "uinput" ];
   };
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-  boot.kernel.sysctl."kernel.sysrq" = 1;
-  boot.kernelModules = [ "uinput" ];
 
   networking = {
     networkmanager.enable = true;
@@ -63,22 +65,20 @@
     extraGroups = [ "networkmanager" "wheel" "gamemode" "docker" "vboxusers" "input" ];
   };
 
-  # Ensure graphics support for Vulkan/Intel
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [ mangohud ];
-  };
-
-  hardware.bluetooth = {
-    enable = true;
-    settings = {
-      General = {
-        Experimental = true;
+  hardware = {
+    # Ensure graphics support for Vulkan/Intel
+    graphics = {
+      enable = true;
+      extraPackages = with pkgs; [ mangohud ];
+    };
+    bluetooth = {
+      enable = true;
+      settings = {
+        General.Experimental = true;
       };
     };
+    uinput.enable = true;
   };
-
-  hardware.uinput.enable = true;
 
   services = {
     displayManager.sddm = {

@@ -47,17 +47,20 @@ in
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
-    kdePackages.kate
-    flameshot
+    # Gaming
     prismlauncher
+    protonplus
+    # Dev
     jetbrains.idea
     jetbrains.datagrip
-    jetbrains-runner
+    python314
     nodejs
-    protonplus
+    # Other
+    kdePackages.kate
+    flameshot
+    jetbrains-runner
     kdePackages.filelight
     evtest
-    python314
   ];
 
   # Iterate over xdg configs and map them accordingly
