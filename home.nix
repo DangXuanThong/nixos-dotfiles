@@ -56,6 +56,8 @@ in
     nodejs
     protonplus
     kdePackages.filelight
+    evtest
+    python314
   ];
 
   # Iterate over xdg configs and map them accordingly

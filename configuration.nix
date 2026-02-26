@@ -13,6 +13,7 @@
   };
   boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.kernel.sysctl."kernel.sysrq" = 1;
+  boot.kernelModules = [ "uinput" ];
 
   networking = {
     networkmanager.enable = true;
@@ -59,7 +60,7 @@
   users.users.penguin = {
     isNormalUser = true;
     description = "Penguin";
-    extraGroups = [ "networkmanager" "wheel" "gamemode" "docker" "vboxusers" ];
+    extraGroups = [ "networkmanager" "wheel" "gamemode" "docker" "vboxusers" "input" ];
   };
 
   # Ensure graphics support for Vulkan/Intel
@@ -76,6 +77,8 @@
       };
     };
   };
+
+  hardware.uinput.enable = true;
 
   services = {
     displayManager.sddm = {
@@ -101,6 +104,10 @@
     # List services that you want to enable:
     flatpak.enable = true;
     timesyncd.enable = true;
+    udev.extraRules = ''
+      KERNEL=="uinput", MODE="0660", GROUP="input", TAG+="uaccess"
+      KERNEL=="event*", MODE="0660", GROUP="input", TAG+="uaccess"
+    '';
   };
   security.rtkit.enable = true;
 

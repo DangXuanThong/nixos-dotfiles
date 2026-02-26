@@ -36,7 +36,7 @@
 
       nix-rebuild = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles --impure";
       nix-update = "nix flake update --flake ~/nixos-dotfiles && nix-rebuild";
-      nix-cleanup = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +5 && sudo nix-collect-garbage -d";
+      nix-cleanup = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +5 && sudo nix-collect-garbage";
     };
     interactiveShellInit = ''
       function fish_greeting
