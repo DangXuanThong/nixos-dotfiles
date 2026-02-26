@@ -133,9 +133,10 @@
       enablePlasmaBrowserIntegration = true;
       extensions = [
         "eimadpbcbfnmbkopoojfekhnkhdbieeh" # dark reader
-        "aapbdbdomjkkjkaonfhkkikfgjllcleb" # translate
+        "aapbdbdomjkkjkaonfhkkikfgjllcleb" # gg translate
         "bgnkhhnnamicmpeenaelnjfhikgbkllg" # adguard
         "nngceckbapebfimnlniiiahkandclblb" # bitwarden
+        "icallnadddjmdinamnolclfjanhfoafe" # fast forward
       ];
       initialPrefs = {
         "homepage_is_newtabpage" = true;
