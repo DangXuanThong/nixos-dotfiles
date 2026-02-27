@@ -34,8 +34,8 @@
       egrep = "egrep --color=auto";
       jctl = "journalctl -p 3 -xb";  # Get the error messages from journalctl
 
-      nix-rebuild = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles --impure";
-      nix-update = "nix flake update --flake ~/nixos-dotfiles && nix-rebuild";
+      nix-rebuild = "clear && sudo nixos-rebuild switch --flake ~/nixos-dotfiles --impure";
+      nix-update = "clear && nix flake update --flake ~/nixos-dotfiles && sudo nixos-rebuild switch --flake ~/nixos-dotfiles --impure";
       nix-cleanup = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +5 && sudo nix-collect-garbage";
     };
     interactiveShellInit = ''
