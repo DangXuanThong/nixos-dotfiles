@@ -175,7 +175,7 @@
       };
       enableOnBoot = false;
     };
-    virtualbox.host.enable = true;
+    # virtualbox.host.enable = true;
     waydroid.enable = true;
     waydroid.package = pkgs.waydroid-nftables;
   };
