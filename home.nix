@@ -11,9 +11,14 @@ let
 in
 
 {
+  nixpkgs.config = {
+    allowUnfree = true;
+    android_sdk.accept_license = true;
+  };
   imports = [
     ./modules/fish.nix
     ./modules/flatpak.nix
+    ./modules/android-studio.nix
   ];
 
   # This value determines the home Manager release that your
