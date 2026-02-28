@@ -34,6 +34,11 @@
       fsType = "ntfs3";
       options = [ "nofail" "uid=1000" "gid=1000" "windows_names" ];
     };
+    "/run/media/penguin/Games" = {
+      device = "/dev/disk/by-uuid/0E9213840E921384";
+      fsType = "ntfs3";
+      options = [ "nofail" "uid=1000" "gid=1000" "windows_names" ];
+    };
     "/run/media/penguin/Docker" = {
       device = "/dev/disk/by-uuid/bfc0adbc-1fdc-a64a-9371-c577db51e4f6";
       fsType = "ext4";
