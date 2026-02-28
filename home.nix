@@ -66,6 +66,7 @@ in
     jetbrains-runner
     kdePackages.filelight
     evtest
+    inkscape
   ];
 
   # Iterate over xdg configs and map them accordingly
