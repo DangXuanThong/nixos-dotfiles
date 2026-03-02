@@ -3,10 +3,9 @@
 let
   # Compose an Android SDK with the SDK tools you want
   androidComposition = pkgs.androidenv.composeAndroidPackages {
-    # required SDK versions:
-    platformVersions = [ "36" ];       # Android API level 36
-    abiVersions = [ "x86_64" "arm64-v8a" ];
-    buildToolsVersions = [ "36.1.0" ];
+    platformVersions = [ "36" ];  # required SDK versions
+    buildToolsVersions = [ "36.0.0" ];
+    abiVersions = [ "x86_64" "armeabi-v7a" "arm64-v8a" ];
   };
 
   # The actual SDK package
@@ -22,8 +21,8 @@ in
 
   # Set environment variables so IDEs & tools can find it
   home.sessionVariables = {
-    ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
-    ANDROID_HOME     = "${androidSdk}/libexec/android-sdk";
+    # ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
+    ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
   };
 
   # (optional) if you want adb available directly
