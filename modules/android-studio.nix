@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 let
   # Compose an Android SDK with the SDK tools you want
@@ -12,19 +12,18 @@ let
   # The actual SDK package
   androidSdk = androidComposition.androidsdk;
 in
+
 {
+  nixpkgs.config.android_sdk.accept_license = true;
   # Install Android Studio itself
   home.packages = with pkgs; [
     (android-studio.withSdk androidSdk)
-    # androidSdk        # tell Home Manager to install the SDK too
   ];
 
   # Set environment variables so IDEs & tools can find it
   home.sessionVariables = {
     ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
     ANDROID_HOME     = "${androidSdk}/libexec/android-sdk";
-    # (optional) put tools on PATH
-    # PATH = "${androidSdk}/bin:${pkgs.androidenv.androidPkgs.platform-tools}/bin:${config.home.sessionVariables.PATH}";
   };
 
   # (optional) if you want adb available directly
