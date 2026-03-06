@@ -181,13 +181,6 @@
       enableOnBoot = false;
     };
     virtualbox.host.enable = true;
-    waydroid.enable = true;
-    waydroid.package = pkgs.waydroid-nftables;
-  };
-
-  systemd = {
-    packages = [ pkgs.waydroid-helper ];
-    services.waydroid-mount.wantedBy = [ "multi-user.target" ];
   };
 
   fonts.packages = with pkgs; [
