@@ -163,8 +163,6 @@
       embeddedTheme = "purple_leaves";
     })
     (vivaldi.override { enableWidevine = true; })
-    wl-clipboard
-    waydroid-helper
   ];
   environment.plasma6.excludePackages = with pkgs; [
     kdePackages.konsole
