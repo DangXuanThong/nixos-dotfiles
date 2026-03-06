@@ -57,6 +57,7 @@ in
     jetbrains.datagrip
     python314
     nodejs
+    genymotion
     # Other
     kdePackages.kate
     flameshot

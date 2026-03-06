@@ -6,6 +6,7 @@ let
     platformVersions = [ "36" ];  # required SDK versions
     buildToolsVersions = [ "36.0.0" ];
     abiVersions = [ "x86_64" "armeabi-v7a" "arm64-v8a" ];
+    includeSources = true;
   };
 
   # The actual SDK package
