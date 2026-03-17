@@ -10,6 +10,7 @@
     # Add here the flatpaks you want to install
     packages = [
       # { appId = "com.brave.Browser"; origin = "flathub"; }
+      { appId = "org.vinegarhq.Sober"; origin = "flathub"; }
     ];
   };
 }

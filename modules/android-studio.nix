@@ -30,4 +30,9 @@ in
   home.sessionPath = [
     "${pkgs.androidenv.androidPkgs.platform-tools}/bin"
   ];
+
+  # home.file."Android/Sdk" = {
+    # source = config.lib.file.mkOutOfStoreSymlink "${androidSdk}/libexec/android-sdk";
+    # recursive = true;
+  # };
 }
