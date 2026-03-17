@@ -54,7 +54,6 @@ in
     protonplus
     # Dev
     jetbrains.idea
-    jetbrains.datagrip
     python314
     nodejs
     genymotion
