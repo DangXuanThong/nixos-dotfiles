@@ -33,6 +33,7 @@
       fgrep = "fgrep --color=auto";
       egrep = "egrep --color=auto";
       jctl = "journalctl -p 3 -xb";  # Get the error messages from journalctl
+      past = "history --show-time='%F %T '";
 
       nix-rebuild = "clear && sudo nixos-rebuild switch --flake ~/nixos-dotfiles --impure";
       nix-update = "clear && nix flake update --flake ~/nixos-dotfiles && sudo nixos-rebuild switch --flake ~/nixos-dotfiles --impure";
