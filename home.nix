@@ -48,6 +48,17 @@ in
     };
     vscode.enable = true;
     # Other
+    brave = {
+      enable = true;
+      extensions = [
+        { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # dark reader
+        { id = "aapbdbdomjkkjkaonfhkkikfgjllcleb"; } # gg translate
+        { id = "bgnkhhnnamicmpeenaelnjfhikgbkllg"; } # adguard
+        { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden
+        { id = "icallnadddjmdinamnolclfjanhfoafe"; } # fast forward
+      ];
+      package = pkgs.brave;
+    };
   };
 
   # Packages that should be installed to the user profile.
