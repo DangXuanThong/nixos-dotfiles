@@ -41,7 +41,9 @@
     };
     interactiveShellInit = ''
       function fish_greeting
-        fastfetch
+        if test "$TERM_PROGRAM" = "ghostty"
+          fastfetch
+        end
       end
     '';
     shellInitLast = ''

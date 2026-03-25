@@ -36,8 +36,11 @@ in
     # Dev
     git = {
       enable = true;
-      settings.user.name = "Dang Xuan Thong";
-      settings.user.email = "dangxuanthongvn@gmail.com";
+      settings = {
+        user.name = "Dang Xuan Thong";
+        user.email = "dangxuanthongvn@gmail.com";
+        init.defaultBranch = "main";
+      };
     };
     java = {
       enable = true;
