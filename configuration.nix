@@ -161,7 +161,7 @@
       };
       enableOnBoot = false;
     };
-    virtualbox.host.enable = true;
+    # virtualbox.host.enable = true;
   };
 
   fonts.packages = with pkgs; [
