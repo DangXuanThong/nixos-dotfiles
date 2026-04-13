@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   # Compose an Android SDK with the SDK tools you want
@@ -23,7 +23,8 @@ in
   # Set environment variables so IDEs & tools can find it
   home.sessionVariables = {
     # ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
-    ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
+    # ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
+    ANDROID_HOME = "$HOME/adb";
   };
 
   # (optional) if you want adb available directly
@@ -31,8 +32,7 @@ in
     "${pkgs.androidenv.androidPkgs.platform-tools}/bin"
   ];
 
-  # home.file."Android/Sdk" = {
-    # source = config.lib.file.mkOutOfStoreSymlink "${androidSdk}/libexec/android-sdk";
-    # recursive = true;
-  # };
+  home.activation.adbSymlink = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    ln -sfn ${androidSdk}/libexec/android-sdk $HOME/adb
+  '';
 }

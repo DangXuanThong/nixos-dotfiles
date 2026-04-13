@@ -146,11 +146,17 @@
     (sddm-astronaut.override {
       embeddedTheme = "purple_leaves";
     })
+    libGL
   ];
   environment.plasma6.excludePackages = with pkgs; [
     kdePackages.konsole
     kdePackages.spectacle
   ];
+  environment.variables = {
+    LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
+      pkgs.libGL
+    ];
+  };
 
   virtualisation = {
     docker = {

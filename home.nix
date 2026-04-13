@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 let
   dotfiles = "${config.home.homeDirectory}/nixos-dotfiles/config";
@@ -71,6 +71,7 @@ in
     python314
     nodejs
     genymotion
+    flutter
     # Other
     kdePackages.kate
     flameshot
@@ -91,4 +92,8 @@ in
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
+
+  home.activation.flutterSymlink = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    ln -sfn ${pkgs.flutter} $HOME/flutter
+  '';
 }
