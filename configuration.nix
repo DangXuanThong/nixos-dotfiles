@@ -67,7 +67,7 @@
   users.users.penguin = {
     isNormalUser = true;
     description = "Penguin";
-    extraGroups = [ "networkmanager" "wheel" "gamemode" "docker" "vboxusers" "input" ];
+    extraGroups = [ "networkmanager" "wheel" "gamemode" "docker" "vboxusers" "input" "libvirtd" ];
   };
 
   hardware = {
@@ -109,10 +109,6 @@
     # List services that you want to enable:
     flatpak.enable = true;
     timesyncd.enable = true;
-    udev.extraRules = ''
-      KERNEL=="uinput", MODE="0660", GROUP="input", TAG+="uaccess"
-      KERNEL=="event*", MODE="0660", GROUP="input", TAG+="uaccess"
-    '';
   };
   security.rtkit.enable = true;
 
@@ -136,6 +132,7 @@
     gamemode.enable = true;
     npm.enable = true;
     partition-manager.enable = true;
+    virt-manager.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
@@ -168,6 +165,7 @@
       enableOnBoot = false;
     };
     # virtualbox.host.enable = true;
+    libvirtd.enable = true;
   };
 
   fonts.packages = with pkgs; [

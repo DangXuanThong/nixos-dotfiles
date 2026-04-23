@@ -77,7 +77,6 @@ in
     flameshot
     jetbrains-runner
     kdePackages.filelight
-    evtest
     inkscape
   ];
 
