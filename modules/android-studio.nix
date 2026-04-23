@@ -3,10 +3,10 @@
 let
   # Compose an Android SDK with the SDK tools you want
   androidComposition = pkgs.androidenv.composeAndroidPackages {
-    platformVersions = [ "36" ];  # required SDK versions
+    platformVersions = [ "36" "latest" ];  # required SDK versions
     buildToolsVersions = [ "36.0.0" ];
-    abiVersions = [ "x86_64" "armeabi-v7a" "arm64-v8a" ];
     includeSources = true;
+    toolsVersion = null;
   };
 
   # The actual SDK package
@@ -15,16 +15,14 @@ in
 
 {
   nixpkgs.config.android_sdk.accept_license = true;
-  # Install Android Studio itself
   home.packages = with pkgs; [
-    (android-studio.withSdk androidSdk)
+    androidSdk
   ];
 
   # Set environment variables so IDEs & tools can find it
   home.sessionVariables = {
-    # ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
     # ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
-    ANDROID_HOME = "$HOME/adb";
+    ANDROID_HOME = "$HOME/AndroidSdk";
   };
 
   # (optional) if you want adb available directly
@@ -33,6 +31,7 @@ in
   ];
 
   home.activation.adbSymlink = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    ln -sfn ${androidSdk}/libexec/android-sdk $HOME/adb
+    rm -rf $HOME/AndroidSdk
+    ln -sfn ${androidSdk}/libexec/android-sdk $HOME/AndroidSdk
   '';
 }
