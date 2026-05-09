@@ -165,6 +165,8 @@
       enableOnBoot = false;
     };
     # virtualbox.host.enable = true;
+    # virtualbox.host.enableKvm = true;
+    # virtualbox.host.addNetworkInterface = false;
     libvirtd.enable = true;
   };
 
