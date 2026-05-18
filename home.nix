@@ -78,6 +78,7 @@ in
     jetbrains-runner
     kdePackages.filelight
     inkscape
+    onlyoffice-desktopeditors
   ];
 
   # Iterate over xdg configs and map them accordingly
