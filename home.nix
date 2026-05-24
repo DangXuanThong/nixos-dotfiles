@@ -66,6 +66,7 @@ in
     # Gaming
     prismlauncher
     protonplus
+    lutris
     # Dev
     jetbrains.idea
     python314
@@ -79,6 +80,16 @@ in
     kdePackages.filelight
     inkscape
     onlyoffice-desktopeditors
+  ];
+
+  nixpkgs.overlays = [
+    # Skipping tests while upstream sorts it out, revert once
+    # Hydra consistently builds openldap green.
+    (final: prev: {
+      openldap = prev.openldap.overrideAttrs (_: {
+        doCheck = false;
+      });
+    })
   ];
 
   # Iterate over xdg configs and map them accordingly

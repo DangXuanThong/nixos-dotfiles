@@ -86,11 +86,12 @@
   };
 
   services = {
-    displayManager.sddm = {
-      enable = true;
-      wayland.enable = true;
-      theme = "sddm-astronaut-theme";
-    };
+    # displayManager.sddm = {
+    #   enable = true;
+    #   wayland.enable = true;
+    #   theme = "sddm-astronaut-theme";
+    # };
+    displayManager.plasma-login-manager.enable = true;
     # Enable the KDE Plasma Desktop Environment.
     desktopManager.plasma6.enable = true;
     # Enable CUPS to print documents.
@@ -124,7 +125,6 @@
     };
     steam = {
       enable = true;
-      # extraCompatPackages = [ pkgs.proton-ge-bin ];
       remotePlay.openFirewall = true;  # Open ports in the firewall for Steam Remote Play
       dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server hosting
       # gamescopeSession.enable = true;
