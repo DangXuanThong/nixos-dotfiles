@@ -16,6 +16,7 @@ in
     ./modules/fish.nix
     ./modules/flatpak.nix
     ./modules/android-studio.nix
+    ./modules/hyprland.nix
   ];
 
   # This value determines the home Manager release that your
@@ -74,11 +75,11 @@ in
     genymotion
     flutter
     # Other
-    kdePackages.kate
+    # kdePackages.kate
     flameshot
-    jetbrains-runner
+    # jetbrains-runner
     kdePackages.filelight
-    inkscape
+    # inkscape
     onlyoffice-desktopeditors
   ];
 

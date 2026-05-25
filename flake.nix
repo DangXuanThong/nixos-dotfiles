@@ -13,11 +13,13 @@
       # to avoid problems caused by different versions of nixpkgs.
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland.url = "github:hyprwm/Hyprland";
     flatpaks.url = "github:gmodena/nix-flatpak";
   };
 
-  outputs = { self, nixpkgs, home-manager, flatpaks, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, flatpaks, hyprland, ... }@inputs: {
     nixosConfigurations.Nix-PC = nixpkgs.lib.nixosSystem {
+      specialArgs = { inherit inputs; };
       modules = [
         ./configuration.nix
         # make home-manager as a module of nixos
