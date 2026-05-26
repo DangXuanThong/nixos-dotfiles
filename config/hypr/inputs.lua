@@ -7,13 +7,13 @@ hl.config({
   }
 })
 hl.gesture({
-    fingers = 3,
-    direction = "horizontal",
-    action = "workspace"
+  fingers = 3,
+  direction = "horizontal",
+  action = "workspace"
 })
 
 hl.device({
-    name = "vxe-r1se+-mouse",
-    sensitivity = -0.4,
-    accel_profile = "flat"
+  name = "vxe-r1se+-mouse",
+  sensitivity = -0.4,
+  accel_profile = "flat"
 })

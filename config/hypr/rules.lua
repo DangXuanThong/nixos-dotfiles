@@ -9,12 +9,12 @@ hl.window_rule({
   -- Fix some dragging issues with XWayland
   name  = "fix-xwayland-drags",
   match = {
-    class      = "^$",
-    title      = "^$",
-    xwayland   = true,
-    float      = true,
+    class = "^$",
+    title = "^$",
+    xwayland = true,
+    float = true,
     fullscreen = false,
-    pin        = false,
+    pin = false,
   },
   no_focus = true
 })
@@ -36,13 +36,9 @@ hl.config({
     rounding = 10,
     -- Change transparency of focused and unfocused windows
     active_opacity = 1.0,
-    inactive_opacity = 0.9,
-    blur = {
-      enabled   = true,
-      size      = 3,
-      passes    = 1,
-      vibrancy  = 0.1696,
-    }
+    inactive_opacity = 0.8
+    -- dim_inactive = true,
+    -- dim_strength = 0.2,
   },
   animations = {
     enabled = true
