@@ -24,6 +24,7 @@
   ];
 
   xdg.configFile = {
-    "hypr/hyprland.lua" = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-dotfiles/config/hypr/hyprland.lua";
+    "hypr/hyprland.lua".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-dotfiles/config/hypr/hyprland.lua";
+    "hypr/monitors.lua".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-dotfiles/config/hypr/monitors.lua";
   };
 }
