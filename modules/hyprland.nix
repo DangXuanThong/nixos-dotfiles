@@ -1,5 +1,10 @@
 { config, pkgs, ... }:
 
+let
+  hyprDir = "${config.home.homeDirectory}/nixos-dotfiles/config/hypr";
+  files = builtins.attrNames (builtins.readDir ../config/hypr);
+in
+
 {
   wayland.windowManager.hyprland = {
     enable = true;
@@ -23,8 +28,8 @@
     nautilus
   ];
 
-  xdg.configFile = {
-    "hypr/hyprland.lua".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-dotfiles/config/hypr/hyprland.lua";
-    "hypr/monitors.lua".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-dotfiles/config/hypr/monitors.lua";
-  };
+  xdg.configFile = builtins.listToAttrs (map (f: {
+    name = "hypr/${f}";
+    value.source = config.lib.file.mkOutOfStoreSymlink "${hyprDir}/${f}";
+  }) files);
 }
