@@ -28,6 +28,7 @@ in
 
   home.packages = with pkgs; [
     nautilus
+    brightnessctl
   ];
 
   xdg.configFile = builtins.listToAttrs (map (f: {
