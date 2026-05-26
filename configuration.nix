@@ -121,6 +121,7 @@
         fi
       '';
     };
+    regreet.enable = true;
     hyprland = {
       enable = true;
       withUWSM = true;
