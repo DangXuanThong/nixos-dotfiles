@@ -104,6 +104,7 @@
       alsa.support32Bit = true;
       pulse.enable = true;
     };
+    blueman.enable = true;
 
     # List services that you want to enable:
     flatpak.enable = true;

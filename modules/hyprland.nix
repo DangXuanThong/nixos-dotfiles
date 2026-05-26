@@ -17,11 +17,13 @@ in
     hypridle.enable = true;
     hyprpaper.enable = true;
     hyprlauncher.enable = true;
+    blueman-applet.enable = true;
   };
 
   programs = {
     hyprshot.enable = true;
     waybar.enable = true;
+    hyprlock.enable = true;
   };
 
   home.packages = with pkgs; [
