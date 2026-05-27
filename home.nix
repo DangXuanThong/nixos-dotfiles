@@ -6,7 +6,6 @@ let
   # Standard .config/directory
   configs = {
     MangoHud = "MangoHud";
-    ghostty = "ghostty";
   };
 in
 

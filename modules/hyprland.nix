@@ -2,8 +2,19 @@
 
 let
   home = config.home.homeDirectory;
-  hyprDir = "${home}/nixos-dotfiles/config/hypr";
-  files = builtins.attrNames (builtins.readDir ../config/hypr);
+  configDir = "${home}/nixos-dotfiles/config";
+  mkConfigEntries = names:
+    builtins.concatMap (folder:
+      let
+        files = builtins.attrNames (
+          lib.filterAttrs (_: v: v == "regular") (builtins.readDir (../config + "/${folder}"))
+        );
+      in
+      map (f: {
+        name = "${folder}/${f}";
+        value.source = config.lib.file.mkOutOfStoreSymlink "${configDir}/${folder}/${f}";
+      }) files
+    ) names;
 in
 
 {
@@ -30,16 +41,15 @@ in
   home.packages = with pkgs; [
     nautilus
     brightnessctl
+    sublime3
   ];
 
-  xdg.configFile = builtins.listToAttrs (map (f: {
-    name = "hypr/${f}";
-    value.source = config.lib.file.mkOutOfStoreSymlink "${hyprDir}/${f}";
-  }) files);
+  xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" "waybar" ]);
 
   home.activation.buildHyprcursor = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    rm -r ${home}/.icons/theme_MacOS\ Tahoe\ Cursor
+    rm -rf ${home}/.icons/theme_MacOS\ Tahoe\ Cursor
     nix-shell -p hyprcursor --run "hyprcursor-util --create ${home}/nixos-dotfiles/config/cursor/MacTahoeCursor --output ${home}/.icons"
+    rm -rf ${home}/.icons/MacTahoeCursor
     mv ${home}/.icons/theme_MacOS\ Tahoe\ Cursor ${home}/.icons/MacTahoeCursor
   '';
 }
