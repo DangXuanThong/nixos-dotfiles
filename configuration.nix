@@ -131,6 +131,7 @@
       # make sure to also set the portal package, so that they are in sync
       portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     };
+    dconf.enable = true;
     steam = {
       enable = true;
       # remotePlay.openFirewall = true;  # Open ports in the firewall for Steam Remote Play

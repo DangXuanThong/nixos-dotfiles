@@ -60,3 +60,15 @@ hl.window_rule({
   border_size = 0,
   rounding = 0
 })
+
+hl.window_rule({
+  match = { class = "^Minecraft.*"},
+  immediate = true,
+  float = true,
+})
+
+hl.window_rule({
+  match = { class = "org.vinegarhq.Sober"},
+  immediate = true,
+  float = true,
+})
