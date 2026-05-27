@@ -17,3 +17,6 @@ hl.config({
     force_zero_scaling = true
   }
 })
+
+hl.env("HYPRCURSOR_THEME", "MacTahoeCursor")
+hl.env("HYPRCURSOR_SIZE", "36")

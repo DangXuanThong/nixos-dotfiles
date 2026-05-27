@@ -1,0 +1,4 @@
+resize_algorithm = none
+define_size = 0, text.svg
+hotspot_x = 0.51515625
+hotspot_y = 0.4784375

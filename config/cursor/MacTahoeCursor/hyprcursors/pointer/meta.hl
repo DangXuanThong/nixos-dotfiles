@@ -1,0 +1,4 @@
+resize_algorithm = none
+define_size = 0, pointer.svg
+hotspot_x = 0.34375
+hotspot_y = 0.445

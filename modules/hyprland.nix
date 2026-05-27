@@ -1,7 +1,8 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
-  hyprDir = "${config.home.homeDirectory}/nixos-dotfiles/config/hypr";
+  home = config.home.homeDirectory;
+  hyprDir = "${home}/nixos-dotfiles/config/hypr";
   files = builtins.attrNames (builtins.readDir ../config/hypr);
 in
 
@@ -35,4 +36,10 @@ in
     name = "hypr/${f}";
     value.source = config.lib.file.mkOutOfStoreSymlink "${hyprDir}/${f}";
   }) files);
+
+  home.activation.buildHyprcursor = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    rm -r ${home}/.icons/theme_MacOS\ Tahoe\ Cursor
+    nix-shell -p hyprcursor --run "hyprcursor-util --create ${home}/nixos-dotfiles/config/cursor/MacTahoeCursor --output ${home}/.icons"
+    mv ${home}/.icons/theme_MacOS\ Tahoe\ Cursor ${home}/.icons/MacTahoeCursor
+  '';
 }
