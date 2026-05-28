@@ -72,3 +72,9 @@ hl.window_rule({
   immediate = true,
   float = true,
 })
+
+hl.window_rule({
+  match = { class = "^steam_app_[0-9]+$"},
+  immediate = true,
+  float = true,
+})
