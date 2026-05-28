@@ -42,6 +42,9 @@ in
     nautilus
     brightnessctl
     sublime3
+    grim
+    slurp
+    wl-clipboard
   ];
 
   xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" "waybar" ]);
