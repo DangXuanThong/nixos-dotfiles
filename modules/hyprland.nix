@@ -60,4 +60,41 @@ in
     rm -rf ${home}/.icons/MacTahoeCursor
     mv ${home}/.icons/theme_MacOS\ Tahoe\ Cursor ${home}/.icons/MacTahoeCursor
   '';
+
+  systemd.user = {
+    timers = {
+      dark-mode = {
+        Timer = {
+          OnCalendar = "*-*-* 17:00:00"; # switch to dark at 5PM
+          Persistent = true;
+        };
+        Install.WantedBy = [ "timers.target" ];
+      };
+      light-mode = {
+        Timer = {
+          OnCalendar = "*-*-* 06:00:00"; # switch to light at 6AM
+          Persistent = true;
+        };
+        Install.WantedBy = [ "timers.target" ];
+      };
+    };
+    services = {
+      dark-mode = {
+        Service = {
+          Type = "oneshot";
+          ExecStart = toString (pkgs.writeShellScript "dark-mode" ''
+            dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
+          '');
+        };
+      };
+      light-mode = {
+        Service = {
+          Type = "oneshot";
+          ExecStart = toString (pkgs.writeShellScript "light-mode" ''
+            dconf write /org/gnome/desktop/interface/color-scheme "'prefer-light'"
+          '');
+        };
+      };
+    };
+  };
 }
