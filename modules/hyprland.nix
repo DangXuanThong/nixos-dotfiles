@@ -39,9 +39,14 @@ in
   };
 
   home.packages = with pkgs; [
+    # Applications
     nautilus
-    brightnessctl
     sublime3
+    obs-studio
+    loupe
+    celluloid
+    # Utils
+    brightnessctl
     grim
     slurp
     wl-clipboard

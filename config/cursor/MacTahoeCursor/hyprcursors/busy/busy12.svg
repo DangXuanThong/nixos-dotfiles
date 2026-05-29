@@ -1,4 +1,5 @@
-<svg style="transform: rotate(270deg)" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g transform="rotate(270.0, 16, 16)">
 <g filter="url(#filter0_d_1_311)">
 <path d="M11.5455 7.04446C12.319 7.14044 13.0864 7.38965 13.8038 7.80386C16.6736 9.46071 17.6568 13.1303 16 16C14.3431 13.1303 10.6736 12.147 7.80384 13.8039C7.08745 14.2175 6.48862 14.7565 6.01907 15.3772C6.24376 11.7206 8.43355 8.59535 11.5455 7.04446Z" fill="url(#paint0_linear_1_311)"/>
 <path d="M6.01908 15.3772C6.48862 14.7565 7.08745 14.2175 7.80385 13.8038C10.6736 12.147 14.3431 13.1302 16 16C12.6863 16 10 18.6863 10 22C10 22.8277 10.1676 23.6162 10.4707 24.3336C7.77601 22.5421 6 19.4784 6 16C6 15.7908 6.00642 15.5832 6.01908 15.3772Z" fill="url(#paint1_linear_1_311)"/>
@@ -42,4 +43,5 @@
 <stop offset="1" stop-color="#FF9508" style="stop-color:#FF9508;stop-color:color(display-p3 1.0000 0.5843 0.0314);stop-opacity:1;"/>
 </linearGradient>
 </defs>
+</g>
 </svg>
