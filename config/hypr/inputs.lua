@@ -17,3 +17,8 @@ hl.device({
   sensitivity = -0.4,
   accel_profile = "flat"
 })
+hl.device({
+  name = "compx-vxe-r1se+-1",
+  sensitivity = -0.4,
+  accel_profile = "flat"
+})
