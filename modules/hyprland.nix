@@ -41,15 +41,17 @@ in
   home.packages = with pkgs; [
     # Applications
     nautilus
-    sublime3
     obs-studio
     loupe
     celluloid
+    gnome-text-editor
+    mission-center
     # Utils
     brightnessctl
     grim
     slurp
     wl-clipboard
+    dunst
   ];
 
   xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" "waybar" ]);
