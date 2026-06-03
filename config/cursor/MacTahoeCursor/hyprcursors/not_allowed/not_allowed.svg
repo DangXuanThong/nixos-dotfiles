@@ -1,0 +1,40 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <!-- Shadow that doesn't overlap its own source -->
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="alpha"/>
+    <feOffset dx="0.5" dy="0.5" result="shadowOffset"/>
+    <feColorMatrix in="shadowOffset" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0" result="shadowColored"/>
+    <feComposite in="shadowColored" in2="SourceGraphic" operator="out" result="shadowOnly"/>
+    <feMerge>
+      <feMergeNode in="shadowOnly"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+
+  <linearGradient id="bgGrad" x1="16" y1="6" x2="16" y2="26" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#EE3757"/>
+    <stop offset="1" stop-color="#DD1132"/>
+  </linearGradient>
+</defs>
+
+<!-- 1. Red background -->
+<circle cx="16" cy="16" r="10" fill="url(#bgGrad)"/>
+
+<!-- 2. Ring with shadow (shadow bleeds inside hole) -->
+<path d="M16.0024 9.09715C19.8157 9.0973 22.9067 12.1891 22.9067 16.0024C22.9066 19.8156 19.8156 22.9066 16.0024 22.9067C12.1891 22.9067 9.09729 19.8157 9.09714 16.0024C9.09714 12.189 12.189 9.09715 16.0024 9.09715Z"
+      stroke="white" stroke-width="1.90476" filter="url(#shadow)"/>
+
+<!-- 3. Cover circle fills ring interior with background gradient — hides shadow bleed -->
+<circle cx="16.0024" cy="16.0024" r="5.952" fill="url(#bgGrad)"/>
+
+<!-- 4. Slash on top of cover circle (with shadow) -->
+<line x1="20.8178" y1="11.1870" x2="11.1870" y2="20.8178"
+      stroke="white" stroke-width="1.90476" stroke-linecap="round"
+      filter="url(#shadow)"/>
+
+<!-- 5. Ring redrawn on top of slash (ring is in front of slash) -->
+<path d="M16.0024 9.09715C19.8157 9.0973 22.9067 12.1891 22.9067 16.0024C22.9066 19.8156 19.8156 22.9066 16.0024 22.9067C12.1891 22.9067 9.09729 19.8157 9.09714 16.0024C9.09714 12.189 12.189 9.09715 16.0024 9.09715Z"
+      stroke="white" stroke-width="1.90476"/>
+
+</svg>
