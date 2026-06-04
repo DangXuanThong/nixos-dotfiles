@@ -56,13 +56,6 @@ in
 
   xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" "waybar" ]);
 
-  home.activation.buildHyprcursor = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    rm -rf ${home}/.icons/theme_MacOS\ Tahoe\ Cursor
-    nix-shell -p hyprcursor --run "hyprcursor-util --create ${home}/nixos-dotfiles/config/cursor/MacTahoeCursor --output ${home}/.icons"
-    rm -rf ${home}/.icons/MacTahoeCursor
-    mv ${home}/.icons/theme_MacOS\ Tahoe\ Cursor ${home}/.icons/MacTahoeCursor
-  '';
-
   systemd.user = {
     timers = {
       dark-mode = {
