@@ -91,7 +91,6 @@
   };
 
   services = {
-    greetd.enable = true;
     # Enable CUPS to print documents.
     printing.enable = true;
     printing.drivers = [
@@ -109,8 +108,10 @@
     # List services that you want to enable:
     flatpak.enable = true;
     timesyncd.enable = true;
+    gnome.gnome-keyring.enable = true;
   };
   security.rtkit.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   programs = {
     bash = {
