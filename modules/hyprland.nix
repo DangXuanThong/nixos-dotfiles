@@ -52,6 +52,7 @@ in
     slurp
     wl-clipboard
     dunst
+    networkmanagerapplet
   ];
 
   xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" "waybar" ]);
