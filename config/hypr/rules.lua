@@ -78,3 +78,8 @@ hl.window_rule({
   immediate = true,
   float = true,
 })
+
+hl.window_rule({
+  match = { class = "zen", title = "Picture-in-Picture" },
+  float = true
+})
