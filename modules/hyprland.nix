@@ -18,6 +18,8 @@ let
 in
 
 {
+  imports = [ ./cursor.nix ];
+
   wayland.windowManager.hyprland = {
     enable = true;
     configType = "lua";
