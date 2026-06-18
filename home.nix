@@ -55,7 +55,8 @@ in
     # Gaming
     prismlauncher
     protonplus
-    lutris
+    ryubing # nintendo switch emulator (.nsp)
+    azahar # 3ds emulator (.3ds)
     # Dev
     jetbrains.idea
     python314
