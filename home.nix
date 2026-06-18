@@ -66,6 +66,8 @@ in
     # Other
     # kdePackages.kate
     flameshot
+    claude-code
+    cursor-cli
     # jetbrains-runner
     kdePackages.filelight
     # inkscape
