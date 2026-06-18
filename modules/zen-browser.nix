@@ -13,6 +13,7 @@ let
     # Check these out at about:config
     "extensions.autoDisableScopes" = 0;
     "extensions.pocket.enabled" = false;
+    "widget.wayland.fractional-scale.enabled" = false;
   };
 
   extensions = [
