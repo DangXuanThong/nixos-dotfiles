@@ -109,6 +109,7 @@
     flatpak.enable = true;
     timesyncd.enable = true;
     gnome.gnome-keyring.enable = true;
+    gvfs.enable = true;
   };
   security.rtkit.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;

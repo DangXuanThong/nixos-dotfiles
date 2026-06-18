@@ -48,6 +48,7 @@ in
     celluloid
     gnome-text-editor
     mission-center
+    file-roller
     # Utils
     brightnessctl
     grim
