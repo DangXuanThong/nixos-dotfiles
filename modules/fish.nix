@@ -35,8 +35,8 @@
       jctl = "journalctl -p 3 -xb";  # Get the error messages from journalctl
       past = "history --show-time='%F %T '";
 
-      nix-rebuild = "clear && sudo nixos-rebuild switch --flake ~/nixos-dotfiles --impure";
-      nix-update = "clear && nix flake update --flake ~/nixos-dotfiles && sudo nixos-rebuild switch --flake ~/nixos-dotfiles --impure";
+      nix-rebuild = "clear && sudo nixos-rebuild switch --impure";
+      nix-update = "clear && nix flake update ~/nixos-dotfiles && sudo nixos-rebuild switch --impure";
       nix-cleanup = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +5 && sudo nix-collect-garbage";
     };
     interactiveShellInit = ''
