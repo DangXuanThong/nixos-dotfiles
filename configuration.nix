@@ -1,7 +1,7 @@
 { inputs, config, pkgs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ./modules/zen-browser.nix ];
+  imports = [ /etc/nix/hardware-configuration.nix ./modules/zen-browser.nix ];
   system.stateVersion = "25.11";
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings = {
