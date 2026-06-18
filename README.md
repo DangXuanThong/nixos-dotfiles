@@ -18,6 +18,9 @@ git clone https://github.com/DangXuanThong/nixos-dotfiles.git ~/nixos-dotfiles
 sudo rm -rf /etc/nixos
 sudo ln -s ~/nixos-dotfiles /etc/nixos
 
+# Fix permissions so the nix evaluator can read files through the symlink
+chmod -R o+rX ~/nixos-dotfiles
+
 sudo nixos-generate-config
 sudo nixos-rebuild switch --impure
 ```
