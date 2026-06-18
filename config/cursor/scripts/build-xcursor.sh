@@ -3,8 +3,9 @@
 set -Eeuo pipefail
 trap 'echo "ERROR: $BASH_COMMAND (line $LINENO)"' ERR
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SRC_DIR="${1:-${SCRIPT_DIR}/../src/MacTahoeXCursor}"
-DEST_DIR="${2:-${HOME}/.icons/MacTahoeXCursor}"
+DEST_DIR="${2:-${HOME}/.icons/MacTahoeCursor}"
 
 main() {
     cd "$SRC_DIR/cursors"

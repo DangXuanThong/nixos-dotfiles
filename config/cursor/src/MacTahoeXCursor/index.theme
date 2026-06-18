@@ -1,3 +1,4 @@
 [Icon Theme]
-Name=MacTahoeXCursor
+Name=MacTahoeCursor
 Comment=Very cool!
+Inherits=Adwaita
