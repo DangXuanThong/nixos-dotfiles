@@ -74,6 +74,15 @@ hl.window_rule({
 })
 
 hl.window_rule({
+  match = { class = "^.*Azahar.*$"},
+  immediate = true,
+})
+hl.window_rule({
+  match = { class = "Ryujinx"},
+  immediate = true,
+})
+
+hl.window_rule({
   match = { class = "^steam_app_[0-9]+$"},
   immediate = true,
   float = true,
