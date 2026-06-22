@@ -64,7 +64,7 @@ in
     genymotion
     flutter
     # Other
-    claude-code
+    codex
     cursor-cli
     kdePackages.filelight
     onlyoffice-desktopeditors
