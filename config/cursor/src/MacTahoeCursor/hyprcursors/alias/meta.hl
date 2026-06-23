@@ -1,0 +1,4 @@
+resize_algorithm = none
+define_size = 0, alias.svg
+hotspot_x = 0.26125
+hotspot_y = 0.465

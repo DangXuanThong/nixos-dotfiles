@@ -6,7 +6,6 @@ let
   # Standard .config/directory
   configs = {
     MangoHud = "MangoHud";
-    ghostty = "ghostty";
   };
 in
 
@@ -16,6 +15,7 @@ in
     ./modules/fish.nix
     ./modules/flatpak.nix
     ./modules/android-studio.nix
+    ./modules/hyprland.nix
   ];
 
   # This value determines the home Manager release that your
@@ -48,17 +48,6 @@ in
     };
     vscode.enable = true;
     # Other
-    brave = {
-      enable = true;
-      extensions = [
-        { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # dark reader
-        { id = "aapbdbdomjkkjkaonfhkkikfgjllcleb"; } # gg translate
-        { id = "bgnkhhnnamicmpeenaelnjfhikgbkllg"; } # adguard
-        { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden
-        { id = "icallnadddjmdinamnolclfjanhfoafe"; } # fast forward
-      ];
-      package = pkgs.brave;
-    };
   };
 
   # Packages that should be installed to the user profile.
@@ -66,7 +55,8 @@ in
     # Gaming
     prismlauncher
     protonplus
-    lutris
+    ryubing # nintendo switch emulator (.nsp)
+    azahar # 3ds emulator (.3ds)
     # Dev
     jetbrains.idea
     python314
@@ -74,11 +64,9 @@ in
     genymotion
     flutter
     # Other
-    kdePackages.kate
-    flameshot
-    jetbrains-runner
+    codex
+    cursor-cli
     kdePackages.filelight
-    inkscape
     onlyoffice-desktopeditors
   ];
 

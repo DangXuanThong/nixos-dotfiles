@@ -1,9 +1,14 @@
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [ /etc/nixos/hardware-configuration.nix ./modules/zen-browser.nix ];
   system.stateVersion = "25.11";
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings = {
+    substituters = [ "https://hyprland.cachix.org" ];
+    trusted-substituters = ["https://hyprland.cachix.org"];
+    trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
+  };
   nixpkgs.config.allowUnfree = true; # Allow unfree packages
 
   boot = {
@@ -86,14 +91,6 @@
   };
 
   services = {
-    # displayManager.sddm = {
-    #   enable = true;
-    #   wayland.enable = true;
-    #   theme = "sddm-astronaut-theme";
-    # };
-    displayManager.plasma-login-manager.enable = true;
-    # Enable the KDE Plasma Desktop Environment.
-    desktopManager.plasma6.enable = true;
     # Enable CUPS to print documents.
     printing.enable = true;
     printing.drivers = [
@@ -106,12 +103,20 @@
       alsa.support32Bit = true;
       pulse.enable = true;
     };
+    blueman.enable = true;
 
     # List services that you want to enable:
     flatpak.enable = true;
     timesyncd.enable = true;
+    gnome.gnome-keyring.enable = true;
+    gvfs.enable = true;
+    scx = {
+      enable = true;
+      scheduler = "scx_lavd";
+    };
   };
   security.rtkit.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   programs = {
     bash = {
@@ -123,10 +128,20 @@
         fi
       '';
     };
+    regreet.enable = true;
+    hyprland = {
+      enable = true;
+      withUWSM = true;
+      # set the flake package
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      # make sure to also set the portal package, so that they are in sync
+      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    };
+    dconf.enable = true;
     steam = {
       enable = true;
-      remotePlay.openFirewall = true;  # Open ports in the firewall for Steam Remote Play
-      dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server hosting
+      # remotePlay.openFirewall = true;  # Open ports in the firewall for Steam Remote Play
+      # dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server hosting
       # gamescopeSession.enable = true;
     };
     gamemode.enable = true;
@@ -136,18 +151,10 @@
   };
 
   environment.systemPackages = with pkgs; [
-    ghostty
+    kitty
     tzdata
     nil
-    kdePackages.qtmultimedia
-    (sddm-astronaut.override {
-      embeddedTheme = "purple_leaves";
-    })
     libGL
-  ];
-  environment.plasma6.excludePackages = with pkgs; [
-    kdePackages.konsole
-    kdePackages.spectacle
   ];
   environment.variables = {
     LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
