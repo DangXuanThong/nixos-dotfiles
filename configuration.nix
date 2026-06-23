@@ -110,6 +110,10 @@
     timesyncd.enable = true;
     gnome.gnome-keyring.enable = true;
     gvfs.enable = true;
+    scx = {
+      enable = true;
+      scheduler = "scx_lavd";
+    };
   };
   security.rtkit.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;
