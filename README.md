@@ -67,3 +67,10 @@ nix-update   # flake update + rebuild
 nix-rebuild  # rebuild only
 nix-cleanup  # keep latest 5 system generations + garbage collect
 ```
+
+## Updating
+
+```bash
+nix-update   # flake update + rebuild
+nix-rebuild  # rebuild only
+```
