@@ -1,0 +1,5 @@
+resize_algorithm = none
+define_size = 0, move.svg
+hotspot_x = 0.5
+hotspot_y = 0.5
+define_override = all_resize
