@@ -2,7 +2,7 @@
 
 My personal [NixOS](https://nixos.org) configuration using [Flakes](https://wiki.nixos.org/wiki/Flakes) and [Home Manager](https://github.com/nix-community/home-manager).
 
-This is the **`hyprland-preview`** branch. For the stable KDE Plasma 6 desktop, see the [`main`](https://github.com/DangXuanThong/nixos-dotfiles/tree/main) branch.
+This is the **`main`** branch. For the legacy KDE Plasma 6 desktop, see the [`kde6-legacy`](https://github.com/DangXuanThong/nixos-dotfiles/tree/kde6-legacy) branch.
 
 ## Default apps
 
