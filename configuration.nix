@@ -26,7 +26,7 @@
     networkmanager.enable = true;
     hostName = "Nix-PC";
     # Open ports in the firewall.
-    # firewall.allowedTCPPorts = [ ... ];
+    firewall.allowedTCPPorts = [ 25565 ];
     # firewall.allowedUDPPorts = [ ... ];
     # Or disable the firewall altogether.
     # firewall.enable = false;
