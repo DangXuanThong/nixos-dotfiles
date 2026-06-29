@@ -2,7 +2,7 @@
 
 My personal [NixOS](https://nixos.org) configuration using [Flakes](https://wiki.nixos.org/wiki/Flakes) and [Home Manager](https://github.com/nix-community/home-manager).
 
-**Desktop:** KDE Plasma 6. For the Hyprland setup, see the [`hyprland-preview`](https://github.com/DangXuanThong/nixos-dotfiles/tree/hyprland-preview) branch.
+**Desktop:** KDE Plasma 6. For the new Hyprland setup, see the [`main`](https://github.com/DangXuanThong/nixos-dotfiles) branch.
 
 ## Installation
 
