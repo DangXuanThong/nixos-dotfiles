@@ -71,6 +71,12 @@ in
     onlyoffice-desktopeditors
   ];
 
+  nixpkgs.overlays = [
+    # Skipping tests while upstream sorts it out, revert once
+    # Hydra consistently builds openldap green.
+    (import ./overlays/genymotion.nix)
+  ];
+
   # Iterate over xdg configs and map them accordingly
   xdg.configFile = builtins.mapAttrs (name: subpath: {
     source = create_symlink "${dotfiles}/${subpath}";

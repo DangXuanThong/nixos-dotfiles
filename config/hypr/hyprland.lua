@@ -20,3 +20,5 @@ hl.config({
 
 hl.env("HYPRCURSOR_THEME", "MacTahoeCursor")
 hl.env("HYPRCURSOR_SIZE", "36")
+hl.env("XCURSOR_THEME", "MacTahoeCursor")
+hl.env("XCURSOR_SIZE", "36")

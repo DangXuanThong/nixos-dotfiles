@@ -1,0 +1,94 @@
+[theme]
+name = "MacTahoeCursor"
+description = "MacTahoeCursor"
+version = "0.1"
+author = "Dang Xuan Thong"
+
+[config]
+shape_size = 32
+x_hotspot = 16
+y_hotspot = 16
+xcur_sizes = [32, 40]
+cleanup = ["hycur", "xcur"]
+
+[cursors]
+[cursors.alias]
+x_hotspot = 8.3
+y_hotspot = 14.88
+
+[cursors.busy]
+symlinks = ["wait"]
+animated = 1
+anim_delay = 33
+
+[cursors.cell]
+
+[cursors.col_resize]
+
+[cursors.context_menu]
+x_hotspot = 8.36
+y_hotspot = 14.88
+
+[cursors.copy]
+x_hotspot = 8.36
+y_hotspot = 14.88
+
+[cursors.crosshair]
+x_hotspot = 15
+y_hotspot = 15
+
+[cursors.default]
+
+[cursors.e_resize]
+
+[cursors.ew_resize]
+
+[cursors.grab]
+
+[cursors.grabbing]
+
+[cursors.help]
+x_hotspot = 8.36
+y_hotspot = 14.88
+
+[cursors.move]
+symlinks = ["all-resize"]
+
+[cursors.n_resize]
+
+[cursors.nesw_resize]
+symlinks = ["ne-resize", "sw-resize"]
+
+[cursors.no_drop]
+x_hotspot = 8.36
+y_hotspot = 14.88
+
+[cursors.not_allowed]
+
+[cursors.ns_resize]
+
+[cursors.nwse_resize]
+symlinks = ["nw-resize", "se-resize"]
+
+[cursors.pointer]
+y_hotspot = 14.29
+
+[cursors.progress]
+x_hotspot = 8.36
+y_hotspot = 14.88
+animated = 1
+anim_delay = 33
+
+[cursors.row_resize]
+
+[cursors.s_resize]
+
+[cursors.text]
+
+[cursors.vertical_text]
+
+[cursors.w_resize]
+
+[cursors.zoom_in]
+
+[cursors.zoom_out]
