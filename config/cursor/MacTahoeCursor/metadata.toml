@@ -13,7 +13,7 @@ cleanup = ["hycur", "xcur"]
 
 [cursors]
 [cursors.default]
-symlinks = ["arrow", "left_ptr"]
+symlinks = ["arrow", "left_ptr", "top_left_arrow"]
 
 [cursors.context-menu]
 x_hotspot = 8.36
@@ -36,9 +36,9 @@ anim_delay = 33
 symlinks = ["left_ptr_watch"]
 
 [cursors.wait]
-symlinks = ["watch"]
 animated = 1
 anim_delay = 33
+symlinks = ["watch"]
 
 [cursors.cell]
 symlinks = ["plus"]
@@ -46,6 +46,7 @@ symlinks = ["plus"]
 [cursors.crosshair]
 x_hotspot = 15
 y_hotspot = 15
+symlinks = ["cross"]
 
 [cursors.text]
 symlinks = ["xterm"]
@@ -55,11 +56,12 @@ symlinks = ["xterm"]
 [cursors.alias]
 x_hotspot = 8.3
 y_hotspot = 14.88
-symlinks = ["dnd-link"]
+symlinks = ["link", "dnd-link"]
 
 [cursors.copy]
 x_hotspot = 8.36
 y_hotspot = 14.88
+symlinks = ["dnd-copy"]
 
 [cursors.move]
 symlinks = ["all-scroll", "size_all"]
@@ -70,10 +72,10 @@ y_hotspot = 14.88
 symlinks = ["dnd-no-drop"]
 
 [cursors.not-allowed]
-symlinks = ["crossed_circle"]
+symlinks = ["crossed_circle", "forbidden"]
 
 [cursors.grab]
-symlinks = ["openhand", "hand1"]
+symlinks = ["hand1"]
 
 [cursors.grabbing]
 symlinks = ["closedhand", "dnd-move"]
@@ -83,6 +85,7 @@ symlinks = ["closedhand", "dnd-move"]
 [cursors.row-resize]
 
 [cursors.n-resize]
+symlinks = ["top_side"]
 
 [cursors.e-resize]
 symlinks = ["right_side"]
@@ -97,13 +100,31 @@ symlinks = ["left_side"]
 symlinks = ["h_double_arrow", "sb_h_double_arrow", "size_hor"]
 
 [cursors.ns-resize]
-symlinks = ["v_double_arrow", "sb_v_double_arrow", "size_ver"]
+symlinks = ["double_arrow", "v_double_arrow", "sb_v_double_arrow", "size_ver"]
 
 [cursors.nesw-resize]
-symlinks = ["ne-resize", "sw-resize", "bottom_left_corner", "top_right_corner", "size_bdiag", "fd_double_arrow"]
+symlinks = [
+    "fd_double_arrow",
+    "size_bdiag",
+    "ne-resize",
+    "ur_angle",
+    "top_right_corner",
+    "sw-resize",
+    "ll_angle",
+    "bottom_left_corner"
+]
 
 [cursors.nwse-resize]
-symlinks = ["nw-resize", "se-resize", "bottom_right_corner", "top_left_corner", "size_fdiag", "bd_double_arrow"]
+symlinks = [
+    "bd_double_arrow",
+    "size_fdiag",
+    "nw-resize",
+    "ul_angle",
+    "top_left_corner",
+    "se-resize",
+    "lr_angle",
+    "bottom_right_corner"
+]
 
 [cursors.zoom-in]
 
