@@ -35,8 +35,8 @@ in
   };
 
   programs = {
+    quickshell.enable = true;
     hyprshot.enable = true;
-    waybar.enable = true;
     hyprlock.enable = true;
   };
 
@@ -58,7 +58,7 @@ in
     networkmanagerapplet
   ];
 
-  xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" "waybar" ]);
+  xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" ]);
 
   systemd.user = {
     timers = {
