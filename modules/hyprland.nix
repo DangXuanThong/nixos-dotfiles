@@ -35,7 +35,13 @@ in
   };
 
   programs = {
-    quickshell.enable = true;
+    quickshell = {
+      enable = true;
+      systemd = {
+        enable = true;
+        target = "graphical-session.target";
+      };
+    };
     hyprshot.enable = true;
     hyprlock.enable = true;
   };
@@ -58,7 +64,7 @@ in
     networkmanagerapplet
   ];
 
-  xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" ]);
+  xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" "quickshell" ]);
 
   systemd.user = {
     timers = {
