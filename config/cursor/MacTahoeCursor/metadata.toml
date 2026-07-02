@@ -8,7 +8,7 @@ author = "Dang Xuan Thong"
 shape_size = 32
 x_hotspot = 16
 y_hotspot = 16
-xcur_sizes = [32, 40]
+xcur_sizes = [30, 40]
 cleanup = ["hycur", "xcur"]
 
 [cursors]
@@ -17,8 +17,8 @@ x_hotspot = 8.3
 y_hotspot = 14.88
 symlinks = ["dnd-link"]
 
-[cursors.busy]
-symlinks = ["wait", "watch"]
+[cursors.wait]
+symlinks = ["watch"]
 animated = 1
 anim_delay = 33
 
