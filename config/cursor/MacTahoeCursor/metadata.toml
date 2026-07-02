@@ -15,17 +15,19 @@ cleanup = ["hycur", "xcur"]
 [cursors.alias]
 x_hotspot = 8.3
 y_hotspot = 14.88
+symlinks = ["dnd-link"]
 
 [cursors.busy]
-symlinks = ["wait"]
+symlinks = ["wait", "watch"]
 animated = 1
 anim_delay = 33
 
 [cursors.cell]
+symlinks = ["plus"]
 
-[cursors.col_resize]
+[cursors.col-resize]
 
-[cursors.context_menu]
+[cursors.context-menu]
 x_hotspot = 8.36
 y_hotspot = 14.88
 
@@ -38,57 +40,71 @@ x_hotspot = 15
 y_hotspot = 15
 
 [cursors.default]
+symlinks = ["arrow", "left_ptr"]
 
-[cursors.e_resize]
+[cursors.e-resize]
+symlinks = ["right_side"]
 
-[cursors.ew_resize]
+[cursors.ew-resize]
+symlinks = ["h_double_arrow", "sb_h_double_arrow", "size_hor"]
 
 [cursors.grab]
+symlinks = ["openhand", "hand1"]
 
 [cursors.grabbing]
+symlinks = ["closedhand", "dnd-move"]
 
 [cursors.help]
 x_hotspot = 8.36
 y_hotspot = 14.88
+symlinks = ["left_ptr_help", "question_arrow", "whats_this"]
 
 [cursors.move]
-symlinks = ["all-resize"]
+symlinks = ["all-scroll", "size_all"]
 
-[cursors.n_resize]
+[cursors.n-resize]
 
-[cursors.nesw_resize]
-symlinks = ["ne-resize", "sw-resize"]
+[cursors.nesw-resize]
+symlinks = ["ne-resize", "sw-resize", "bottom_left_corner", "top_right_corner", "size_bdiag", "fd_double_arrow"]
 
-[cursors.no_drop]
+[cursors.no-drop]
 x_hotspot = 8.36
 y_hotspot = 14.88
+symlinks = ["dnd-no-drop"]
 
-[cursors.not_allowed]
+[cursors.not-allowed]
+symlinks = ["crossed_circle"]
 
-[cursors.ns_resize]
+[cursors.ns-resize]
+symlinks = ["v_double_arrow", "sb_v_double_arrow", "size_ver"]
 
-[cursors.nwse_resize]
-symlinks = ["nw-resize", "se-resize"]
+[cursors.nwse-resize]
+symlinks = ["nw-resize", "se-resize", "bottom_right_corner", "top_left_corner", "size_fdiag", "bd_double_arrow"]
 
 [cursors.pointer]
 y_hotspot = 14.29
+symlinks = ["hand2"]
 
 [cursors.progress]
 x_hotspot = 8.36
 y_hotspot = 14.88
 animated = 1
 anim_delay = 33
+symlinks = ["left_ptr_watch"]
 
-[cursors.row_resize]
+[cursors.row-resize]
 
-[cursors.s_resize]
+[cursors.s-resize]
+symlinks = ["bottom_side"]
 
 [cursors.text]
+symlinks = ["xterm"]
 
-[cursors.vertical_text]
+[cursors.vertical-text]
 
-[cursors.w_resize]
+[cursors.w-resize]
+symlinks = ["left_side"]
 
-[cursors.zoom_in]
+[cursors.zoom-in]
 
-[cursors.zoom_out]
+[cursors.zoom-out]

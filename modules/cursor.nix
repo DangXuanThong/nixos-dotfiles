@@ -29,7 +29,7 @@ let
   };
 
   macTahoeCursor = pkgs.stdenv.mkDerivation {
-    name = "MacTahoeCursor";
+    name = cursorName;
     src = ../config/cursor/${cursorName};
     nativeBuildInputs = [ accurse ];
     buildPhase = ''
