@@ -48,17 +48,4 @@ in
     name = cursorName;
     package = macTahoeCursor;
   };
-
-  # xdg.configFile = {
-  #   "gtk-4.0/settings.ini".text = ''
-  #     [Settings]
-  #     gtk-cursor-theme-name=${cursorName}
-  #     gtk-cursor-theme-size=36
-  #   '';
-  #   "gtk-3.0/settings.ini".text = ''
-  #     [Settings]
-  #     gtk-cursor-theme-name=${cursorName}
-  #     gtk-cursor-theme-size=36
-  #   '';
-  # };
 }
