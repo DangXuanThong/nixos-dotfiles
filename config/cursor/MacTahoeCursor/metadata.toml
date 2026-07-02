@@ -12,74 +12,17 @@ xcur_sizes = [30, 40]
 cleanup = ["hycur", "xcur"]
 
 [cursors]
-[cursors.alias]
-x_hotspot = 8.3
-y_hotspot = 14.88
-symlinks = ["dnd-link"]
-
-[cursors.wait]
-symlinks = ["watch"]
-animated = 1
-anim_delay = 33
-
-[cursors.cell]
-symlinks = ["plus"]
-
-[cursors.col-resize]
+[cursors.default]
+symlinks = ["arrow", "left_ptr"]
 
 [cursors.context-menu]
 x_hotspot = 8.36
 y_hotspot = 14.88
 
-[cursors.copy]
-x_hotspot = 8.36
-y_hotspot = 14.88
-
-[cursors.crosshair]
-x_hotspot = 15
-y_hotspot = 15
-
-[cursors.default]
-symlinks = ["arrow", "left_ptr"]
-
-[cursors.e-resize]
-symlinks = ["right_side"]
-
-[cursors.ew-resize]
-symlinks = ["h_double_arrow", "sb_h_double_arrow", "size_hor"]
-
-[cursors.grab]
-symlinks = ["openhand", "hand1"]
-
-[cursors.grabbing]
-symlinks = ["closedhand", "dnd-move"]
-
 [cursors.help]
 x_hotspot = 8.36
 y_hotspot = 14.88
 symlinks = ["left_ptr_help", "question_arrow", "whats_this"]
-
-[cursors.move]
-symlinks = ["all-scroll", "size_all"]
-
-[cursors.n-resize]
-
-[cursors.nesw-resize]
-symlinks = ["ne-resize", "sw-resize", "bottom_left_corner", "top_right_corner", "size_bdiag", "fd_double_arrow"]
-
-[cursors.no-drop]
-x_hotspot = 8.36
-y_hotspot = 14.88
-symlinks = ["dnd-no-drop"]
-
-[cursors.not-allowed]
-symlinks = ["crossed_circle"]
-
-[cursors.ns-resize]
-symlinks = ["v_double_arrow", "sb_v_double_arrow", "size_ver"]
-
-[cursors.nwse-resize]
-symlinks = ["nw-resize", "se-resize", "bottom_right_corner", "top_left_corner", "size_fdiag", "bd_double_arrow"]
 
 [cursors.pointer]
 y_hotspot = 14.29
@@ -92,18 +35,75 @@ animated = 1
 anim_delay = 33
 symlinks = ["left_ptr_watch"]
 
-[cursors.row-resize]
+[cursors.wait]
+symlinks = ["watch"]
+animated = 1
+anim_delay = 33
 
-[cursors.s-resize]
-symlinks = ["bottom_side"]
+[cursors.cell]
+symlinks = ["plus"]
+
+[cursors.crosshair]
+x_hotspot = 15
+y_hotspot = 15
 
 [cursors.text]
 symlinks = ["xterm"]
 
 [cursors.vertical-text]
 
+[cursors.alias]
+x_hotspot = 8.3
+y_hotspot = 14.88
+symlinks = ["dnd-link"]
+
+[cursors.copy]
+x_hotspot = 8.36
+y_hotspot = 14.88
+
+[cursors.move]
+symlinks = ["all-scroll", "size_all"]
+
+[cursors.no-drop]
+x_hotspot = 8.36
+y_hotspot = 14.88
+symlinks = ["dnd-no-drop"]
+
+[cursors.not-allowed]
+symlinks = ["crossed_circle"]
+
+[cursors.grab]
+symlinks = ["openhand", "hand1"]
+
+[cursors.grabbing]
+symlinks = ["closedhand", "dnd-move"]
+
+[cursors.col-resize]
+
+[cursors.row-resize]
+
+[cursors.n-resize]
+
+[cursors.e-resize]
+symlinks = ["right_side"]
+
+[cursors.s-resize]
+symlinks = ["bottom_side"]
+
 [cursors.w-resize]
 symlinks = ["left_side"]
+
+[cursors.ew-resize]
+symlinks = ["h_double_arrow", "sb_h_double_arrow", "size_hor"]
+
+[cursors.ns-resize]
+symlinks = ["v_double_arrow", "sb_v_double_arrow", "size_ver"]
+
+[cursors.nesw-resize]
+symlinks = ["ne-resize", "sw-resize", "bottom_left_corner", "top_right_corner", "size_bdiag", "fd_double_arrow"]
+
+[cursors.nwse-resize]
+symlinks = ["nw-resize", "se-resize", "bottom_right_corner", "top_left_corner", "size_fdiag", "bd_double_arrow"]
 
 [cursors.zoom-in]
 
