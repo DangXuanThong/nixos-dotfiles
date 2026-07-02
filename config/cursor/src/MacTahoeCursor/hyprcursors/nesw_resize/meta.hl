@@ -1,6 +1,0 @@
-resize_algorithm = none
-define_size = 0, nesw_resize.svg
-hotspot_x = 0.5
-hotspot_y = 0.5
-define_override = ne_resize
-define_override = sw_resize

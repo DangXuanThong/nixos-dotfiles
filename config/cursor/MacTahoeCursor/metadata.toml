@@ -1,0 +1,131 @@
+[theme]
+name = "MacTahoeCursor"
+description = "MacTahoeCursor"
+version = "0.1"
+author = "Dang Xuan Thong"
+
+[config]
+shape_size = 32
+x_hotspot = 16
+y_hotspot = 16
+xcur_sizes = [30, 40]
+cleanup = ["hycur", "xcur"]
+
+[cursors]
+[cursors.default]
+symlinks = ["arrow", "left_ptr", "top_left_arrow"]
+
+[cursors.context-menu]
+x_hotspot = 8.36
+y_hotspot = 14.88
+
+[cursors.help]
+x_hotspot = 8.36
+y_hotspot = 14.88
+symlinks = ["left_ptr_help", "question_arrow", "whats_this"]
+
+[cursors.pointer]
+y_hotspot = 14.29
+symlinks = ["hand2"]
+
+[cursors.progress]
+x_hotspot = 8.36
+y_hotspot = 14.88
+animated = 1
+anim_delay = 33
+symlinks = ["left_ptr_watch"]
+
+[cursors.wait]
+animated = 1
+anim_delay = 33
+symlinks = ["watch"]
+
+[cursors.cell]
+symlinks = ["plus"]
+
+[cursors.crosshair]
+x_hotspot = 15
+y_hotspot = 15
+symlinks = ["cross"]
+
+[cursors.text]
+symlinks = ["xterm"]
+
+[cursors.vertical-text]
+
+[cursors.alias]
+x_hotspot = 8.3
+y_hotspot = 14.88
+symlinks = ["link", "dnd-link"]
+
+[cursors.copy]
+x_hotspot = 8.36
+y_hotspot = 14.88
+symlinks = ["dnd-copy"]
+
+[cursors.move]
+symlinks = ["all-scroll", "size_all"]
+
+[cursors.no-drop]
+x_hotspot = 8.36
+y_hotspot = 14.88
+symlinks = ["dnd-no-drop"]
+
+[cursors.not-allowed]
+symlinks = ["crossed_circle", "forbidden"]
+
+[cursors.grab]
+symlinks = ["hand1"]
+
+[cursors.grabbing]
+symlinks = ["closedhand", "dnd-move"]
+
+[cursors.col-resize]
+
+[cursors.row-resize]
+
+[cursors.n-resize]
+symlinks = ["top_side"]
+
+[cursors.e-resize]
+symlinks = ["right_side"]
+
+[cursors.s-resize]
+symlinks = ["bottom_side"]
+
+[cursors.w-resize]
+symlinks = ["left_side"]
+
+[cursors.ew-resize]
+symlinks = ["h_double_arrow", "sb_h_double_arrow", "size_hor"]
+
+[cursors.ns-resize]
+symlinks = ["double_arrow", "v_double_arrow", "sb_v_double_arrow", "size_ver"]
+
+[cursors.nesw-resize]
+symlinks = [
+    "fd_double_arrow",
+    "size_bdiag",
+    "ne-resize",
+    "ur_angle",
+    "top_right_corner",
+    "sw-resize",
+    "ll_angle",
+    "bottom_left_corner"
+]
+
+[cursors.nwse-resize]
+symlinks = [
+    "bd_double_arrow",
+    "size_fdiag",
+    "nw-resize",
+    "ul_angle",
+    "top_left_corner",
+    "se-resize",
+    "lr_angle",
+    "bottom_right_corner"
+]
+
+[cursors.zoom-in]
+
+[cursors.zoom-out]
