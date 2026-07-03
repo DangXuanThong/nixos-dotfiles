@@ -1,15 +1,13 @@
 import QtQuick
 import QtQuick.Controls
 
-Text {
+Item {
     id: root
 
     property string tooltipText: ""
 
-    color: "#ffffff"
-    font.pixelSize: 13
-    font.family: "JetBrainsMono Nerd Font"
-    renderType: Text.NativeRendering
+    width: childrenRect.width
+    height: childrenRect.height
 
     MouseArea {
         id: area

@@ -1,7 +1,14 @@
 import Quickshell.Networking
+import QtQuick
 
 StatusIcon {
-    text: "\uf1eb"
+    Text {
+        text: "\uf1eb"
+        color: "#ffffff"
+        font.pixelSize: 13
+        font.family: "JetBrainsMono Nerd Font"
+        renderType: Text.NativeRendering
+    }
 
     function activeWifiNetwork() {
         var devices = Networking.devices.values;

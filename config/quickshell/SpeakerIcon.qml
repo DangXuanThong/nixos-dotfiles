@@ -1,9 +1,16 @@
 import Quickshell.Services.Pipewire
+import QtQuick
 
 StatusIcon {
     property var sink: Pipewire.defaultAudioSink
 
-    text: "\uf028"
+    Text {
+        text: "\uf028"
+        color: "#ffffff"
+        font.pixelSize: 13
+        font.family: "JetBrainsMono Nerd Font"
+        renderType: Text.NativeRendering
+    }
 
     tooltipText: {
         if (!sink) return "No output device";

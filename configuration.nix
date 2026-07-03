@@ -116,6 +116,7 @@
       enable = true;
       scheduler = "scx_lavd";
     };
+    upower.enable = true;
   };
   security.rtkit.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;

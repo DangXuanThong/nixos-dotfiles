@@ -1,7 +1,14 @@
 import Quickshell.Bluetooth
+import QtQuick
 
 StatusIcon {
-    text: "\uf293"
+    Text {
+        text: "\uf293"
+        color: "#ffffff"
+        font.pixelSize: 13
+        font.family: "JetBrainsMono Nerd Font"
+        renderType: Text.NativeRendering
+    }
 
     tooltipText: {
         var enabled = Bluetooth.defaultAdapter && Bluetooth.defaultAdapter.enabled;

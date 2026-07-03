@@ -1,0 +1,14 @@
+<svg width="25" height="15" viewBox="0 0 25 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- body -->
+    <path
+        d="M3 3.25C3 2.007 4.007 1 5.25 1H20.25C22.045 1 23.5 2.455 23.5 4.25V10.25C23.5 12.045 22.045 13.5 20.25 13.5H5.25C4.007 13.5 3 12.493 3 11.25V3.25Z" 
+        fill="black"
+        stroke="black"
+        style="fill:black;fill-opacity:1;stroke:black;stroke-opacity:1;"
+        stroke-width="1.5" />
+    <!-- cap -->
+    <path
+        d="M0 4C0 3.448 0.448 3 1 3H1.5V11H1C0.448 11 0 10.552 0 10V4Z"
+        fill="black"
+        style="fill:black;fill-opacity:1;" />
+</svg>
