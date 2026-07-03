@@ -9,31 +9,32 @@ ShellRoot {
             right: true
         }
 
-        implicitHeight: 28
+        implicitHeight: 120
+        exclusiveZone: 28
         color: "transparent"
+        mask: Region { item: bar }
 
-        Text {
-            id: clock
+        Item {
+            id: bar
 
+            anchors.top: parent.top
             anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 1.5
-            leftPadding: 12
-            rightPadding: 12
+            anchors.right: parent.right
+            height: 28
 
-            color: "#ffffff"
-            font.pixelSize: 13
-            renderType: Text.NativeRendering
+            Clock {}
 
-            property date currentTime: new Date()
+            Row {
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 1.5
+                rightPadding: 12
+                spacing: 12
 
-            text: Qt.formatDateTime(currentTime, "hh:mm ddd d MMM")
-
-            Timer {
-                interval: 1000
-                running: true
-                repeat: true
-                onTriggered: clock.currentTime = new Date()
+                BluetoothIcon {}
+                WifiIcon {}
+                SpeakerIcon {}
+                BatteryIcon {}
             }
         }
     }
