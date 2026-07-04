@@ -31,10 +31,18 @@ ShellRoot {
                 rightPadding: 12
                 spacing: 12
 
-                BluetoothIcon {}
-                WifiIcon {}
-                SpeakerIcon {}
-                BatteryIcon {}
+                BluetoothIcon {
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                WifiIcon {
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                SpeakerIcon {
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                BatteryIcon {
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
         }
     }

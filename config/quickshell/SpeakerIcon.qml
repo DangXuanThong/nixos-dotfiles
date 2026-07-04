@@ -2,14 +2,29 @@ import Quickshell.Services.Pipewire
 import QtQuick
 
 StatusIcon {
-    property var sink: Pipewire.defaultAudioSink
+    id: speakerRoot
 
-    Text {
-        text: "\uf028"
-        color: "#ffffff"
-        font.pixelSize: 13
-        font.family: "JetBrainsMono Nerd Font"
-        renderType: Text.NativeRendering
+    PwObjectTracker {
+        objects: [sink]
+    }
+
+    property var sink: Pipewire.defaultAudioSink
+    property real volume: sink ? sink.audio.volume : 0
+    property bool muted: !sink || sink.audio.muted || volume <= 0
+
+    property string iconSource: {
+        if (muted) return "assets/speaker_mute.svg";
+        if (volume <= 0.30) return "assets/speaker_low.svg";
+        if (volume <= 0.50) return "assets/speaker_med.svg";
+        return "assets/speaker_high.svg";
+    }
+
+    Image {
+        source: speakerRoot.iconSource
+        sourceSize.width: 18
+        sourceSize.height: 18
+        width: 18
+        height: 18
     }
 
     tooltipText: {
