@@ -49,13 +49,14 @@ StatusIcon {
 
         Item {
             id: fillClip
-            x: 3
+            x: 24 - width
             y: 1
-            width: 21 * Math.max(batteryRoot.pct, 0.01)
+            width: 21 * Math.max(batteryRoot.pct, batteryRoot.pct > 0 ? 0.08 : 0)
             height: 13
             clip: true
 
             Image {
+                x: -(21 - fillClip.width)
                 source: "assets/battery_fill.svg"
                 sourceSize.width: 21
                 sourceSize.height: 13
