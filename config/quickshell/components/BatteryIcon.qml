@@ -40,7 +40,7 @@ StatusIcon {
         height: 15
 
         Image {
-            source: "assets/battery_bg.svg"
+            source: "../assets/battery_bg.svg"
             sourceSize.width: 25
             sourceSize.height: 15
             width: 25
@@ -57,7 +57,7 @@ StatusIcon {
 
             Image {
                 x: -(21 - fillClip.width)
-                source: "assets/battery_fill.svg"
+                source: "../assets/battery_fill.svg"
                 sourceSize.width: 21
                 sourceSize.height: 13
                 width: 21
@@ -67,7 +67,7 @@ StatusIcon {
 
         Image {
             visible: batteryRoot.charging
-            source: "assets/charging.svg"
+            source: "../assets/charging.svg"
             sourceSize.width: 8
             sourceSize.height: 10
             width: 8
@@ -78,7 +78,7 @@ StatusIcon {
 
         Image {
             visible: batteryRoot.protectedCharge
-            source: "assets/protected.svg"
+            source: "../assets/protected.svg"
             sourceSize.width: 8
             sourceSize.height: 9
             width: 8
@@ -89,7 +89,7 @@ StatusIcon {
 
         Image {
             visible: batteryRoot.powerSaverActive && !batteryRoot.charging && !batteryRoot.protectedCharge
-            source: "assets/powersave.svg"
+            source: "../assets/powersave.svg"
             sourceSize.width: 8
             sourceSize.height: 9
             width: 8

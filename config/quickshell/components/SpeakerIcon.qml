@@ -13,10 +13,10 @@ StatusIcon {
     property bool muted: !sink || sink.audio.muted || volume <= 0
 
     property string iconSource: {
-        if (muted) return "assets/speaker_mute.svg";
-        if (volume <= 0.30) return "assets/speaker_low.svg";
-        if (volume <= 0.50) return "assets/speaker_med.svg";
-        return "assets/speaker_high.svg";
+        if (muted) return "../assets/speaker_mute.svg";
+        if (volume <= 0.30) return "../assets/speaker_low.svg";
+        if (volume <= 0.50) return "../assets/speaker_med.svg";
+        return "../assets/speaker_high.svg";
     }
 
     Image {
