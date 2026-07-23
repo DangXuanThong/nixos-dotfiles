@@ -69,6 +69,7 @@ in
     cursor-cli
     kdePackages.filelight
     onlyoffice-desktopeditors
+    kdePackages.qtdeclarative
   ];
 
   nixpkgs.overlays = [
