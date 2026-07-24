@@ -3,18 +3,6 @@
 let
   home = config.home.homeDirectory;
   configDir = "${home}/nixos-dotfiles/config";
-  mkConfigEntries = names:
-    builtins.concatMap (folder:
-      let
-        files = builtins.attrNames (
-          lib.filterAttrs (_: v: v == "regular") (builtins.readDir (../config + "/${folder}"))
-        );
-      in
-      map (f: {
-        name = "${folder}/${f}";
-        value.source = config.lib.file.mkOutOfStoreSymlink "${configDir}/${folder}/${f}";
-      }) files
-    ) names;
 in
 
 {
@@ -35,8 +23,14 @@ in
   };
 
   programs = {
+    quickshell = {
+      enable = true;
+      systemd = {
+        enable = true;
+        target = "graphical-session.target";
+      };
+    };
     hyprshot.enable = true;
-    waybar.enable = true;
     hyprlock.enable = true;
   };
 
@@ -58,8 +52,21 @@ in
     networkmanagerapplet
   ];
 
-  xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" "waybar" ]);
+  # xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" ]);
+  xdg.configFile = {
+    "hypr/binds.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/binds.lua";
+    "hypr/hyprland.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/hyprland.lua";
+    "hypr/hyprpaper.conf".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/hyprpaper.conf";
+    "hypr/inputs.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/inputs.lua";
+    "hypr/monitors.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/monitors.lua";
+    "hypr/permissions.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/permissions.lua";
+    "hypr/rules.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/rules.lua";
 
+    "quickshell" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/quickshell";
+      recursive = true;
+    };
+  };
   systemd.user = {
     timers = {
       dark-mode = {

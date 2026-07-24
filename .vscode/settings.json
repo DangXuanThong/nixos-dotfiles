@@ -1,0 +1,4 @@
+{
+  "qt-qml.qmlls.enabled": true,
+  "qt-qml.qmlls.customExePath": "/etc/profiles/per-user/penguin/bin/qmlls"
+}
