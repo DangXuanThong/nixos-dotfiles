@@ -1,9 +1,10 @@
 import Quickshell
 import QtQuick
 import "components"
+import "components/battery"
 
 ShellRoot {
-    PanelWindow {
+    PanelWindow {   // qmllint disable uncreatable-type
         anchors {
             top: true
             left: true

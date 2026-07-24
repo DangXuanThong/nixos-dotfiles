@@ -4,7 +4,7 @@ import QtQuick.Controls
 Item {
     id: root
 
-    property string tooltipText: ""
+    required property string tooltipText
 
     width: childrenRect.width
     height: childrenRect.height
