@@ -9,18 +9,17 @@ StatusIcon {
     readonly property int level: device.percentage * 100
     readonly property int batteryState: {
         if (!device.ready) return Enums.BatteryState.UNKNOWN
-        if (PowerProfiles.profile === PowerProfile.PowerSaver)
-            return Enums.BatteryState.POWERSAVE
+        if (PowerProfiles.profile === PowerProfile.PowerSaver) return Enums.BatteryState.POWERSAVE
 
         switch (device.state) {
-        case UPowerDeviceState.Charging:
-            return Enums.BatteryState.CHARGING
-        case UPowerDeviceState.FullyCharged:
-            return level < 100 ? Enums.BatteryState.PROTECTED : Enums.BatteryState.CHARGING
-        case UPowerDeviceState.Unknown:
-            return Enums.BatteryState.UNKNOWN
-        default:
-            return Enums.BatteryState.DEFAULT
+            case UPowerDeviceState.Charging:
+                return Enums.BatteryState.CHARGING
+            case UPowerDeviceState.FullyCharged:
+                return level < 100 ? Enums.BatteryState.PROTECTED : Enums.BatteryState.CHARGING
+            case UPowerDeviceState.Unknown:
+                return Enums.BatteryState.UNKNOWN
+            default:
+                return Enums.BatteryState.DEFAULT
         }
     }
     readonly property int criticalThreshold: 20
