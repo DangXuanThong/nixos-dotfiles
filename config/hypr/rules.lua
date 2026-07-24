@@ -86,7 +86,7 @@ hl.window_rule({
 })
 
 hl.window_rule({
-  match = { class = "^steam_app_[0-9]+$"},
+  match = { class = "^steam_app_+$"},
   immediate = true,
   float = true,
 })
@@ -99,4 +99,10 @@ hl.window_rule({
 hl.window_rule({
   match = { class = "zen", title = "Library" },
   float = true
+})
+
+hl.window_rule({
+  match = { class = "Emulator" },
+  float = true,
+  immediate = true,
 })
