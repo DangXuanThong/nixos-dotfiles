@@ -38,14 +38,14 @@ StatusIcon {
         const pctText = level + '%'
         switch (batteryState) {
             case Enums.BatteryState.CHARGING:
-                var t = formatDuration(battery.timeToFull);
+                var t = formatDuration(device.timeToFull);
                 return pctText + (t ? " • " + t + " until full" : " • Fully charged");
             case Enums.BatteryState.PROTECTED:
                 return pctText + " • Fully charged";
             case Enums.BatteryState.UNKNOWN:
                 return "Loading…"
             default:
-                var t = formatDuration(battery.timeToEmpty);
+                var t = formatDuration(device.timeToEmpty);
                 return pctText + (t ? " • " + t + " left" : "");
         }
     }
