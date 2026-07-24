@@ -13,14 +13,14 @@ StatusIcon {
             return Enums.BatteryState.POWERSAVE
 
         switch (device.state) {
-            case UPowerDeviceState.Charging:
-                return Enums.BatteryState.CHARGING
-            case UPowerDeviceState.FullyCharged:
-                return level < 100 ? Enums.BatteryState.PROTECTED : Enums.BatteryState.CHARGING
-            case UPowerDeviceState.Unknown:
-                return Enums.BatteryState.UNKNOWN
-            default:
-                return Enums.BatteryState.DEFAULT
+        case UPowerDeviceState.Charging:
+            return Enums.BatteryState.CHARGING
+        case UPowerDeviceState.FullyCharged:
+            return level < 100 ? Enums.BatteryState.PROTECTED : Enums.BatteryState.CHARGING
+        case UPowerDeviceState.Unknown:
+            return Enums.BatteryState.UNKNOWN
+        default:
+            return Enums.BatteryState.DEFAULT
         }
     }
     readonly property int criticalThreshold: 20
@@ -54,11 +54,8 @@ StatusIcon {
         id: colors
 
         readonly property color background: {
-            if (root.batteryState === Enums.BatteryState.DEFAULT) {
-                return root.darkBackground ? Qt.rgba(1, 1, 1, 0.45) : Qt.rgba(0, 0, 0, 0.2)
-            } else {
-                return root.darkBackground ? Qt.rgba(1, 1, 1, 0.55) : Qt.rgba(0, 0, 0, 0.2)
-            }
+            if (!root.darkBackground) return Qt.rgba(0, 0, 0, 0.2);
+            else return root.batteryState === Enums.BatteryState.DEFAULT ? Qt.rgba(1, 1, 1, 0.45) : Qt.rgba(1, 1, 1, 0.55);
         }
 
         readonly property color fill: {
