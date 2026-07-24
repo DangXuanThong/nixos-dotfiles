@@ -26,6 +26,7 @@ let
     (extension "darkreader" "addon@darkreader.org")
     (extension "fastforwardteam" "addon@fastforward.team")
     (extension "i-dont-care-about-cookies" "jid1-KKzOGWgsW3Ao4Q@jetpack")
+    (extension "temp-mail" "{2d97895d-fcd3-41ab-82e6-6a1d4d2243f6}")
   ];
 in
 
