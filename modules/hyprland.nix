@@ -1,8 +1,9 @@
 { config, lib, pkgs, ... }:
 
 let
-  home = config.home.homeDirectory;
-  configDir = "${home}/nixos-dotfiles/config";
+  mkConfigLink = import ../lib/mkConfigLink.nix {
+    inherit config lib;
+  };
 in
 
 {
@@ -52,21 +53,17 @@ in
     networkmanagerapplet
   ];
 
-  # xdg.configFile = builtins.listToAttrs (mkConfigEntries [ "hypr" ]);
-  xdg.configFile = {
-    "hypr/binds.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/binds.lua";
-    "hypr/hyprland.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/hyprland.lua";
-    "hypr/hyprpaper.conf".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/hyprpaper.conf";
-    "hypr/inputs.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/inputs.lua";
-    "hypr/monitors.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/monitors.lua";
-    "hypr/permissions.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/permissions.lua";
-    "hypr/rules.lua".source = config.lib.file.mkOutOfStoreSymlink "${configDir}/hypr/rules.lua";
+  xdg.configFile = lib.mkMerge [
+    (mkConfigLink "hypr/binds.lua")
+    (mkConfigLink "hypr/hyprland.lua")
+    (mkConfigLink "hypr/hyprpaper.conf")
+    (mkConfigLink "hypr/inputs.lua")
+    (mkConfigLink "hypr/monitors.lua")
+    (mkConfigLink "hypr/permissions.lua")
+    (mkConfigLink "hypr/rules.lua")
 
-    "quickshell" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${configDir}/quickshell";
-      recursive = true;
-    };
-  };
+    (mkConfigLink "quickshell")
+  ];
   systemd.user = {
     timers = {
       dark-mode = {
