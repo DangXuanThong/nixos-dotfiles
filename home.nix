@@ -62,8 +62,6 @@ in
     genymotion
     flutter
     # Other
-    codex
-    cursor-cli
     kdePackages.filelight
     onlyoffice-desktopeditors
     kdePackages.qtdeclarative
