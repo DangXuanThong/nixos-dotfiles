@@ -21,8 +21,6 @@
     kernel.sysctl."kernel.sysrq" = 1;
     kernelModules = [ "uinput" ];
   };
-  # Temporary workaround for https://github.com/NixOS/nixpkgs/issues/535850
-  system.boot.loader.kernelFile = "vmlinuz";
 
   networking = {
     networkmanager.enable = true;
@@ -188,9 +186,5 @@
     noto-fonts-color-emoji
     corefonts
     font-awesome
-  ];
-  # Temporary fix for Cantarell build failure
-  nixpkgs.overlays = [
-    (import ./overlays/cantarell-fix.nix)
   ];
 }
