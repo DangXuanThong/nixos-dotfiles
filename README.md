@@ -18,7 +18,7 @@ My personal [NixOS](https://nixos.org) configuration using [Flakes](https://wiki
 ### Fresh NixOS system
 
 ```bash
-nix-shell -p git --run 'git clone https://github.com/DangXuanThong/nixos-dotfiles.git ~/nixos-dotfiles'
+nix-shell -p git --run 'git clone --branch kde6-legacy https://github.com/DangXuanThong/nixos-dotfiles.git ~/nixos-dotfiles'
 
 # Optional: Symlink to /etc/nixos
 sudo rm -rf /etc/nixos
@@ -33,7 +33,7 @@ sudo NIX_CONFIG="experimental-features = nix-command flakes" nixos-rebuild switc
 ### Build directly from GitHub (no clone)
 
 ```bash
-sudo NIX_CONFIG="experimental-features = nix-command flakes" nixos-rebuild switch --flake github:DangXuanThong/nixos-dotfiles#Nix-PC --impure
+sudo NIX_CONFIG="experimental-features = nix-command flakes" nixos-rebuild switch --flake github:DangXuanThong/nixos-dotfiles/kde6-legacy#Nix-PC --impure
 ```
 
 ## Updating
