@@ -1,12 +1,8 @@
 { lib, config, pkgs, ... }:
 
 let
-  dotfiles = "${config.home.homeDirectory}/nixos-dotfiles/config";
-  create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
-  # Standard .config/directory
-  configs = {
-    MangoHud = "MangoHud";
-    ghostty = "ghostty";
+  mkConfigLink = import ./lib/mkConfigLink.nix {
+    inherit config lib;
   };
 in
 
@@ -92,11 +88,10 @@ in
     })
   ];
 
-  # Iterate over xdg configs and map them accordingly
-  xdg.configFile = builtins.mapAttrs (name: subpath: {
-    source = create_symlink "${dotfiles}/${subpath}";
-    recursive = true;
-  }) configs;
+  xdg.configFile = lib.mkMerge [
+    (mkConfigLink "MangoHud")
+    (mkConfigLink "ghostty")
+  ];
 
   nix.gc = {
     automatic = true;

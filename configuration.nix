@@ -67,7 +67,7 @@
   users.users.penguin = {
     isNormalUser = true;
     description = "Penguin";
-    extraGroups = [ "networkmanager" "wheel" "gamemode" "docker" "vboxusers" "input" "libvirtd" ];
+    extraGroups = [ "networkmanager" "wheel" "gamemode" "docker" "vboxusers" "input" "libvirtd" "kvm" ];
   };
 
   hardware = {
