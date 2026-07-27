@@ -61,6 +61,7 @@ in
     (mkConfigLink "hypr/monitors.lua")
     (mkConfigLink "hypr/permissions.lua")
     (mkConfigLink "hypr/rules.lua")
+    (mkConfigLink "hypr/hypridle.conf")
 
     (mkConfigLink "quickshell")
   ];
