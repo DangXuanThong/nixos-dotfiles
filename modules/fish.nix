@@ -11,10 +11,10 @@
   programs.fish = {
     enable = true;
     shellAliases = {
-      ls = "eza -al --color=always --group-directories-first --icons"; # preferred listing
-      la = "eza -a --color=always --group-directories-first --icons";  # all files and dirs
-      ll = "eza -l --color=always --group-directories-first --icons";  # long format
-      lt = "eza -aT --color=always --group-directories-first --icons"; # tree listing
+      ls = "eza -al --color=always --group-directories-first --icons=auto"; # preferred listing
+      la = "eza -a --color=always --group-directories-first --icons=auto";  # all files and dirs
+      ll = "eza -l --color=always --group-directories-first --icons=auto";  # long format
+      lt = "eza -aT --color=always --group-directories-first --icons=auto"; # tree listing
       "l." = "eza -a | grep -e '^\\.'";                                # show only dotfiles
 
       tarnow = "tar -acf ";
