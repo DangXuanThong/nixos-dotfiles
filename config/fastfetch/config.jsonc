@@ -1,0 +1,86 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json", // Optional: Provides IDE intelligence
+  "logo": {
+    "type": "kitty",
+    "width": 16,
+    "height": 16
+  },
+  "display": {
+    "key": {
+      "type": "both"
+    }
+  },
+  "modules": [
+    "title",
+    "separator",
+    {
+      "type": "cpu",
+      "temp": true,
+      "format": "{name} @ {freq-base} - {temperature}"
+    },
+    // Integrated GPUs
+    {
+      "type": "gpu",
+      "driverSpecific": true,
+      "format": "{name} ({core-count} cores) {pcie-max-speed} {shared-total}",
+      "hideType": "discrete"
+    },
+    // Discrete GPUs
+    {
+      "type": "gpu",
+      "temp": true,
+      "driverSpecific": true,
+      "format": "{name} ({core-usage-num}/{core-count} cores) {dedicated-percentage-num}/{dedicated-total} - {temperature}",
+      "hideType": "integrated"
+    },
+    {
+      "type": "memory",
+      "key": "Memory",
+      "percent": {
+        "type": 3, // Show both percentage number and bar
+        "green": 30, // Values below 30% in green
+        "yellow": 70 // 30-70% in yellow, >70% in red
+      }
+    },
+    {
+      "type": "display",
+      "key": "Display"
+    },
+    "separator",
+    {
+      "type": "os",
+      "format": "{pretty-name} {arch}"
+    },
+    {
+      "type": "kernel"
+    },
+    {
+      "type": "vulkan"
+    },
+    {
+      "type": "opengl"
+    },
+    {
+      "type": "uptime"
+    },
+    "separator",
+    {
+      "type": "localip",
+      "showIpv6": true
+    },
+    {
+      "type": "bluetooth"
+    },
+    {
+      "type": "processes"
+    },
+    {
+      "type": "shell",
+      "format": "{pretty-name} (tty{tty})"
+    },
+    {
+      "type": "colors",
+      "symbol": "circle"
+    }
+  ]
+}

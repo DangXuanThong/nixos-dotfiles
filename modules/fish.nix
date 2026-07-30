@@ -1,4 +1,10 @@
-{ config, pkgs, ...}:
+{ config, lib, pkgs, ...}:
+
+let
+  mkConfigLink = import ../lib/mkConfigLink.nix {
+    inherit config lib;
+  };
+in
 
 {
   home.shell.enableFishIntegration = true;
@@ -41,7 +47,7 @@
     };
     interactiveShellInit = ''
       function fish_greeting
-        if test "$TERM_PROGRAM" = "ghostty"
+        if test "$TERM" = "xterm-kitty"
           fastfetch
         end
       end
@@ -90,6 +96,9 @@
     fastfetch
     bat
     eza
-    libnotify
+  ];
+
+  xdg.configFile = lib.mkMerge [
+    (mkConfigLink "fastfetch")
   ];
 }

@@ -1,7 +1,7 @@
 { lib, config, pkgs, ... }:
 
 let
-  mkConfigLink = import lib/mkConfigLink.nix {
+  mkConfigLink = import ./lib/mkConfigLink.nix {
     inherit config lib;
   };
 in
