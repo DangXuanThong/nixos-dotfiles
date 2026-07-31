@@ -16,31 +16,25 @@ in
 
   programs.fish = {
     enable = true;
-    shellAliases = {
-      ls = "eza -al --color=always --group-directories-first --icons=auto"; # preferred listing
-      la = "eza -a --color=always --group-directories-first --icons=auto";  # all files and dirs
-      ll = "eza -l --color=always --group-directories-first --icons=auto";  # long format
-      lt = "eza -aT --color=always --group-directories-first --icons=auto"; # tree listing
-      "l." = "eza -a | grep -e '^\\.'";                                # show only dotfiles
-
-      tarnow = "tar -acf ";
-      untar = "tar -zxvf ";
-      wget = "wget -c ";
-      psmem = "ps auxf | sort -nr -k 4";
-      psmem10 = "ps auxf | sort -nr -k 4 | head -10";
+    preferAbbrs = true;
+    shellAbbrs = {
       ".." = "cd ..";
       "..." = "cd ../..";
       "...." = "cd ../../..";
       "....." = "cd ../../../..";
       "......" = "cd ../../../../..";
-      dir = "dir --color=auto";
-      vdir = "vdir --color=auto";
+
+      tarnow = "tar -acf ";
+      untar = "tar -zxvf ";
+      wget = "wget -c ";
+      
       grep = "grep --color=auto";
       fgrep = "fgrep --color=auto";
       egrep = "egrep --color=auto";
       jctl = "journalctl -p 3 -xb";  # Get the error messages from journalctl
       past = "history --show-time='%F %T '";
-
+    };
+    shellAliases = {
       nix-rebuild = "clear && sudo nixos-rebuild switch --impure";
       nix-update = "clear && nix flake update --flake ~/nixos-dotfiles && sudo nixos-rebuild switch --impure";
       nix-cleanup = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +5 && sudo nix-collect-garbage";
@@ -91,11 +85,21 @@ in
     ];
   };
   programs.ghostty.enableFishIntegration = true;
+  programs.eza = {
+    enable = true;
+    enableFishIntegration = true;
+    extraOptions = [
+      "--group-directories-first"
+      "--header"
+      "--short-nix"
+    ];
+    icons = "always";
+    colors = "always";
+  };
 
   home.packages = with pkgs; [
     fastfetch
     bat
-    eza
   ];
 
   xdg.configFile = lib.mkMerge [
