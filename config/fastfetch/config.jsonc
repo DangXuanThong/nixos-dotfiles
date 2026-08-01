@@ -8,7 +8,8 @@
   "display": {
     "key": {
       "type": "both"
-    }
+    },
+    "disableLinewrap": true
   },
   "modules": [
     "title",
