@@ -26,13 +26,12 @@ in
 
       tarnow = "tar -acf ";
       untar = "tar -zxvf ";
-      wget = "wget -c ";
       
       grep = "grep --color=auto";
-      fgrep = "fgrep --color=auto";
-      egrep = "egrep --color=auto";
+      fgrep = "grep -F --color=auto";
+      egrep = "grep -E --color=auto";
       jctl = "journalctl -p 3 -xb";  # Get the error messages from journalctl
-      past = "history --show-time='%F %T '";
+      history = "history --show-time='%F %T '";
     };
     shellAliases = {
       nix-rebuild = "clear && sudo nixos-rebuild switch --impure";
@@ -40,38 +39,12 @@ in
       nix-cleanup = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +5 && sudo nix-collect-garbage";
     };
     interactiveShellInit = ''
-      function fish_greeting
-        if test "$TERM" = "xterm-kitty"
+      if test "$TERM" = "xterm-kitty"
           fastfetch
-        end
-      end
-    '';
-    shellInitLast = ''
-      # Add ~/.local/bin to PATH
-      if test -d ~/.local/bin
-        and not contains -- ~/.local/bin $fish_user_paths
-        set -U fish_user_paths ~/.local/bin $fish_user_paths
-      end
-
-      # Add depot_tools to PATH
-      if test -d ~/Applications/depot_tools
-        and not contains -- ~/Applications/depot_tools $fish_user_paths
-        set -U fish_user_paths ~/Applications/depot_tools $fish_user_paths
       end
     '';
     functions = {
       backup.body = "cp $filename $filename.bak";
-      # Copy DIR1 DIR2
-      copy.body = ''
-        set count (count $argv | tr -d \n)
-        if test "$count" = 2; and test -d "$argv[1]"
-          set from (echo $argv[1] | trim-right /)
-          set to (echo $argv[2])
-          command cp -r $from $to
-        else
-          command cp $argv
-        end
-      '';
       __notify_long_cmd_preexec = {
         body = ''
           set -l win_info (hyprctl activewindow -j 2>/dev/null)
@@ -89,7 +62,6 @@ in
       { name = "bang-bang"; src = bang-bang.src; }
     ];
   };
-  programs.ghostty.enableFishIntegration = true;
   programs.eza = {
     enable = true;
     enableFishIntegration = true;
