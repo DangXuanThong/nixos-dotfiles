@@ -21,6 +21,15 @@ in
     hyprpaper.enable = true;
     hyprlauncher.enable = true;
     blueman-applet.enable = true;
+    swaync = {
+      enable = true;
+      settings = {
+        positionX = "left";
+        positionY = "top";
+        notification-icon-size = 64;
+        layer-shell = true;
+      };
+    };
   };
 
   programs = {
@@ -49,7 +58,6 @@ in
     grim
     slurp
     wl-clipboard
-    dunst
     networkmanagerapplet
   ];
 
