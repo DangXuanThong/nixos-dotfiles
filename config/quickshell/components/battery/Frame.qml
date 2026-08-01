@@ -21,15 +21,6 @@ Item {
 
     property color backgroundColor: "gray"
     property color fillColor: "black"
-
-    // ---- Percentage digits (independent of the attribution glyph) -----
-    // Per decompiled BatteryViewModel/Lambda12, the digit list and the
-    // attribution glyph (Cap/Glyph) are separate mechanisms and can be
-    // shown simultaneously (e.g. charging bolt AND percentage visible at
-    // once). showPercentage defaults to true, matching AOSP's
-    // AlwaysShowPercent variant - wire it to a real setting if you want
-    // BasedOnUserSetting / ShowPercentWhenChargingOrSetting behavior instead.
-    property bool showPercentage: true
     property color digitColor: "black"
 
     id: root
@@ -47,6 +38,7 @@ Item {
         }
     }
 
+    // battery level fill
     Item {
         visible: root.level > 0
         width: Math.ceil((root.level / 100) * 24)
@@ -65,8 +57,8 @@ Item {
         }
     }
 
+    // percentage
     Digits {
-        visible: root.showPercentage
         level: root.level
         digitColor: root.digitColor
         anchors.fill: parent

@@ -70,21 +70,9 @@ StatusIcon {
             }
         }
 
-        readonly property color attributionColor: root.darkBackground ? "white" : "black"
+        readonly property color glyph: root.darkBackground ? "white" : "black"
 
-        // Decompiled from BatteryColors.java: DarkTheme.glyph is a constant
-        // (black @ 75% alpha) across every dark-theme subclass - no
-        // override anywhere, unlike background/fill which do vary by
-        // state. It reads as "dark" because the digits sit ON TOP of the
-        // bright translucent-white shell/fill in dark mode, so a dark
-        // semi-transparent glyph is what gives contrast there - same
-        // logic in reverse from attributionColor (bright icon OUTSIDE the
-        // shell on a dark status bar, vs dark digits INSIDE the shell on
-        // a bright fill). LightTheme.glyph is the same black @ 75% base
-        // value EXCEPT the Default subclass, which overrides it to white
-        // @ 90% - only relevant when darkBackground is false, state is
-        // DEFAULT, and not critical.
-        readonly property color glyph: {
+        readonly property color digit: {
             if (root.darkBackground) return Qt.rgba(0, 0, 0, 0.75);
             if (root.batteryState === Enums.BatteryState.DEFAULT && !root.isCritical) return Qt.rgba(1, 1, 1, 0.9);
             return Qt.rgba(0, 0, 0, 0.75);
@@ -101,7 +89,7 @@ StatusIcon {
             anchors.verticalCenter: parent.verticalCenter
             backgroundColor: colors.background
             fillColor: colors.fill
-            digitColor: colors.glyph
+            digitColor: colors.digit
         }
 
         // ---- Plain cap (only drawn when no attribution glyph is active) ----
@@ -109,7 +97,7 @@ StatusIcon {
             visible: root.batteryState === Enums.BatteryState.DEFAULT
             x: 25
             anchors.verticalCenter: parent.verticalCenter
-            fillColor: colors.attributionColor
+            fillColor: colors.glyph
             opacity: root.level === 100 ? 1.0 : 0.45
         }
 
@@ -120,7 +108,7 @@ StatusIcon {
             visible: root.batteryState !== Enums.BatteryState.DEFAULT
             x: (24 - glyph.activeGlyph.w * 0.2)
             anchors.verticalCenter: parent.verticalCenter
-            fillColor: colors.attributionColor
+            fillColor: colors.glyph
         }
     }
 }
