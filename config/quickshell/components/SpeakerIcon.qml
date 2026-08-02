@@ -3,6 +3,8 @@ import QtQuick
 
 StatusIcon {
     id: speakerRoot
+    implicitWidth: 18
+    implicitHeight: 18
 
     PwObjectTracker {
         objects: [sink]

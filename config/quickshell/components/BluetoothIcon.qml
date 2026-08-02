@@ -2,6 +2,9 @@ import Quickshell.Bluetooth
 import QtQuick
 
 StatusIcon {
+    implicitWidth: 24
+    implicitHeight: 24
+
     Text {
         text: "\uf293"
         color: "#ffffff"
