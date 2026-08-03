@@ -22,10 +22,11 @@ Item {
     ]
     readonly property list<int> digitChars: {
         if (level === 0) return [0]
+        let localLevel = level
         const res = []
-        while (level > 0) {
-            res.push(level % 10)
-            level /= 10
+        while (localLevel > 0) {
+            res.push(localLevel % 10)
+            localLevel = Math.floor(localLevel / 10)
         }
         return res.reverse()
     }
@@ -40,14 +41,12 @@ Item {
 
     property color digitColor: "black"
 
-    width: 24
-    height: 13
-
     Repeater {
         model: root.digitChars
 
         Shape {
             id: shape
+
             required property int modelData
             required property int index
 
@@ -62,8 +61,6 @@ Item {
 
             x: xOffset
             y: (13 - digitData.h) / 2
-            width: digitData.w
-            height: digitData.h
             preferredRendererType: Shape.CurveRenderer
 
             ShapePath {

@@ -4,8 +4,8 @@ import "../"
 
 StatusIcon {
     id: root
-    implicitWidth: 30.8
-    implicitHeight: 13
+
+    property real contentScale: 1.0
 
     readonly property UPowerDevice device: UPower.displayDevice
     readonly property int level: device.percentage * 100
@@ -27,6 +27,9 @@ StatusIcon {
     readonly property int criticalThreshold: 20
     readonly property bool isCritical: level <= criticalThreshold
     readonly property bool darkBackground: true
+
+    implicitWidth: 30.8 * contentScale
+    implicitHeight: 13 * contentScale
 
     function formatDuration(seconds) {
         if (seconds <= 0) return ""
@@ -81,31 +84,40 @@ StatusIcon {
         }
     }
 
-    Frame {
-        batteryState: root.batteryState
-        level: root.level
-        anchors.verticalCenter: parent.verticalCenter
-        backgroundColor: colors.background
-        fillColor: colors.fill
-        digitColor: colors.digit
-    }
+    Item {
+        id: content
+        implicitWidth: 30.8
+        implicitHeight: 13
+        anchors.centerIn: parent
+        scale: root.contentScale
+        transformOrigin: Item.Center
 
-    // ---- Plain cap (only drawn when no attribution glyph is active) ----
-    Cap {
-        visible: root.batteryState === Enums.BatteryState.DEFAULT
-        x: 25
-        anchors.verticalCenter: parent.verticalCenter
-        fillColor: colors.glyph
-        opacity: root.level === 100 ? 1.0 : 0.45
-    }
+        Frame {
+            batteryState: root.batteryState
+            level: root.level
+            anchors.verticalCenter: parent.verticalCenter
+            backgroundColor: colors.background
+            fillColor: colors.fill
+            digitColor: colors.digit
+        }
 
-    // ---- Attribution glyph (replaces the cap, overlaps shell 20%) ------
-    Glyph {
-        id: glyph
-        batteryState: root.batteryState
-        visible: root.batteryState !== Enums.BatteryState.DEFAULT
-        x: (24 - glyph.activeGlyph.w * 0.2)
-        anchors.verticalCenter: parent.verticalCenter
-        fillColor: colors.glyph
+        // ---- Plain cap (only drawn when no attribution glyph is active) ----
+        Cap {
+            visible: root.batteryState === Enums.BatteryState.DEFAULT
+            x: 25
+            anchors.verticalCenter: parent.verticalCenter
+            fillColor: colors.glyph
+            opacity: root.level === 100 ? 1.0 : 0.45
+        }
+
+        // ---- Attribution glyph (replaces the cap, overlaps shell 20%) ------
+        Glyph {
+            id: glyph
+            batteryState: root.batteryState
+            visible: root.batteryState !== Enums.BatteryState.DEFAULT
+            x: (24 - glyph.activeGlyph.w * 0.2)
+            anchors.verticalCenter: parent.verticalCenter
+            fillColor: colors.glyph
+        }
     }
 }
