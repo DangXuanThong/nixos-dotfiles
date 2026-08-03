@@ -4,20 +4,14 @@ import QtQuick.Controls
 Item {
     id: root
 
-    required property string tooltipText
+    property alias tooltipText: toolTip.text
 
-    width: childrenRect.width
-    height: childrenRect.height
-
-    MouseArea {
-        id: area
-        anchors.fill: parent
-        hoverEnabled: true
+    HoverHandler {
+        id: hover
     }
 
     ToolTip {
-        visible: area.containsMouse
-        text: root.tooltipText
-        y: root.height + 4
+        id: toolTip
+        visible: hover.hovered
     }
 }

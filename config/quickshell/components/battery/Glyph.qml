@@ -1,7 +1,9 @@
 import QtQuick
 import QtQuick.Shapes
 
-Shape {
+Item {
+    id: root
+
     required property int batteryState
 
     readonly property var glyphPaths: [
@@ -34,14 +36,15 @@ Shape {
 
     property color fillColor: "white"
 
-    id: root
-    width: activeGlyph.w
-    height: activeGlyph.h
-    preferredRendererType: Shape.CurveRenderer
+    implicitWidth: root.activeGlyph.w
+    implicitHeight: root.activeGlyph.h
 
-    ShapePath {
-        fillColor: root.fillColor
-        strokeWidth: -1
-        PathSvg { path: root.activeGlyph.d }
+    Shape {
+        preferredRendererType: Shape.CurveRenderer
+        ShapePath {
+            fillColor: root.fillColor
+            strokeWidth: -1
+            PathSvg { path: root.activeGlyph.d }
+        }
     }
 }

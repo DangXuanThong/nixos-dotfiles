@@ -5,6 +5,8 @@ import "../"
 StatusIcon {
     id: root
 
+    property real contentScale: 1.0
+
     readonly property UPowerDevice device: UPower.displayDevice
     readonly property int level: device.percentage * 100
     readonly property int batteryState: {
@@ -25,6 +27,9 @@ StatusIcon {
     readonly property int criticalThreshold: 20
     readonly property bool isCritical: level <= criticalThreshold
     readonly property bool darkBackground: true
+
+    implicitWidth: 30.8 * contentScale
+    implicitHeight: 13 * contentScale
 
     function formatDuration(seconds) {
         if (seconds <= 0) return ""
@@ -70,12 +75,22 @@ StatusIcon {
             }
         }
 
-        readonly property color attributionColor: root.darkBackground ? "white" : "black"
+        readonly property color glyph: root.darkBackground ? "white" : "black"
+
+        readonly property color digit: {
+            if (root.darkBackground) return Qt.rgba(0, 0, 0, 0.75);
+            if (root.batteryState === Enums.BatteryState.DEFAULT && !root.isCritical) return Qt.rgba(1, 1, 1, 0.9);
+            return Qt.rgba(0, 0, 0, 0.75);
+        }
     }
 
     Item {
+        id: content
         implicitWidth: 30.8
         implicitHeight: 13
+        anchors.centerIn: parent
+        scale: root.contentScale
+        transformOrigin: Item.Center
 
         Frame {
             batteryState: root.batteryState
@@ -83,6 +98,7 @@ StatusIcon {
             anchors.verticalCenter: parent.verticalCenter
             backgroundColor: colors.background
             fillColor: colors.fill
+            digitColor: colors.digit
         }
 
         // ---- Plain cap (only drawn when no attribution glyph is active) ----
@@ -90,7 +106,7 @@ StatusIcon {
             visible: root.batteryState === Enums.BatteryState.DEFAULT
             x: 25
             anchors.verticalCenter: parent.verticalCenter
-            fillColor: colors.attributionColor
+            fillColor: colors.glyph
             opacity: root.level === 100 ? 1.0 : 0.45
         }
 
@@ -101,7 +117,7 @@ StatusIcon {
             visible: root.batteryState !== Enums.BatteryState.DEFAULT
             x: (24 - glyph.activeGlyph.w * 0.2)
             anchors.verticalCenter: parent.verticalCenter
-            fillColor: colors.attributionColor
+            fillColor: colors.glyph
         }
     }
 }

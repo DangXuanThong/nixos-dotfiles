@@ -21,10 +21,11 @@ Item {
 
     property color backgroundColor: "gray"
     property color fillColor: "black"
+    property color digitColor: "black"
 
     id: root
-    width: 24
-    height: 13
+    implicitWidth: 24
+    implicitHeight: 13
 
     // background shell
     Shape {
@@ -32,26 +33,32 @@ Item {
         preferredRendererType: Shape.CurveRenderer
         ShapePath {
             fillColor: root.backgroundColor
-            strokeWidth: 0
+            strokeWidth: -1
             PathSvg { path: root.activeFrame }
         }
     }
 
+    // battery level fill
     Item {
         visible: root.level > 0
-        width: Math.ceil((root.level / 100) * 24)
-        height: parent.height
+        implicitWidth: Math.ceil((root.level / 100) * 24)
+        implicitHeight: parent.height
         clip: true
 
         Shape {
-            width: 24
-            height: 13
             preferredRendererType: Shape.CurveRenderer
             ShapePath {
                 fillColor: root.fillColor
-                strokeWidth: 0
+                strokeWidth: -1
                 PathSvg { path: root.activeFrame }
             }
         }
+    }
+
+    // percentage
+    Digits {
+        level: root.level
+        digitColor: root.digitColor
+        anchors.fill: parent
     }
 }
