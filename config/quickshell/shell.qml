@@ -1,7 +1,10 @@
 import Quickshell
 import QtQuick
-import "components"
-import "components/battery"
+import "modules/battery"
+import "modules/wifi"
+import "modules/clock"
+import "modules/speaker"
+import "modules/bluetooth"
 
 ShellRoot {
     PanelWindow {   // qmllint disable uncreatable-type
