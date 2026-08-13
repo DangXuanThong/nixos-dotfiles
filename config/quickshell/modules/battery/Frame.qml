@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Shapes
 
 Item {
+    id: root
+
     required property int batteryState
     required property int level
 
@@ -23,33 +25,31 @@ Item {
     property color fillColor: "black"
     property color digitColor: "black"
 
-    id: root
     implicitWidth: 24
     implicitHeight: 13
 
-    // background shell
-    Shape {
-        anchors.fill: parent
-        preferredRendererType: Shape.CurveRenderer
-        ShapePath {
-            fillColor: root.backgroundColor
-            strokeWidth: -1
-            PathSvg { path: root.activeFrame }
-        }
-    }
-
-    // battery level fill
+    // Battery pill, drawn once as a single Shape. The charge level is
+    // expressed as a hard-stop gradient
     Item {
-        visible: root.level > 0
-        implicitWidth: Math.ceil((root.level / 100) * 24)
-        implicitHeight: parent.height
-        clip: true
-
+        anchors.fill: parent
         Shape {
+            width: 24
+            height: 13
+            anchors.centerIn: parent
             preferredRendererType: Shape.CurveRenderer
+
             ShapePath {
-                fillColor: root.fillColor
                 strokeWidth: -1
+                fillGradient: LinearGradient {
+                    x1: 0
+                    y1: 0
+                    x2: 24
+                    y2: 0
+                    GradientStop { position: 0; color: root.fillColor }
+                    GradientStop { position: root.level / 100; color: root.fillColor }
+                    GradientStop { position: Math.min(1, root.level / 100 + 0.001); color: root.backgroundColor }
+                    GradientStop { position: 1; color: root.backgroundColor }
+                }
                 PathSvg { path: root.activeFrame }
             }
         }

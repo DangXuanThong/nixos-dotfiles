@@ -1,5 +1,6 @@
 import Quickshell.Bluetooth
 import QtQuick
+import "../../components"
 
 StatusIcon {
     implicitWidth: 24

@@ -1,12 +1,12 @@
 import Quickshell.Services.UPower
 import QtQuick
-import "../"
+import "../../components"
 
 StatusIcon {
     id: root
 
-    property real contentScale: 1.0
-
+    readonly property real baseWidth: 30.8
+    readonly property real baseHeight: 13
     readonly property UPowerDevice device: UPower.displayDevice
     readonly property int level: device.percentage * 100
     readonly property int batteryState: {
@@ -28,8 +28,10 @@ StatusIcon {
     readonly property bool isCritical: level <= criticalThreshold
     readonly property bool darkBackground: true
 
-    implicitWidth: 30.8 * contentScale
-    implicitHeight: 13 * contentScale
+    property real contentScale: 1.0
+
+    implicitWidth: baseWidth * contentScale
+    implicitHeight: baseHeight * contentScale
 
     function formatDuration(seconds) {
         if (seconds <= 0) return ""
@@ -85,10 +87,9 @@ StatusIcon {
     }
 
     Item {
-        id: content
-        implicitWidth: 30.8
-        implicitHeight: 13
         anchors.centerIn: parent
+        implicitWidth: root.baseWidth
+        implicitHeight: root.baseHeight
         scale: root.contentScale
         transformOrigin: Item.Center
 

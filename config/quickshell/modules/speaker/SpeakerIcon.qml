@@ -1,5 +1,6 @@
 import Quickshell.Services.Pipewire
 import QtQuick
+import "../../components"
 
 StatusIcon {
     id: speakerRoot
@@ -15,10 +16,10 @@ StatusIcon {
     property bool muted: !sink || sink.audio.muted || volume <= 0
 
     property string iconSource: {
-        if (muted) return "../assets/volume_mute.svg";
-        if (volume <= 0.30) return "../assets/volume_low.svg";
-        if (volume <= 0.60) return "../assets/volume_med.svg";
-        return "../assets/volume_high.svg";
+        if (muted) return "volume_mute.svg";
+        if (volume <= 0.30) return "volume_low.svg";
+        if (volume <= 0.60) return "volume_med.svg";
+        return "volume_high.svg";
     }
 
     Image {

@@ -1,5 +1,6 @@
 import Quickshell.Networking
 import QtQuick
+import "../../components"
 
 StatusIcon {
     id: wifiRoot
@@ -34,15 +35,15 @@ StatusIcon {
     property bool isPublic: connectedNetwork?.security === WifiSecurityType.Open
 
     property string iconSource: {
-        if (isEthernetConnected) return "../assets/ethernet.svg";
-        if (!isWifiEnabled) return "../assets/wifi_off.svg";
-        if (!connectedNetwork) return "../assets/wifi_not_connected.svg";
-        if (!hasInternetAccess) return "../assets/wifi_no_internet.svg";
+        if (isEthernetConnected) return "ethernet.svg";
+        if (!isWifiEnabled) return "wifi_off.svg";
+        if (!connectedNetwork) return "wifi_not_connected.svg";
+        if (!hasInternetAccess) return "wifi_no_internet.svg";
         var tier = connectedNetwork.signalStrength <= 0.33 ? "weak"
             : connectedNetwork.signalStrength <= 0.66 ? "med"
             : "strong";
         var kind = isPublic ? "public" : "private";
-        return "../assets/wifi_" + kind + "_" + tier + ".svg";
+        return "wifi_" + kind + "_" + tier + ".svg";
     }
 
     Image {

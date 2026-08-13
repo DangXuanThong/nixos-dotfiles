@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Shapes
+import "../../components"
 
 Item {
     id: root
@@ -44,8 +45,8 @@ Item {
     Repeater {
         model: root.digitChars
 
-        Shape {
-            id: shape
+        SvgIcon {
+            id: digit
 
             required property int modelData
             required property int index
@@ -61,14 +62,11 @@ Item {
 
             x: xOffset
             y: (13 - digitData.h) / 2
-            preferredRendererType: Shape.CurveRenderer
-
-            ShapePath {
-                fillColor: root.digitColor
-                fillRule: ShapePath.WindingFill
-                strokeWidth: -1
-                PathSvg { path: shape.digitData.d }
-            }
+            svgPath: digitData.d
+            sourceWidth: digitData.w
+            sourceHeight: digitData.h
+            fillColor: root.digitColor
+            fillRule: ShapePath.WindingFill
         }
     }
 }
