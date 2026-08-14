@@ -32,11 +32,10 @@ in
       egrep = "grep -E --color=auto";
       jctl = "journalctl -p 3 -xb";  # Get the error messages from journalctl
       history = "history --show-time='%F %T '";
-    };
-    shellAliases = {
-      nix-rebuild = "clear && sudo nixos-rebuild switch --impure";
-      nix-update = "clear && nix flake update --flake ~/nixos-dotfiles && sudo nixos-rebuild switch --impure";
-      nix-cleanup = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +5 && sudo nix-collect-garbage";
+
+      nixswitch = "clear && nh os switch --impure";
+      nixupdate = "clear && nh os switch --update --impure";
+      nixclean = "clear && nh clean all --keep 5 --optimise";
     };
     interactiveShellInit = ''
       if test "$TERM" = "xterm-kitty"
