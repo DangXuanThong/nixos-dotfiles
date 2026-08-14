@@ -91,6 +91,7 @@
   };
 
   services = {
+    displayManager.regreet.enable = true;
     # Enable CUPS to print documents.
     printing.enable = true;
     printing.drivers = [
@@ -130,7 +131,6 @@
         fi
       '';
     };
-    regreet.enable = true;
     hyprland = {
       enable = true;
       withUWSM = true;

@@ -53,7 +53,7 @@ in
     prismlauncher
     protonplus
     heroic
-    ryubing # nintendo switch emulator (.nsp)
+    eden # nintendo switch emulator (.nsp)
     azahar # 3ds emulator (.3ds)
     # Dev
     jetbrains.idea
@@ -71,6 +71,7 @@ in
     # Skipping tests while upstream sorts it out, revert once
     # Hydra consistently builds openldap green.
     (import ./overlays/genymotion.nix)
+    (import ./overlays/azahar-cstring-fix.nix)
   ];
 
   xdg.configFile = lib.mkMerge [
