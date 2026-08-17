@@ -45,6 +45,15 @@ in
     };
     vscode.enable = true;
     # Other
+    nh = {
+      enable = true;
+      flake = "$HOME/nixos-dotfiles";
+      clean = {
+        enable = true;
+        dates = "weekly";
+        extraArgs = "--keep 5 --optimise";
+      };
+    };
   };
 
   # Packages that should be installed to the user profile.
@@ -53,7 +62,7 @@ in
     prismlauncher
     protonplus
     heroic
-    ryubing # nintendo switch emulator (.nsp)
+    eden # nintendo switch emulator (.nsp)
     azahar # 3ds emulator (.3ds)
     # Dev
     jetbrains.idea
@@ -71,17 +80,12 @@ in
     # Skipping tests while upstream sorts it out, revert once
     # Hydra consistently builds openldap green.
     (import ./overlays/genymotion.nix)
+    (import ./overlays/azahar-cstring-fix.nix)
   ];
 
   xdg.configFile = lib.mkMerge [
     (mkConfigLink "MangoHud")
   ];
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
-  };
 
   home.activation.flutterSymlink = lib.hm.dag.entryAfter ["writeBoundary"] ''
     ln -sfn ${pkgs.flutter} $HOME/flutter
