@@ -39,10 +39,10 @@ ShellRoot {
                 BluetoothIcon {
                     anchors.verticalCenter: parent.verticalCenter
                 }
-                WifiIcon {
+                SpeakerIcon {
                     anchors.verticalCenter: parent.verticalCenter
                 }
-                SpeakerIcon {
+                WifiIcon {
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 BatteryIcon {
