@@ -13,32 +13,37 @@ StatusIcon {
         "M18.3769 4.94078C18.9684 4.34928 18.9452 3.37504 18.2725 2.88792C15.7789 1.07862 12.717 0 9.4 0C6.08295 0 3.02106 1.06702 0.52747 2.88792C-0.145218 3.37504 -0.168414 4.34928 0.423088 4.94078C0.968197 5.48589 1.83805 5.50909 2.46435 5.06836C4.43602 3.69979 6.82523 2.89952 9.4 2.89952C11.9748 2.89952 14.364 3.69979 16.3356 5.06836C16.9619 5.50909 17.8318 5.48589 18.3769 4.94078Z"
     ]
     readonly property string noInternetPath: "M0.87 0C0.3944 0 0 0.3944 0 0.87V4.35C0 4.8256 0.3944 5.22 0.87 5.22C1.3456 5.22 1.74 4.8256 1.74 4.35V0.87C1.74 0.3944 1.3456 0 0.87 0ZM0.87 8.12C1.3456 8.12 1.74 7.7256 1.74 7.25C1.74 6.7744 1.3456 6.38 0.87 6.38C0.3944 6.38 0 6.7744 0 7.25C0 7.7256 0.3944 8.12 0.87 8.12Z"
+    readonly property double sourceWidth: 18.8
+    readonly property double sourceHeight: 13.92
+    readonly property double scaleFactor: Math.min(width / sourceWidth, height / sourceHeight)
 
     property color fillActive: "white"
     property color fillInactive: Qt.alpha(fillActive, 0.45)
     property bool hasInternetAccess: true
 
     Item {
-        implicitWidth: 18.8
-        implicitHeight: 13.92
         anchors.centerIn: parent
+        width: root.sourceWidth
+        height: root.sourceHeight
+        scale: root.scaleFactor
+        transformOrigin: Item.Center
 
         SvgIcon {
             svgPath: root.signalPaths[0]
-            sourceWidth: 18.8
-            sourceHeight: 13.92
+            sourceWidth: root.sourceWidth
+            sourceHeight: root.sourceHeight
             fillColor: root.strength < 0 ? root.fillInactive : root.fillActive
         }
         SvgIcon {
             svgPath: root.signalPaths[1]
-            sourceWidth: 18.8
-            sourceHeight: 13.92
+            sourceWidth: root.sourceWidth
+            sourceHeight: root.sourceHeight
             fillColor: root.strength < 33 ? root.fillInactive : root.fillActive
         }
         SvgIcon {
             svgPath: root.signalPaths[2]
-            sourceWidth: 18.8
-            sourceHeight: 13.92
+            sourceWidth: root.sourceWidth
+            sourceHeight: root.sourceHeight
             fillColor: root.strength < 66 ? root.fillInactive : root.fillActive
         }
         SvgIcon {

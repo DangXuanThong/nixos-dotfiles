@@ -5,9 +5,6 @@ import "../../components"
 StatusIcon {
     id: root
 
-    readonly property double baseWidth: 24
-    readonly property double baseHeight: 24
-
     readonly property bool isEthernetConnected: {
         const devices = Networking.devices.values;
         for (var i = 0; i < devices.length; i++) {
@@ -37,11 +34,14 @@ StatusIcon {
         Networking.connectivity !== NetworkConnectivity.Limited &&
         Networking.connectivity !== NetworkConnectivity.Portal
 
-    property double contentScale: 1.0
     property bool darkBackground: true
 
-    implicitWidth: baseWidth * contentScale
-    implicitHeight: baseHeight * contentScale
+    readonly property double designWidth: 15
+    readonly property real designHeight: 15
+    readonly property real contentScale: height / designHeight
+
+    implicitWidth: designWidth * contentScale
+    implicitHeight: designHeight * contentScale
 
     tooltipText: {
         if (isEthernetConnected) return "Ethernet connected";
@@ -60,14 +60,14 @@ StatusIcon {
 
     Item {
         anchors.centerIn: parent
-        implicitWidth: root.baseWidth
-        implicitHeight: root.baseHeight
+        width: root.designWidth
+        height: root.designHeight
         scale: root.contentScale
         transformOrigin: Item.Center
 
         Wired {
             visible: root.isEthernetConnected
-            anchors.centerIn: parent
+            anchors.fill: parent
             fillColor: colors.fill
         }
         Wireless {
@@ -75,11 +75,11 @@ StatusIcon {
             strength: root.strength
             hasInternetAccess: root.hasInternetAccess
             fillActive: colors.fill
-            anchors.centerIn: parent
+            anchors.fill: parent
         }
         Off {
             visible: !root.isEthernetConnected && !root.isWifiEnabled
-            anchors.centerIn: parent
+            anchors.fill: parent
             fillColor: colors.fill
         }
     }

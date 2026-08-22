@@ -5,8 +5,6 @@ import "../../components"
 StatusIcon {
     id: root
 
-    readonly property real baseWidth: 30.8
-    readonly property real baseHeight: 13
     readonly property UPowerDevice device: UPower.displayDevice
     readonly property int level: device.percentage * 100
     readonly property int batteryState: {
@@ -28,10 +26,12 @@ StatusIcon {
     readonly property bool isCritical: level <= criticalThreshold
     readonly property bool darkBackground: true
 
-    property real contentScale: 1.0
+    readonly property double designWidth: 30.8
+    readonly property double designHeight: 13
+    readonly property double contentScale: height / designHeight
 
-    implicitWidth: baseWidth * contentScale
-    implicitHeight: baseHeight * contentScale
+    implicitWidth: designWidth * contentScale
+    implicitHeight: designHeight * contentScale
 
     function formatDuration(seconds) {
         if (seconds <= 0) return ""
@@ -88,8 +88,8 @@ StatusIcon {
 
     Item {
         anchors.centerIn: parent
-        implicitWidth: root.baseWidth
-        implicitHeight: root.baseHeight
+        width: root.designWidth
+        height: root.designHeight
         scale: root.contentScale
         transformOrigin: Item.Center
 
