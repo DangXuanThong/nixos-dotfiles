@@ -37,8 +37,8 @@ StatusIcon {
     property bool darkBackground: true
 
     readonly property double designWidth: 15
-    readonly property real designHeight: 15
-    readonly property real contentScale: height / designHeight
+    readonly property double designHeight: 15
+    readonly property double contentScale: height / designHeight
 
     implicitWidth: designWidth * contentScale
     implicitHeight: designHeight * contentScale

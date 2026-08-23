@@ -42,7 +42,7 @@ ShellRoot {
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 SpeakerIcon {
-                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
                 }
                 WifiIcon {
                     height: parent.height

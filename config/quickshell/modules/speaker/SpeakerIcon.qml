@@ -3,37 +3,31 @@ import QtQuick
 import "../../components"
 
 StatusIcon {
-    id: speakerRoot
-    implicitWidth: 18
-    implicitHeight: 18
+    id: root
 
-    PwObjectTracker {
-        objects: [sink]
-    }
+    readonly property var sink: Pipewire.defaultAudioSink
+    readonly property bool muted: !sink || sink.audio.muted || sink.audio.volume <= 0
+    readonly property int volume: !muted ? Math.round(sink.audio.volume * 100) : 0
 
-    property var sink: Pipewire.defaultAudioSink
-    property real volume: sink ? sink.audio.volume : 0
-    property bool muted: !sink || sink.audio.muted || volume <= 0
+    readonly property double designWidth: 15
+    readonly property double designHeight: 15
+    readonly property double contentScale: height / designHeight
 
-    property string iconSource: {
-        if (muted) return "volume_mute.svg";
-        if (volume <= 0.30) return "volume_low.svg";
-        if (volume <= 0.60) return "volume_med.svg";
-        return "volume_high.svg";
-    }
-
-    Image {
-        source: speakerRoot.iconSource
-        sourceSize.width: 18
-        sourceSize.height: 18
-        width: 18
-        height: 18
-    }
+    implicitWidth: designWidth * contentScale
+    implicitHeight: designHeight * contentScale
 
     tooltipText: {
         if (!sink) return "No output device";
         var name = sink.description || sink.nickname;
-        var pct = Math.round(sink.audio.volume * 100) + "%";
-        return name + " • " + pct;
+        return name + " • " + volume + "%";
+    }
+
+    PwObjectTracker {
+        objects: [root.sink]
+    }
+
+    SpeakerVolume {
+        level: root.volume
+        anchors.fill: parent
     }
 }
