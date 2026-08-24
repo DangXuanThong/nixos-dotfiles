@@ -46,7 +46,7 @@ Item {
                     x2: 24
                     y2: 0
                     GradientStop { position: 0; color: root.fillColor }
-                    GradientStop { position: root.level / 100; color: root.fillColor }
+                    GradientStop { position: Math.max(0, root.level / 100 - 0.001); color: root.fillColor }
                     GradientStop { position: Math.min(1, root.level / 100 + 0.001); color: root.backgroundColor }
                     GradientStop { position: 1; color: root.backgroundColor }
                 }

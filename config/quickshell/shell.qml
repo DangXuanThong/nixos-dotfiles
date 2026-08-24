@@ -15,38 +15,40 @@ ShellRoot {
         }
 
         implicitHeight: 120
-        exclusiveZone: 28
+        exclusiveZone: bar.barHeight
         color: "transparent"
         mask: Region { item: bar }
 
         Item {
             id: bar
 
+            readonly property double barHeight: 28
+
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            height: 28
+            height: barHeight
 
             Clock {}
 
             Row {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 1.5
-                rightPadding: 12
-                spacing: 12
+                height: 16
+                rightPadding: 8
+                spacing: 8
 
                 BluetoothIcon {
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                WifiIcon {
-                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
                 }
                 SpeakerIcon {
-                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
+                }
+                WifiIcon {
+                    height: parent.height
                 }
                 BatteryIcon {
-                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
                 }
             }
         }
