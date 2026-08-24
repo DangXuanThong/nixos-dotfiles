@@ -39,7 +39,7 @@ ShellRoot {
                 spacing: 8
 
                 BluetoothIcon {
-                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
                 }
                 SpeakerIcon {
                     height: parent.height

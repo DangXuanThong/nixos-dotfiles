@@ -17,19 +17,13 @@ StatusIcon {
         return volumePaths[1]                   // high
     }
 
-    property bool darkBackground: true
-
-    QtObject {
-        id: colors
-
-        readonly property color fill: root.darkBackground ? "white" : "black"
-    }
+    property color fillColor: "black"
 
     SvgIcon {
         svgPath: root.eligiblePath
         sourceWidth: 18
         sourceHeight: 16.58
         anchors.fill: parent
-        fillColor: colors.fill
+        fillColor: root.fillColor
     }
 }

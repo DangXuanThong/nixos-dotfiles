@@ -22,12 +22,21 @@ StatusIcon {
         return name + " • " + volume + "%";
     }
 
+    property bool darkBackground: true
+
     PwObjectTracker {
         objects: [root.sink]
+    }
+
+    QtObject {
+        id: colors
+
+        readonly property color fill: root.darkBackground ? "white" : "black"
     }
 
     SpeakerVolume {
         level: root.volume
         anchors.fill: parent
+        fillColor: colors.fill
     }
 }
