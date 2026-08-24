@@ -37,7 +37,7 @@ This is the **`main`** branch. For the legacy KDE Plasma 6 desktop, see the [`kd
 ### Fresh NixOS system
 
 ```bash
-nix-shell -p git --run 'git clone https://github.com/DangXuanThong/nixos-dotfiles.git ~/nixos-dotfiles'
+nix shell nixpkgs#git --command 'git clone https://github.com/DangXuanThong/nixos-dotfiles.git ~/nixos-dotfiles'
 
 # Optional: Symlink to /etc/nixos
 sudo rm -rf /etc/nixos
@@ -58,7 +58,7 @@ sudo NIX_CONFIG="experimental-features = nix-command flakes" nixos-rebuild switc
 ## Updating
 
 ```bash
-nix-update   # flake update + rebuild
-nix-rebuild  # rebuild only
-nix-cleanup  # keep latest 5 system generations + garbage collect
+nh os switch --update --impure      # flake update + rebuild
+nh os switch --impure               # rebuild only
+nh clean all --keep 5 --optimise    # keep latest 5 system generations + garbage collect
 ```
