@@ -3,14 +3,14 @@
 let
   # Compose an Android SDK with the SDK tools you want
   androidComposition = pkgs.androidenv.composeAndroidPackages {
-    platformVersions = [ "36.1" "latest" ];  # required SDK versions
-    buildToolsVersions = [ "36.1.0" ];
+    platformVersions = [ "37.1" "latest" ];  # required SDK versions
+    buildToolsVersions = [ "37.0.0" ];
     includeSources = true;
     toolsVersion = null;
 
     includeEmulator = true;
     includeSystemImages = true;
-    systemImageTypes = [ "google_apis" ];
+    systemImageTypes = [ "google_apis_ps16k" ];
     abiVersions = [ "x86_64" ];
   };
 
