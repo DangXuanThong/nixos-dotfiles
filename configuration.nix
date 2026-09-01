@@ -45,7 +45,7 @@
       options = [ "nofail" "uid=1000" "gid=1000" "windows_names" ];
     };
     "/run/media/penguin/Docker" = {
-      device = "/dev/disk/by-uuid/bfc0adbc-1fdc-a64a-9371-c577db51e4f6";
+      device = "/dev/disk/by-uuid/d27a5ea9-a0f9-49bc-94fb-882cffe6c10e";
       fsType = "ext4";
       options = [ "nofail" ];
     };
@@ -166,12 +166,16 @@
 
   virtualisation = {
     docker = {
-      enable = true;
-      daemon.settings = {
-        experimental = true;
-        data-root = "/run/media/penguin/Docker";
+      rootless = {
+        enable = true;
+        daemon.settings = {
+          experimental = true;
+          data-root = "/run/media/penguin/Docker";
+        };
+        setSocketVariable = true;
       };
       enableOnBoot = false;
+      storageDriver = "overlay2";
     };
     # virtualbox.host.enable = true;
     # virtualbox.host.enableKvm = true;
