@@ -15,6 +15,7 @@ in
     ./modules/hyprland.nix
   ];
 
+  home = {
   # This value determines the home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new home Manager release introduces backwards
@@ -23,9 +24,13 @@ in
   # You can update home Manager without changing this value. See
   # the home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "25.11";
-  home.username = "penguin";
-  home.homeDirectory = "/home/penguin";
+    stateVersion = "25.11";
+    username = "penguin";
+    homeDirectory = "/home/penguin";
+    # sessionPath = [
+    #   "${pkgs.jdk21.home}/bin"
+    # ];
+  };
 
   programs = {
     # Gaming
@@ -69,7 +74,6 @@ in
     python314
     nodejs
     genymotion
-    flutter
     # Other
     kdePackages.filelight
     onlyoffice-desktopeditors
@@ -86,8 +90,4 @@ in
   xdg.configFile = lib.mkMerge [
     (mkConfigLink "MangoHud")
   ];
-
-  home.activation.flutterSymlink = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    ln -sfn ${pkgs.flutter} $HOME/flutter
-  '';
 }
