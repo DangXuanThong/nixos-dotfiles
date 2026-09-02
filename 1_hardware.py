@@ -137,17 +137,26 @@ def which(cmd: str) -> bool:
 # ---------------------------------------------------------------------------
 USE_TUI = sys.stdout.isatty()
 BAR_ROW = 0
+BAR_HEIGHT = 1       # 1 (single line) or 2 (bar + text on separate lines)
 LOG_BOTTOM = 0
+NARROW_COLS = 60     # below this width, split the bar and text onto 2 lines
+MIN_BAR_WIDTH = 10   # never render a bar shorter than this
 _cleanup_done = False
 
 
 def setup_screen() -> None:
-    global BAR_ROW, LOG_BOTTOM
+    global BAR_ROW, BAR_HEIGHT, LOG_BOTTOM
     if not USE_TUI:
         return
-    rows = shutil.get_terminal_size().lines
+    size = shutil.get_terminal_size()
+    rows, cols = size.lines, size.columns
+    # Decided once, at setup time, since it determines how many rows we
+    # carve out of the scroll region — not re-evaluated per redraw (that
+    # would desync the reserved rows from the actual scroll region without
+    # also handling SIGWINCH, which this script doesn't).
+    BAR_HEIGHT = 2 if cols < NARROW_COLS else 1
     BAR_ROW = rows
-    LOG_BOTTOM = rows - 1
+    LOG_BOTTOM = rows - BAR_HEIGHT
     # hide cursor
     sys.stdout.write("\033[?25l")
     # set scroll region to lines 1 .. LOG_BOTTOM
@@ -162,17 +171,29 @@ def restore_screen() -> None:
         return
     # reset scroll region
     sys.stdout.write("\033[r")
-    # explicitly clear the bottom row — resetting the scroll region above
-    # only changes future scrolling behaviour, it does NOT erase whatever
-    # the status bar last drew there. Without this, an interrupted run
-    # (Ctrl-C) leaves the stale progress bar frozen on screen, since no
-    # further output happens afterwards to scroll it away.
+    # explicitly clear every reserved bottom row — resetting the scroll
+    # region above only changes future scrolling behaviour, it does NOT
+    # erase whatever the status bar last drew there. Without this, an
+    # interrupted run (Ctrl-C) leaves the stale progress bar frozen on
+    # screen, since no further output happens afterwards to scroll it away.
     if BAR_ROW:
-        sys.stdout.write(f"\033[{BAR_ROW};1H\033[2K")
+        for row in range(BAR_ROW - BAR_HEIGHT + 1, BAR_ROW + 1):
+            sys.stdout.write(f"\033[{row};1H\033[2K")
     # show cursor
     sys.stdout.write("\033[?25h")
     sys.stdout.write("\n")
     sys.stdout.flush()
+
+
+def _truncate(s: str, max_len: int) -> str:
+    """Shorten s to at most max_len chars, with a trailing ellipsis if cut."""
+    if max_len <= 0:
+        return ""
+    if len(s) <= max_len:
+        return s
+    if max_len == 1:
+        return "…"
+    return s[: max_len - 1] + "…"
 
 
 def draw_bar(installed: int, total: int, pkg: str) -> None:
@@ -181,20 +202,46 @@ def draw_bar(installed: int, total: int, pkg: str) -> None:
         return
 
     pct = (installed * 100) // total if total else 100
-    width = 30
-    filled = (pct * width) // 100
-    empty = width - filled
-    bar = "#" * filled + "-" * empty
+    cols = shutil.get_terminal_size().columns
 
-    # save cursor, jump to bottom row, clear, draw, restore cursor
-    sys.stdout.write("\0337")
-    sys.stdout.write(f"\033[{BAR_ROW};1H")
-    sys.stdout.write("\033[2K")
-    sys.stdout.write(
-        f"\033[7m [{bar}] {pct:3d}% | {installed}/{total} installed | "
-        f"installing: {pkg:<30s} \033[0m"
-    )
-    sys.stdout.write("\0338")
+    sys.stdout.write("\0337")  # save cursor position
+
+    if BAR_HEIGHT == 2:
+        # Narrow terminal: the bar gets its own full-width line, stats
+        # (percentage / counts / current package) go on the line below,
+        # truncated with an ellipsis if they don't fit.
+        bar_width = max(cols - 2, 1)
+        filled = (pct * bar_width) // 100
+        bar = "#" * filled + "-" * (bar_width - filled)
+        stats = _truncate(
+            f"{pct:3d}% | {installed}/{total} installed | {pkg}", cols
+        )
+
+        sys.stdout.write(f"\033[{BAR_ROW - 1};1H\033[2K")
+        sys.stdout.write(f"\033[7m[{bar}]\033[0m")
+        sys.stdout.write(f"\033[{BAR_ROW};1H\033[2K")
+        sys.stdout.write(f"\033[7m{stats:<{cols}}\033[0m")
+    else:
+        # Wide terminal: one line. The text (percentage, counts, current
+        # package — truncated with an ellipsis if needed) is laid out
+        # first, and the bar stretches to fill whatever width is left.
+        prefix = f"{pct:3d}% | {installed}/{total} installed | installing: "
+        chrome = len(prefix) + 4  # "[" "] " and a leading/trailing space
+        pkg_budget = max(cols - chrome - MIN_BAR_WIDTH, 3)
+        pkg_display = _truncate(pkg, pkg_budget)
+        text = f"{prefix}{pkg_display}"
+
+        bar_width = max(cols - len(text) - 4, MIN_BAR_WIDTH)
+        filled = (pct * bar_width) // 100
+        bar = "#" * filled + "-" * (bar_width - filled)
+
+        line = f" [{bar}] {text} "
+        line = line[:cols].ljust(cols)  # hard clamp, never overflow the row
+
+        sys.stdout.write(f"\033[{BAR_ROW};1H\033[2K")
+        sys.stdout.write(f"\033[7m{line}\033[0m")
+
+    sys.stdout.write("\0338")  # restore cursor position
     sys.stdout.flush()
 
 
