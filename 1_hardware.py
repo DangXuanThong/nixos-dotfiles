@@ -3,8 +3,9 @@
 1_hardware.py
 
 Installs Intel graphics drivers (including 32-bit for Steam/Proton),
-firmware, power management, PipeWire, NetworkManager, Bluetooth and CUPS,
-then enables the relevant services.
+firmware, power management, PipeWire, NetworkManager, Bluetooth and CUPS.
+Each package's services (see the Package/Service model below) are enabled
+immediately after that package installs, not batched at the end of the run.
 
 Snapshot behaviour
 ------------------
@@ -39,7 +40,23 @@ import signal
 import subprocess
 import sys
 import time
-from typing import List, Sequence
+from dataclasses import dataclass, field
+from typing import List, Optional, Sequence
+
+
+# ---------------------------------------------------------------------------
+# Package model
+# ---------------------------------------------------------------------------
+@dataclass
+class Service:
+    name: str
+    is_user_service: bool = False
+
+
+@dataclass
+class Package:
+    name: str
+    services: List[Service] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -50,58 +67,57 @@ DESC_PRE = "pre: 1_hardware.py"
 DESC_POST = "post: 1_hardware.py"
 
 # ---------------------------------------------------------------------------
-# Package lists
+# Packages
 # ---------------------------------------------------------------------------
 GRAPHICS_PKGS = [
-    "mesa",
-    "vulkan-icd-loader",
-    "vulkan-intel",
-    "intel-media-driver",
-    "libva-utils",
+    Package("mesa"),
+    Package("vulkan-icd-loader"),
+    Package("vulkan-intel"),
+    Package("intel-media-driver"),
+    Package("libva-utils"),
     # 32-bit libraries required by Steam + Proton / most Windows games
-    "lib32-mesa",
-    "lib32-vulkan-intel",
+    Package("lib32-mesa"),
+    Package("lib32-vulkan-intel"),
 ]
 
 FIRMWARE_PKGS = [
-    "intel-ucode",
-    "linux-firmware",
+    Package("intel-ucode"),
+    Package("linux-firmware"),
 ]
 
 POWER_PKGS = [
-    "power-profiles-daemon",
-    "upower",
+    Package("power-profiles-daemon", services=[Service("power-profiles-daemon.service")]),
+    Package("upower"),  # dbus-activated on demand, nothing to enable
 ]
 
 AUDIO_PKGS = [
-    "pipewire",
-    "pipewire-alsa",
-    "pipewire-pulse",
-    "pipewire-jack",
-    "wireplumber",
+    Package("pipewire", services=[Service("pipewire.service", is_user_service=True)]),
+    Package("pipewire-alsa"),
+    Package("pipewire-pulse", services=[Service("pipewire-pulse.service", is_user_service=True)]),
+    Package("pipewire-jack"),
+    Package("wireplumber", services=[Service("wireplumber.service", is_user_service=True)]),
 ]
 
 NETWORK_PKGS = [
-    "networkmanager",
+    Package("networkmanager", services=[Service("NetworkManager.service")]),
 ]
 
 BLUETOOTH_PKGS = [
-    "bluez",
-    "bluez-utils",
-    "blueman",
+    Package("bluez", services=[Service("bluetooth.service")]),
+    Package("bluez-utils"),
+    Package("blueman"),
 ]
 
 PRINTING_PKGS = [
-    "cups",
-    "ghostscript",
-    "system-config-printer",
-    "cups-pdf",
-    # Uncommment for printers discovered via network
-    # "avahi",
-    # "nss-mdns",
+    Package("cups", services=[Service("cups.service")]),
+    Package("ghostscript"),
+    Package("system-config-printer"),
+    Package("cups-pdf"),
+    Package("avahi", services=[Service("avahi-daemon.service")]),
+    Package("nss-mdns"),
 ]
 
-ALL_PKGS = (
+ALL_PKGS: List[Package] = (
     GRAPHICS_PKGS
     + FIRMWARE_PKGS
     + POWER_PKGS
@@ -130,6 +146,41 @@ def run_sudo(cmd: Sequence[str], **kwargs) -> subprocess.CompletedProcess:
 
 def which(cmd: str) -> bool:
     return shutil.which(cmd) is not None
+
+
+_user_session_ok: Optional[bool] = None
+
+
+def user_session_available() -> bool:
+    """Whether a user systemd session bus is reachable — checked once and
+    cached, rather than re-querying it for every user-service package."""
+    global _user_session_ok
+    if _user_session_ok is None:
+        result = run(
+            ["systemctl", "--user", "is-system-running"],
+            check=False,
+            capture=True,
+        )
+        _user_session_ok = result.stdout.strip() in ("running", "degraded")
+    return _user_session_ok
+
+
+def enable_services(pkg: Package) -> None:
+    """Enable whatever services this package owns, called right after that
+    package installs successfully — not batched at the end of the run."""
+    for svc in pkg.services:
+        if svc.is_user_service:
+            if user_session_available():
+                print(f"    enabling (user): {svc.name}")
+                run(["systemctl", "--user", "enable", "--now", svc.name], check=False)
+            else:
+                print(
+                    f"    no active user session bus — enable manually later: "
+                    f"systemctl --user enable --now {svc.name}"
+                )
+        else:
+            print(f"    enabling: {svc.name}")
+            run_sudo(["systemctl", "enable", "--now", svc.name], check=False)
 
 
 # ---------------------------------------------------------------------------
@@ -322,10 +373,10 @@ def main() -> None:
 
     try:
         for pkg in ALL_PKGS:
-            draw_bar(installed, total, pkg)
+            draw_bar(installed, total, pkg.name)
             # check=False: one failing/conflicting package should not take
             # down the rest of the run — record it and keep going.
-            result = run(["yay", "-S", "--needed", "--noconfirm", pkg], check=False)
+            result = run(["yay", "-S", "--needed", "--noconfirm", pkg.name], check=False)
 
             if result.returncode != 0:
                 # --noconfirm auto-declines pacman's own "Remove X? [y/N]"
@@ -336,14 +387,17 @@ def main() -> None:
                 # terminal and you can choose what to keep.
                 restore_screen()
                 print(
-                    f"\n==> '{pkg}' failed non-interactively — retrying so you "
+                    f"\n==> '{pkg.name}' failed non-interactively — retrying so you "
                     "can answer any prompt yourself (e.g. which package to keep):"
                 )
-                result = run(["yay", "-S", "--needed", pkg], check=False)
+                result = run(["yay", "-S", "--needed", pkg.name], check=False)
                 setup_screen()
 
                 if result.returncode != 0:
-                    failed.append(pkg)
+                    failed.append(pkg.name)
+
+            if result.returncode == 0 and pkg.services:
+                enable_services(pkg)
 
             installed += 1
 
@@ -356,40 +410,6 @@ def main() -> None:
         print(f"==> {len(failed)} package(s) failed to install:", file=sys.stderr)
         for pkg in failed:
             print(f"    - {pkg}", file=sys.stderr)
-
-    # ---- enable services --------------------------------------------------
-    print("==> Enabling system services")
-    for svc in (
-        "NetworkManager.service",
-        "bluetooth.service",
-        "cups.service",
-        "avahi-daemon.service",
-        "power-profiles-daemon.service",
-    ):
-        run_sudo(["systemctl", "enable", "--now", svc])
-
-    print("==> Enabling PipeWire user services")
-    try:
-        # Check whether a user session bus is available
-        run(
-            ["systemctl", "--user", "is-system-running"],
-            check=False,
-            capture=True,
-        )
-        run(
-            [
-                "systemctl", "--user", "enable", "--now",
-                "pipewire.service",
-                "pipewire-pulse.service",
-                "wireplumber.service",
-            ]
-        )
-    except Exception:
-        print("    No active user session bus — enable these manually after your next login:")
-        print(
-            "    systemctl --user enable --now "
-            "pipewire.service pipewire-pulse.service wireplumber.service"
-        )
 
     # ---- post-snapshot ----------------------------------------------------
     print("==> Creating post-install snapshot")
