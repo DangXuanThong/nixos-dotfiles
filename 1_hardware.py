@@ -37,11 +37,11 @@ from __future__ import annotations
 import atexit
 import shutil
 import signal
-import subprocess
 import sys
 import time
-from typing import List, Optional, Sequence
+from typing import List
 
+from utils.command_runner import run, enable_services
 from utils.package import Package, Service
 from utils.snapper import run_with_snapper_wrapped
 
@@ -50,8 +50,6 @@ from utils.snapper import run_with_snapper_wrapped
 # Configuration
 # ---------------------------------------------------------------------------
 SNAPPER_CONFIG = "root"
-DESC_PRE = "pre: 1_hardware.py"
-DESC_POST = "post: 1_hardware.py"
 
 # ---------------------------------------------------------------------------
 # Packages
@@ -113,62 +111,6 @@ ALL_PKGS: List[Package] = (
     + BLUETOOTH_PKGS
     + PRINTING_PKGS
 )
-
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-def run(cmd: Sequence[str], *, check: bool = True, capture: bool = False) -> subprocess.CompletedProcess:
-    """Thin wrapper around subprocess.run."""
-    return subprocess.run(
-        cmd,
-        check=check,
-        text=True,
-        capture_output=capture,
-    )
-
-
-def run_sudo(cmd: Sequence[str], **kwargs) -> subprocess.CompletedProcess:
-    return run(["sudo", *cmd], **kwargs)
-
-
-def which(cmd: str) -> bool:
-    return shutil.which(cmd) is not None
-
-
-_user_session_ok: Optional[bool] = None
-
-
-def user_session_available() -> bool:
-    """Whether a user systemd session bus is reachable — checked once and
-    cached, rather than re-querying it for every user-service package."""
-    global _user_session_ok
-    if _user_session_ok is None:
-        result = run(
-            ["systemctl", "--user", "is-system-running"],
-            check=False,
-            capture=True,
-        )
-        _user_session_ok = result.stdout.strip() in ("running", "degraded")
-    return _user_session_ok
-
-
-def enable_services(pkg: Package) -> None:
-    """Enable whatever services this package owns, called right after that
-    package installs successfully — not batched at the end of the run."""
-    for svc in pkg.services:
-        if svc.is_user_service:
-            if user_session_available():
-                print(f"    enabling (user): {svc.name}")
-                run(["systemctl", "--user", "enable", "--now", svc.name], check=False)
-            else:
-                print(
-                    f"    no active user session bus — enable manually later: "
-                    f"systemctl --user enable --now {svc.name}"
-                )
-        else:
-            print(f"    enabling: {svc.name}")
-            run_sudo(["systemctl", "enable", "--now", svc.name], check=False)
-
 
 # ---------------------------------------------------------------------------
 # Status-bar TUI (only active when stdout is a real terminal)
@@ -284,8 +226,14 @@ def draw_bar(installed: int, total: int, pkg: str) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Cleanup – always restore terminal + re-enable snap-pac
+# Cleanup – always restore terminal
 # ---------------------------------------------------------------------------
+# Re-enabling PACMAN_PRE_POST is no longer done here: run_with_snapper_wrapped
+# guarantees it via its own try/finally around workload() (verified: it still
+# fires even when workload() raises). Keeping a second copy here would just
+# mean two idempotent, harmless-but-redundant re-enable calls on every Ctrl-C
+# during the install loop — worth cutting given how much this file has
+# already had duplicated across the split.
 def cleanup() -> None:
     global _cleanup_done
     if _cleanup_done:
@@ -304,17 +252,6 @@ def _signal_handler(signum, frame) -> None:
 # Main
 # ---------------------------------------------------------------------------
 def main() -> None:
-    # verify snapper config exists
-    result = run_sudo(["snapper", "list-configs"], capture=True)
-    configs = {line.split()[0] for line in result.stdout.splitlines() if line.strip()}
-    if SNAPPER_CONFIG not in configs:
-        print(
-            f"Snapper config '{SNAPPER_CONFIG}' not found. "
-            "Run 'snapper list-configs' and update SNAPPER_CONFIG.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-
     if not ALL_PKGS:
         print("Package list is empty — nothing to install.", file=sys.stderr)
         sys.exit(1)
@@ -324,86 +261,56 @@ def main() -> None:
     signal.signal(signal.SIGINT, _signal_handler)
     signal.signal(signal.SIGTERM, _signal_handler)
 
-    # ---- pre-snapshot + disable per-transaction hooks ---------------------
-    print("==> Creating pre-install snapshot")
-    result = run_sudo(
-        [
-            "snapper", "-c", SNAPPER_CONFIG,
-            "create", "--type", "pre",
-            "--print-number",
-            "--description", DESC_PRE,
-        ],
-        capture=True,
-    )
-    pre_num = result.stdout.strip()
-    print(f"    pre snapshot #{pre_num}")
-
-    print("==> Disabling per-transaction snap-pac snapshots for this run")
-    run_sudo(
-        ["snapper", "-c", SNAPPER_CONFIG, "set-config", "PACMAN_PRE_POST=no"]
-    )
-
-    # ---- install packages -------------------------------------------------
     total = len(ALL_PKGS)
     installed = 0
     failed: List[str] = []
 
-    setup_screen()
-
-    try:
-        for pkg in ALL_PKGS:
-            draw_bar(installed, total, pkg.name)
-            # check=False: one failing/conflicting package should not take
-            # down the rest of the run — record it and keep going.
-            result = run(["yay", "-S", "--needed", "--noconfirm", pkg.name], check=False)
-
-            if result.returncode != 0:
-                # --noconfirm auto-declines pacman's own "Remove X? [y/N]"
-                # conflict prompt (that default is hardcoded in pacman, not
-                # something --noconfirm can flip). Rather than guess what to
-                # do, drop out of the status bar and retry this one package
-                # *without* --noconfirm, so pacman's real prompt reaches the
-                # terminal and you can choose what to keep.
-                restore_screen()
-                print(
-                    f"\n==> '{pkg.name}' failed non-interactively — retrying so you "
-                    "can answer any prompt yourself (e.g. which package to keep):"
-                )
-                result = run(["yay", "-S", "--needed", pkg.name], check=False)
-                setup_screen()
+    def workload() -> None:
+        nonlocal installed, failed
+        setup_screen()
+        try:
+            for pkg in ALL_PKGS:
+                draw_bar(installed, total, pkg.name)
+                # check=False: one failing/conflicting package should not
+                # take down the rest of the run — record it and keep going.
+                result = run(["yay", "-S", "--needed", "--noconfirm", pkg.name], check=False)
 
                 if result.returncode != 0:
-                    failed.append(pkg.name)
+                    # --noconfirm auto-declines pacman's own "Remove X? [y/N]"
+                    # conflict prompt (that default is hardcoded in pacman,
+                    # not something --noconfirm can flip). Rather than guess
+                    # what to do, drop out of the status bar and retry this
+                    # one package *without* --noconfirm, so pacman's real
+                    # prompt reaches the terminal and you can choose what to
+                    # keep.
+                    restore_screen()
+                    print(
+                        f"\n==> '{pkg.name}' failed non-interactively — retrying "
+                        "so you can answer any prompt yourself (e.g. which "
+                        "package to keep):"
+                    )
+                    result = run(["yay", "-S", "--needed", pkg.name], check=False)
+                    setup_screen()
 
-            if result.returncode == 0 and pkg.services:
-                enable_services(pkg)
+                    if result.returncode != 0:
+                        failed.append(pkg.name)
 
-            installed += 1
+                if result.returncode == 0 and pkg.services:
+                    enable_services(pkg)
 
-        draw_bar(installed, total, "done")
-        time.sleep(0.3)
-    finally:
-        restore_screen()
+                installed += 1
+
+            draw_bar(installed, total, "done")
+            time.sleep(0.3)
+        finally:
+            restore_screen()
+
+    run_with_snapper_wrapped(workload, desc="1_hardware.py", config=SNAPPER_CONFIG)
 
     if failed:
         print(f"==> {len(failed)} package(s) failed to install:", file=sys.stderr)
         for pkg in failed:
             print(f"    - {pkg}", file=sys.stderr)
-
-    # ---- post-snapshot ----------------------------------------------------
-    print("==> Creating post-install snapshot")
-    result = run_sudo(
-        [
-            "snapper", "-c", SNAPPER_CONFIG,
-            "create", "--type", "post",
-            "--pre-number", pre_num,
-            "--print-number",
-            "--description", DESC_POST,
-        ],
-        capture=True,
-    )
-    post_num = result.stdout.strip()
-    print(f"    post snapshot #{post_num} (paired with pre #{pre_num})")
 
     print(f"==> Done. Installed {installed - len(failed)}/{total} packages.")
 
