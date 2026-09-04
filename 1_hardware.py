@@ -40,23 +40,10 @@ import signal
 import subprocess
 import sys
 import time
-from dataclasses import dataclass, field
 from typing import List, Optional, Sequence
 
-
-# ---------------------------------------------------------------------------
-# Package model
-# ---------------------------------------------------------------------------
-@dataclass
-class Service:
-    name: str
-    is_user_service: bool = False
-
-
-@dataclass
-class Package:
-    name: str
-    services: List[Service] = field(default_factory=list)
+from utils.package import Package, Service
+from utils.snapper import run_with_snapper_wrapped
 
 
 # ---------------------------------------------------------------------------
@@ -306,14 +293,6 @@ def cleanup() -> None:
     _cleanup_done = True
 
     restore_screen()
-    print("==> Re-enabling per-transaction snap-pac snapshots")
-    try:
-        run_sudo(
-            ["snapper", "-c", SNAPPER_CONFIG, "set-config", "PACMAN_PRE_POST=yes"],
-            check=False,
-        )
-    except Exception:
-        pass
 
 
 def _signal_handler(signum, frame) -> None:
