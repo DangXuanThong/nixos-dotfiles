@@ -32,7 +32,6 @@ terminal.  yay's own output scrolls in the region above it.  Falls back to
 plain sequential output when stdout is not a TTY.
 """
 
-from __future__ import annotations
 
 import atexit
 import signal
@@ -40,7 +39,7 @@ import sys
 import time
 from typing import List
 
-from utils.command_runner import run, enable_services
+from utils.command_runner import install_and_enable
 from utils.package import Package, Service
 from utils.screen import draw_bar, restore_screen, setup_screen
 from utils.snapper import run_with_snapper_wrapped
@@ -154,33 +153,29 @@ def main() -> None:
         try:
             for pkg in ALL_PKGS:
                 draw_bar(installed, total, pkg.name)
-                # check=False: one failing/conflicting package should not
-                # take down the rest of the run — record it and keep going.
-                result = run(["yay", "-S", "--needed", "--noconfirm", pkg.name], check=False)
+                result = install_and_enable(pkg)
 
-                if result.returncode == 0 and pkg.services:
-                    enable_services(pkg)
-                elif result.returncode != 0:
-                    # --noconfirm auto-declines pacman's own "Remove X? [y/N]"
-                    # conflict prompt (that default is hardcoded in pacman,
-                    # not something --noconfirm can flip). Rather than guess
-                    # what to do, drop out of the status bar and retry this
-                    # one package *without* --noconfirm, so pacman's real
-                    # prompt reaches the terminal and you can choose what to
-                    # keep.
-                    restore_screen()
-                    print(
-                        f"\n==> '{pkg.name}' failed non-interactively — retrying "
-                        "so you can answer any prompt yourself (e.g. which "
-                        "package to keep):"
-                    )
-                    result = run(["yay", "-S", "--needed", pkg.name], check=False)
-                    setup_screen()
+                if result == 0:
+                    installed += 1
+                    continue
 
-                    if result.returncode != 0:
-                        failed.append(pkg.name)
-
-                installed += 1
+                # --noconfirm auto-declines pacman's own "Remove X? [y/N]"
+                # conflict prompt (that default is hardcoded in pacman,
+                # not something --noconfirm can flip). Rather than guess
+                # what to do, drop out of the status bar and retry this
+                # one package *without* --noconfirm, so pacman's real
+                # prompt reaches the terminal and you can choose what to
+                # keep.
+                restore_screen()
+                print(
+                    f"\n==> '{pkg.name}' failed non-interactively — retrying "
+                    "so you can answer any prompt yourself (e.g. which "
+                    "package to keep):"
+                )
+                result = install_and_enable(pkg, no_confirm=False)
+                setup_screen()
+                if result == 0: installed += 1
+                else: failed.append(pkg.name)
 
             draw_bar(installed, total, "done")
             time.sleep(0.3)
@@ -196,8 +191,7 @@ def main() -> None:
 
     print(f"==> Done. Installed {installed - len(failed)}/{total} packages.")
 
-    if failed:
-        sys.exit(1)
+    if failed: sys.exit(1)
 
 
 if __name__ == "__main__":

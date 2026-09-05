@@ -23,8 +23,6 @@ def run(
 
 
 _user_session_ok: Optional[bool] = None
-
-
 def _user_session_available() -> bool:
     """Whether a user systemd session bus is reachable — checked once and
     cached, rather than re-querying it for every user-service package."""
@@ -37,6 +35,16 @@ def _user_session_available() -> bool:
         )
         _user_session_ok = result.stdout.strip() in ("running", "degraded")
     return _user_session_ok
+
+
+def install_and_enable(pkg: Package, no_confirm: bool = True) -> int:
+    # check=False: one failing/conflicting package should not
+    # take down the rest of the run — record it and keep going.
+    result = run(["yay", "-S", "--needed", "--noconfirm" if no_confirm else "", pkg.name], check=False)
+
+    if result.returncode == 0 and pkg.services:
+        enable_services(pkg)
+    return result.returncode
 
 
 def enable_services(pkg: Package) -> None:
