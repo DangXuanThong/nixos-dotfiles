@@ -35,7 +35,6 @@ plain sequential output when stdout is not a TTY.
 from __future__ import annotations
 
 import atexit
-import shutil
 import signal
 import sys
 import time
@@ -43,13 +42,9 @@ from typing import List
 
 from utils.command_runner import run, enable_services
 from utils.package import Package, Service
+from utils.screen import draw_bar, restore_screen, setup_screen
 from utils.snapper import run_with_snapper_wrapped
 
-
-# ---------------------------------------------------------------------------
-# Configuration
-# ---------------------------------------------------------------------------
-SNAPPER_CONFIG = "root"
 
 # ---------------------------------------------------------------------------
 # Packages
@@ -112,119 +107,7 @@ ALL_PKGS: List[Package] = (
     + PRINTING_PKGS
 )
 
-# ---------------------------------------------------------------------------
-# Status-bar TUI (only active when stdout is a real terminal)
-# ---------------------------------------------------------------------------
-USE_TUI = sys.stdout.isatty()
-BAR_ROW = 0
-BAR_HEIGHT = 1       # 1 (single line) or 2 (bar + text on separate lines)
-LOG_BOTTOM = 0
-NARROW_COLS = 60     # below this width, split the bar and text onto 2 lines
-MIN_BAR_WIDTH = 10   # never render a bar shorter than this
 _cleanup_done = False
-
-
-def setup_screen() -> None:
-    global BAR_ROW, BAR_HEIGHT, LOG_BOTTOM
-    if not USE_TUI:
-        return
-    size = shutil.get_terminal_size()
-    rows, cols = size.lines, size.columns
-    # Decided once, at setup time, since it determines how many rows we
-    # carve out of the scroll region — not re-evaluated per redraw (that
-    # would desync the reserved rows from the actual scroll region without
-    # also handling SIGWINCH, which this script doesn't).
-    BAR_HEIGHT = 2 if cols < NARROW_COLS else 1
-    BAR_ROW = rows
-    LOG_BOTTOM = rows - BAR_HEIGHT
-    # hide cursor
-    sys.stdout.write("\033[?25l")
-    # set scroll region to lines 1 .. LOG_BOTTOM
-    sys.stdout.write(f"\033[1;{LOG_BOTTOM}r")
-    # park cursor at bottom of the scroll region
-    sys.stdout.write(f"\033[{LOG_BOTTOM};1H")
-    sys.stdout.flush()
-
-
-def restore_screen() -> None:
-    if not USE_TUI:
-        return
-    # reset scroll region
-    sys.stdout.write("\033[r")
-    # explicitly clear every reserved bottom row — resetting the scroll
-    # region above only changes future scrolling behaviour, it does NOT
-    # erase whatever the status bar last drew there. Without this, an
-    # interrupted run (Ctrl-C) leaves the stale progress bar frozen on
-    # screen, since no further output happens afterwards to scroll it away.
-    if BAR_ROW:
-        for row in range(BAR_ROW - BAR_HEIGHT + 1, BAR_ROW + 1):
-            sys.stdout.write(f"\033[{row};1H\033[2K")
-    # show cursor
-    sys.stdout.write("\033[?25h")
-    sys.stdout.write("\n")
-    sys.stdout.flush()
-
-
-def _truncate(s: str, max_len: int) -> str:
-    """Shorten s to at most max_len chars, with a trailing ellipsis if cut."""
-    if max_len <= 0:
-        return ""
-    if len(s) <= max_len:
-        return s
-    if max_len == 1:
-        return "…"
-    return s[: max_len - 1] + "…"
-
-
-def draw_bar(installed: int, total: int, pkg: str) -> None:
-    if not USE_TUI:
-        print(f"  ({installed}/{total}) installing: {pkg}")
-        return
-
-    pct = (installed * 100) // total if total else 100
-    cols = shutil.get_terminal_size().columns
-
-    sys.stdout.write("\0337")  # save cursor position
-
-    if BAR_HEIGHT == 2:
-        # Narrow terminal: the bar gets its own full-width line, stats
-        # (percentage / counts / current package) go on the line below,
-        # truncated with an ellipsis if they don't fit.
-        bar_width = max(cols - 2, 1)
-        filled = (pct * bar_width) // 100
-        bar = "#" * filled + "-" * (bar_width - filled)
-        stats = _truncate(
-            f"{pct:3d}% | {installed}/{total} installed | {pkg}", cols
-        )
-
-        sys.stdout.write(f"\033[{BAR_ROW - 1};1H\033[2K")
-        sys.stdout.write(f"\033[7m[{bar}]\033[0m")
-        sys.stdout.write(f"\033[{BAR_ROW};1H\033[2K")
-        sys.stdout.write(f"\033[7m{stats:<{cols}}\033[0m")
-    else:
-        # Wide terminal: one line. The text (percentage, counts, current
-        # package — truncated with an ellipsis if needed) is laid out
-        # first, and the bar stretches to fill whatever width is left.
-        prefix = f"{pct:3d}% | {installed}/{total} installed | installing: "
-        chrome = len(prefix) + 4  # "[" "] " and a leading/trailing space
-        pkg_budget = max(cols - chrome - MIN_BAR_WIDTH, 3)
-        pkg_display = _truncate(pkg, pkg_budget)
-        text = f"{prefix}{pkg_display}"
-
-        bar_width = max(cols - len(text) - 4, MIN_BAR_WIDTH)
-        filled = (pct * bar_width) // 100
-        bar = "#" * filled + "-" * (bar_width - filled)
-
-        line = f" [{bar}] {text} "
-        line = line[:cols].ljust(cols)  # hard clamp, never overflow the row
-
-        sys.stdout.write(f"\033[{BAR_ROW};1H\033[2K")
-        sys.stdout.write(f"\033[7m{line}\033[0m")
-
-    sys.stdout.write("\0338")  # restore cursor position
-    sys.stdout.flush()
-
-
 # ---------------------------------------------------------------------------
 # Cleanup – always restore terminal
 # ---------------------------------------------------------------------------
@@ -275,7 +158,9 @@ def main() -> None:
                 # take down the rest of the run — record it and keep going.
                 result = run(["yay", "-S", "--needed", "--noconfirm", pkg.name], check=False)
 
-                if result.returncode != 0:
+                if result.returncode == 0 and pkg.services:
+                    enable_services(pkg)
+                elif result.returncode != 0:
                     # --noconfirm auto-declines pacman's own "Remove X? [y/N]"
                     # conflict prompt (that default is hardcoded in pacman,
                     # not something --noconfirm can flip). Rather than guess
@@ -295,9 +180,6 @@ def main() -> None:
                     if result.returncode != 0:
                         failed.append(pkg.name)
 
-                if result.returncode == 0 and pkg.services:
-                    enable_services(pkg)
-
                 installed += 1
 
             draw_bar(installed, total, "done")
@@ -305,7 +187,7 @@ def main() -> None:
         finally:
             restore_screen()
 
-    run_with_snapper_wrapped(workload, desc="1_hardware.py", config=SNAPPER_CONFIG)
+    run_with_snapper_wrapped(workload, desc="1_hardware.py")
 
     if failed:
         print(f"==> {len(failed)} package(s) failed to install:", file=sys.stderr)
