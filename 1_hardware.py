@@ -39,7 +39,7 @@ import sys
 import time
 from typing import List
 
-from utils.command_runner import install_and_enable
+from utils.command_runner import install_config_and_enable
 from utils.package import Package, Service
 from utils.screen import draw_bar, restore_screen, setup_screen
 from utils.snapper import run_with_snapper_wrapped
@@ -70,6 +70,7 @@ POWER_PKGS = [
 ]
 
 AUDIO_PKGS = [
+    Package("rtkit"),
     Package("pipewire", services=[Service("pipewire.service", is_user_service=True)]),
     Package("pipewire-alsa"),
     Package("pipewire-pulse", services=[Service("pipewire-pulse.service", is_user_service=True)]),
@@ -153,7 +154,7 @@ def main() -> None:
         try:
             for pkg in ALL_PKGS:
                 draw_bar(installed, total, pkg.name)
-                result = install_and_enable(pkg)
+                result = install_config_and_enable(pkg)
 
                 if result == 0:
                     installed += 1
@@ -172,7 +173,7 @@ def main() -> None:
                     "so you can answer any prompt yourself (e.g. which "
                     "package to keep):"
                 )
-                result = install_and_enable(pkg, no_confirm=False)
+                result = install_config_and_enable(pkg, no_confirm=False)
                 setup_screen()
                 if result == 0: installed += 1
                 else: failed.append(pkg.name)

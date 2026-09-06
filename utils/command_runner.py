@@ -1,4 +1,6 @@
+import os
 import subprocess
+from pathlib import Path
 from subprocess import CompletedProcess
 from typing import Optional, Sequence
 
@@ -37,14 +39,41 @@ def _user_session_available() -> bool:
     return _user_session_ok
 
 
-def install_and_enable(pkg: Package, no_confirm: bool = True) -> int:
+def install_config_and_enable(pkg: Package, no_confirm: bool = True) -> int:
+    cmd = ["yay", "-S", "--needed"]
+    if no_confirm: cmd.append("--noconfirm")
+    cmd.append(pkg.name)
+
     # check=False: one failing/conflicting package should not
     # take down the rest of the run — record it and keep going.
-    result = run(["yay", "-S", "--needed", "--noconfirm" if no_confirm else "", pkg.name], check=False)
+    result = run(cmd, check=False)
 
-    if result.returncode == 0 and pkg.services:
-        enable_services(pkg)
+    # Early return if install fails
+    if result.returncode != 0: return result.returncode
+
+    if pkg.config_dir: create_config_symlink(pkg.config_dir)
+    if pkg.services: enable_services(pkg)
+    if pkg.activation_cmd: run(pkg.activation_cmd.split(), check=False)
     return result.returncode
+
+
+def create_config_symlink(config_dir: Path, overwrite: bool = False):
+    config_home = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
+    name = config_dir.name
+    dest = config_home / name
+
+    if not config_dir.exists():
+        print(f"    config directory not found, skipping: {config_dir.resolve()}")
+        return
+
+    try:
+        if dest.exists():
+            print(f"    config directory already exist at: {dest.resolve()}")
+            if not overwrite: dest.rename(dest.with_name(name + ".bak"))
+            else: dest.rmdir()
+        dest.symlink_to(config_dir.resolve(), target_is_directory=True)
+    except:
+        print(f"    error symlinking config directory to {dest.resolve()}")
 
 
 def enable_services(pkg: Package) -> None:
