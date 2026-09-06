@@ -33,8 +33,6 @@ plain sequential output when stdout is not a TTY.
 """
 
 
-import atexit
-import signal
 import sys
 import time
 from typing import List
@@ -42,6 +40,7 @@ from typing import List
 from utils.command_runner import install_config_and_enable
 from utils.package import Package, Service
 from utils.screen import draw_bar, restore_screen, setup_screen
+from utils.shutdown import register_cleanup
 from utils.snapper import run_with_snapper_wrapped
 
 
@@ -107,29 +106,6 @@ ALL_PKGS: List[Package] = (
     + PRINTING_PKGS
 )
 
-_cleanup_done = False
-# ---------------------------------------------------------------------------
-# Cleanup – always restore terminal
-# ---------------------------------------------------------------------------
-# Re-enabling PACMAN_PRE_POST is no longer done here: run_with_snapper_wrapped
-# guarantees it via its own try/finally around workload() (verified: it still
-# fires even when workload() raises). Keeping a second copy here would just
-# mean two idempotent, harmless-but-redundant re-enable calls on every Ctrl-C
-# during the install loop — worth cutting given how much this file has
-# already had duplicated across the split.
-def cleanup() -> None:
-    global _cleanup_done
-    if _cleanup_done:
-        return
-    _cleanup_done = True
-
-    restore_screen()
-
-
-def _signal_handler(signum, frame) -> None:
-    cleanup()
-    sys.exit(128 + signum)
-
 
 # ---------------------------------------------------------------------------
 # Main
@@ -139,10 +115,13 @@ def main() -> None:
         print("Package list is empty — nothing to install.", file=sys.stderr)
         sys.exit(1)
 
-    # register cleanup handlers
-    atexit.register(cleanup)
-    signal.signal(signal.SIGINT, _signal_handler)
-    signal.signal(signal.SIGTERM, _signal_handler)
+    # Ctrl-C / SIGTERM / normal exit will all still restore the terminal
+    # exactly once (see utils/shutdown.py). Re-enabling PACMAN_PRE_POST is
+    # NOT registered here: run_with_snapper_wrapped guarantees that on its
+    # own, via its own try/finally around workload() — a second copy here
+    # would just be a harmless-but-redundant duplicate re-enable call on
+    # every Ctrl-C during the install loop.
+    register_cleanup(restore_screen)
 
     total = len(ALL_PKGS)
     installed = 0
