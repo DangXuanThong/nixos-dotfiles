@@ -62,7 +62,7 @@ def _remind_kwallet_pam() -> None:
 # ---------------------------------------------------------------------------
 WM_PACKAGES = [
     # Package("greetd-regreet"),
-    Package("kwallet"),
+    Package("kwallet"),             # KDE Wallet daemon (secrets storage)
     Package("kwallet-pam", post_install=_remind_kwallet_pam),  # Auto-unlock wallet on login
     Package("kwalletmanager"),      # GUI manager
 ]
@@ -72,30 +72,35 @@ DE_PACKAGES = [
     Package("libnewt"),             # For using hyprland with uwsm
 
     # Hypr* family
-    Package("hyprland", config_dir="config/hypr"),
-    Package("hyprpolkitagent", services=[Service("hyprpolkitagent.service", is_user_service=True)]),
-    Package("hypridle", services=[Service("hypridle.service", is_user_service=True)]),
-    Package("hyprpaper"),
-    Package("hyprlauncher"),
-    Package("hyprlock"),
-    Package("hyprshot-rs"),
+    Package("hyprland", config_dir="config/hypr"),  # Wayland compositor
+    Package("hyprpolkitagent", services=[Service("hyprpolkitagent.service", is_user_service=True)]),  # Polkit auth agent
+    Package("hypridle", services=[Service("hypridle.service", is_user_service=True)]),  # Idle management (lock/DPMS)
+    Package("hyprpaper"),           # Wallpaper daemon
+    Package("hyprlauncher"),        # App launcher
+    Package("hyprlock"),            # Screen locker
+    Package("hyprshot-rs"),         # Screenshot tool
+    Package("xdg-desktop-portal-hyprland"),
 
-    Package("quickshell", config_dir="config/quickshell"),
+    Package("quickshell", config_dir="config/quickshell"),  # Custom status bar (QtQuick-based)
     Package("swaync", services=[Service("swaync.service", is_user_service=True)]), # Notification daemon
     Package("dconf"),               # Config for GNOME apps
     Package("dolphin"),             # KDE file manager
+    Package("gvfs"),                # Provides trash, smb, mtp...
+    Package("filelight"),           # Disk usage visualizer
+    Package("partitionmanager"),    # GUI partition tool
     Package("obs-studio"),          # Screen recorder
     Package("loupe"),               # Image viewer
     Package("celluloid"),           # Video viewer
     Package("ktexteditor"),         # Text editor
     Package("mission-center"),      # Task manager but for linux
     Package("ark"),                 # Archive viewer
+    Package("zen-browser-bin"),     # Web browser
 ]
 
 TERMINAL_PACKAGES = [
     Package("fish", post_install=lambda: run(["chsh", "-s", "/usr/bin/fish"], check=False)),
-    Package("kitty"),
-    Package("fastfetch-git"),
+    Package("kitty"),               # Terminal emulator
+    Package("fastfetch-git"),       # System info fetch tool
     Package("eza"),                 # Alternative to `ls`
     Package("bat"),                 # Better `cat` (content at file)
     Package("jq"),                  # CLI json processor
@@ -105,11 +110,11 @@ TERMINAL_PACKAGES = [
 ]
 
 FONT_PACKAGES = [
-    Package("inter-font"),
-    Package("ttf-jetbrains-mono-nerd"),
-    Package("noto-fonts-cjk"),
-    Package("noto-fonts-emoji"),
-    Package("ttf-ms-fonts"),
+    Package("inter-font"),           # UI font
+    Package("ttf-jetbrains-mono-nerd"),  # Monospace/terminal font with icon glyphs
+    Package("noto-fonts-cjk"),       # Chinese/Japanese/Korean glyph coverage
+    Package("noto-fonts-emoji"),     # Emoji glyph coverage
+    Package("ttf-ms-fonts"),         # Metric-compatible with common MS fonts (doc/web compatibility)
 ]
 
 ALL_PKGS: List[Package] = (
