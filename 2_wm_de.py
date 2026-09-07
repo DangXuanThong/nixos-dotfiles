@@ -98,9 +98,13 @@ DE_PACKAGES = [
 ]
 
 TERMINAL_PACKAGES = [
-    Package("fish", post_install=lambda: run(["chsh", "-s", "/usr/bin/fish"], check=False)),
+    Package(
+        "fish",
+        config_dir="config/fish",
+        post_install=lambda: run(["chsh", "-s", "/usr/bin/fish"], check=False), # type: ignore
+    ),
     Package("kitty"),               # Terminal emulator
-    Package("fastfetch-git"),       # System info fetch tool
+    Package("fastfetch-git", config_dir="config/fastfetch"),
     Package("eza"),                 # Alternative to `ls`
     Package("bat"),                 # Better `cat` (content at file)
     Package("jq"),                  # CLI json processor
