@@ -18,8 +18,8 @@ def register_cleanup(action: Callable[[], None]) -> None:
         global _cleanup_done
         if _cleanup_done:
             return
-        action()
         _cleanup_done = True
+        action()
 
     def _signal_handler(signum, frame) -> None:
         _cleanup()

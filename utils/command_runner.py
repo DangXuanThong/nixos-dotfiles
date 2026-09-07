@@ -1,10 +1,15 @@
 import os
+import shutil
 import subprocess
 from pathlib import Path
 from subprocess import CompletedProcess
 from typing import Optional, Sequence
 
 from utils.package import Package
+
+
+# utils/command_runner.py -> parent (utils/) -> parent (repo root)
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def run(
@@ -53,26 +58,28 @@ def install_config_and_enable(pkg: Package, no_confirm: bool = True) -> int:
 
     if pkg.config_dir: create_config_symlink(pkg.config_dir)
     if pkg.services: enable_services(pkg)
-    if pkg.activation_cmd: run(pkg.activation_cmd.split(), check=False)
+    if pkg.post_install: pkg.post_install()
     return result.returncode
 
 
-def create_config_symlink(config_dir: Path, overwrite: bool = False):
+def create_config_symlink(config_dir: str, overwrite: bool = False) -> None:
     config_home = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
-    name = config_dir.name
-    dest = config_home / name
+    src = REPO_ROOT / config_dir
+    dest = config_home / src.name
 
-    if not config_dir.exists():
-        print(f"    config directory not found, skipping: {config_dir.resolve()}")
+    if not src.exists():
+        print(f"    config directory not found, skipping: {src.resolve()}")
         return
 
     try:
-        if dest.exists():
-            print(f"    config directory already exist at: {dest.resolve()}")
-            if not overwrite: dest.rename(dest.with_name(name + ".bak"))
-            else: dest.rmdir()
-        dest.symlink_to(config_dir.resolve(), target_is_directory=True)
-    except:
+        # check for both existance and is symlink, because a dangling symlink will report as not exist
+        if dest.exists() or dest.is_symlink():
+            print(f"    config directory already exists at: {dest.resolve()}")
+            if not overwrite: dest.rename(dest.with_name(dest.name + ".bak"))
+            elif dest.is_symlink(): dest.unlink()
+            else: shutil.rmtree(dest)
+        dest.symlink_to(src.resolve(), target_is_directory=True)
+    except Exception:
         print(f"    error symlinking config directory to {dest.resolve()}")
 
 

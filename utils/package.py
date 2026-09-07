@@ -1,7 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
-from pathlib import Path
-from typing import List
+from typing import Callable, List
 
 
 # ---------------------------------------------------------------------------
@@ -10,8 +9,8 @@ from typing import List
 @dataclass
 class Package:
     name: str
-    config_dir: Path | None = field(default=None)
-    activation_cmd: str | None = field(default=None)
+    config_dir: str | None = field(default=None)
+    post_install: Callable[[], None] | None = field(default=None)
     services: List[Service] = field(default_factory=list)
 
 
