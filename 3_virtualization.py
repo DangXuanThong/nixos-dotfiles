@@ -14,6 +14,7 @@ back in.
 
 
 import getpass
+import json
 import sys
 import time
 from pathlib import Path
@@ -29,11 +30,26 @@ from utils.snapper import run_with_snapper_wrapped
 # ---------------------------------------------------------------------------
 # post_install helpers
 # ---------------------------------------------------------------------------
+def _setup_libvirt():
+    add_user_to_group("libvirt")
+
+
 def _setup_docker_rootless() -> None:
     """Rootless Docker setup. Multi-step and script-driven (the setup tool
     creates its own user-level systemd unit), unlike every other
     post_install in this project, which just enables a unit that already
-    exists on disk."""
+    exists on disk.
+ 
+    Deliberately does NOT enable or start docker.service, and does NOT set
+    up lingering. True on-demand start via socket activation has a known
+    bug specific to rootless mode (the first connection after an idle
+    daemon always times out — dockerd-rootless.sh doesn't participate in
+    systemd's socket handoff the way plain `dockerd -H fd://` does), so
+    the tradeoff here is manual instead: start it yourself when you need
+    it (`systemctl --user start docker`), stop it when you don't
+    (`systemctl --user stop docker`). Add `loginctl enable-linger` back
+    if you ever want a long-running container/build to survive a logout.
+    """
     user = getpass.getuser()
 
     # newuidmap/newgidmap come from `shadow` (base, always present on
@@ -59,14 +75,30 @@ def _setup_docker_rootless() -> None:
             )
             return
 
-    # Must run unprivileged — this configures YOUR user namespace.
+    # Must run unprivileged — this configures YOUR user namespace. This
+    # alone creates ~/.config/systemd/user/docker.service, ready to start
+    # on demand — nothing further enables or runs it.
     run(["dockerd-rootless-setuptool.sh", "install"], check=False)
 
-    # Without lingering, the daemon dies when your last session ends.
-    run(["loginctl", "enable-linger", user], sudo=True, check=False)
+    # daemon.json for rootless mode lives under ~/.config/docker, NOT
+    # /etc/docker (that's the rootful location). Merged rather than
+    # overwritten, in case this file already has other settings — same
+    # reasoning as the zen-browser policies.json merge.
+    DATA_ROOT = "/run/media/penguin/Docker"
+    if not Path(DATA_ROOT).parent.is_dir():
+        print(f"    warning: {Path(DATA_ROOT).parent} doesn't exist yet — "
+              "is the drive mounted? Docker will fail to start against a missing data-root.")
 
-    # The setup tool creates the unit but doesn't necessarily enable it.
-    run(["systemctl", "--user", "enable", "--now", "docker.service"], check=False)
+    daemon_json_path = Path.home() / ".config" / "docker" / "daemon.json"
+    try:
+        daemon_settings = json.loads(daemon_json_path.read_text())
+    except (FileNotFoundError, json.JSONDecodeError):
+        daemon_settings = {}
+    daemon_settings["experimental"] = True
+    daemon_settings["data-root"] = DATA_ROOT
+    daemon_settings["storage-driver"] = "overlay2"
+    daemon_json_path.parent.mkdir(parents=True, exist_ok=True)
+    daemon_json_path.write_text(json.dumps(daemon_settings, indent=2))
 
     # fish syntax specifically — stage 2 sets fish as your default shell.
     fish_config = Path.home() / ".config" / "fish" / "config.fish"
@@ -77,7 +109,7 @@ def _setup_docker_rootless() -> None:
         with fish_config.open("a") as f:
             f.write(line)
 
-    print("    rootless docker configured — log out and back in for lingering to take effect")
+    print("    rootless docker configured — start it when needed: systemctl --user start docker")
 
 
 # ---------------------------------------------------------------------------
@@ -88,7 +120,7 @@ KVM_PACKAGES = [
     Package(
         "libvirt",
         services=[Service("libvirtd.service")],
-        post_install=lambda: add_user_to_group("libvirt"),
+        post_install=_setup_libvirt,
     ),                              # system service — manages VMs system-wide
     Package("virt-manager"),        # GUI for creating/managing VMs
     Package("dnsmasq"),             # DHCP/DNS for libvirt's default NAT network
