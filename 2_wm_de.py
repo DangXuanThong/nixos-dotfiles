@@ -6,7 +6,11 @@
 
 import getpass
 import grp
+import json
+from pathlib import Path
+import shlex
 import sys
+import tempfile
 import time
 from typing import List
 
@@ -60,6 +64,88 @@ def _remind_kwallet_pam() -> None:
     )
 
 
+def _configure_zen_browser() -> None:
+    """Write zen-browser's policies.json (merged, not overwritten — the AUR
+    package already ships its own DisableAppUpdate there) plus the
+    AutoConfig pair needed for locked prefs (lockPref() only works inside
+    a .cfg file, not a plain defaults/pref/*.js — see the pointer file
+    below). All three files are staged as temp files first (no privilege
+    needed), then installed into the root-owned tree in a single sudo call.
+    """
+    ZEN_INSTALL_DIR = Path("/opt/zen-browser-bin")
+    if not ZEN_INSTALL_DIR.is_dir():
+        print(f"    zen-browser-bin not found at {ZEN_INSTALL_DIR}, skipping config")
+        return
+
+    ZEN_EXTENSIONS = {
+        # To add additional extensions, find it on addons.mozilla.org, find
+        # the short ID in the url (like https://addons.mozilla.org/en-US/firefox/addon/!SHORT_ID!/)
+        # Then go to https://addons.mozilla.org/api/v5/addons/addon/!SHORT_ID!/ to get the guid
+        "adguardadblocker@adguard.com": "adguard-adblocker",
+        "{446900e4-71c2-419f-a6a7-df9c091e268b}": "bitwarden-password-manager",
+        "addon@darkreader.org": "darkreader",
+        "addon@fastforward.team": "fastforwardteam",
+        "jid1-KKzOGWgsW3Ao4Q@jetpack": "i-dont-care-about-cookies",
+        "{2d97895d-fcd3-41ab-82e6-6a1d4d2243f6}": "temp-mail",
+        # Missing: google translate since it doesn't available for firefox
+    }
+    ZEN_LOCKED_PREFS = {
+        # Check these out at about:config
+        "extensions.autoDisableScopes": 0,
+        "extensions.pocket.enabled": False,
+        "widget.wayland.fractional-scale.enabled": False,
+    }
+
+    policies_path = ZEN_INSTALL_DIR / "distribution" / "policies.json"
+    try:
+        existing = json.loads(policies_path.read_text())
+    except (FileNotFoundError, json.JSONDecodeError):
+        existing = {}
+    policies: dict = existing.setdefault("policies", {})
+    policies["DisableTelemetry"] = True
+    policies.setdefault("ExtensionSettings", {})
+    for guid, slug in ZEN_EXTENSIONS.items():
+        policies["ExtensionSettings"][guid] = {
+            "install_url": f"https://addons.mozilla.org/en-US/firefox/downloads/latest/{slug}/latest.xpi",
+            "installation_mode": "normal_installed",
+        }
+    policies_content = json.dumps(existing, indent=2)
+
+    pointer_content = (
+        'pref("general.config.filename", "zen.cfg");\n'
+        'pref("general.config.obscure_value", 0);\n'
+    )
+
+    cfg_lines = ["// autoconfig — first line is intentionally skipped by Firefox's reader"]
+    for name, value in ZEN_LOCKED_PREFS.items():
+        cfg_lines.append(f"lockPref({json.dumps(name)}, {json.dumps(value)});")
+    cfg_content = "\n".join(cfg_lines) + "\n"
+
+    targets = {
+        policies_path: policies_content,
+        ZEN_INSTALL_DIR / "defaults" / "pref" / "zen-local-settings.js": pointer_content,
+        ZEN_INSTALL_DIR / "zen.cfg": cfg_content,
+    }
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_dir = Path(tmp_dir)
+        src_paths = {}
+        for i, (dest, content) in enumerate(targets.items()):
+            src_path = tmp_dir / f"file{i}"
+            src_path.write_text(content)
+            src_paths[dest] = src_path
+ 
+        install_script = "\n".join(
+            f"install -D -m644 {shlex.quote(str(src))} {shlex.quote(str(dest))}"
+            for dest, src in src_paths.items()
+        )
+        script_path = tmp_dir / "install.sh"
+        script_path.write_text(install_script + "\n")
+ 
+        run(["bash", str(script_path)], sudo=True, check=False)
+
+    print(f"    configured zen-browser policies + locked prefs at {ZEN_INSTALL_DIR}")
+
+
 # ---------------------------------------------------------------------------
 # Packages
 # ---------------------------------------------------------------------------
@@ -97,7 +183,7 @@ DE_PACKAGES = [
     Package("ktexteditor"),         # Text editor
     Package("mission-center"),      # Task manager but for linux
     Package("ark"),                 # Archive viewer
-    Package("zen-browser-bin"),     # Web browser
+    Package("zen-browser-bin", post_install=_configure_zen_browser), # Web browser
 ]
 
 TERMINAL_PACKAGES = [
