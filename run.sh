@@ -17,9 +17,7 @@ set -euo pipefail
 STAGE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STAGES=(
   "1_hardware.py"
-  # Add more stages here later, e.g.:
-  # "02-desktop-environment.py"
-  # "03-applications.py"
+  "2_wm_de.py"
 )
 
 # ---------------------------------------------------------------------------
