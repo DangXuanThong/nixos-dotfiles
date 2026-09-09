@@ -1,3 +1,5 @@
+import getpass
+import grp
 import os
 import shutil
 import subprocess
@@ -27,6 +29,24 @@ def run(
         text=True,
         capture_output=capture,
     )
+
+
+def add_user_to_group(group: str) -> None:
+    """Add the current user to `group` if not already a member. Shared
+    across stages that need unprivileged access to a daemon's socket or
+    device node (docker, libvirt, brightnessctl's video group, ...).
+    Takes effect on next login, not immediately."""
+    user = getpass.getuser()
+    try:
+        members = grp.getgrnam(group).gr_mem
+    except KeyError:
+        print(f"    group '{group}' does not exist, skipping")
+        return
+
+    if user in members: return
+
+    print(f"    adding {user} to the '{group}' group (takes effect next login)")
+    run(["usermod", "-aG", group, user], sudo=True, check=False)
 
 
 _user_session_ok: Optional[bool] = None

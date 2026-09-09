@@ -4,8 +4,6 @@
 """
 
 
-import getpass
-import grp
 import json
 from pathlib import Path
 import shlex
@@ -14,7 +12,7 @@ import tempfile
 import time
 from typing import List
 
-from utils.command_runner import install_config_and_enable, run
+from utils.command_runner import add_user_to_group, install_config_and_enable, run
 from utils.package import Package, Service
 from utils.screen import draw_bar, restore_screen, setup_screen
 from utils.shutdown import register_cleanup
@@ -30,21 +28,7 @@ def _configure_fish() -> None:
 
 
 def _configure_brightnessctl() -> None:
-    """Add the current user to `video` if not already a member. Needed for
-    brightnessctl's udev rule (grants brightness control to the `video`
-    group) to actually take effect — installing the package alone only
-    gets you the udev rule, not membership. Takes effect on next login."""
-    user = getpass.getuser()
-    try:
-        members = grp.getgrnam("video").gr_mem
-    except KeyError:
-        print(f"    group video does not exist, skipping")
-        return
-
-    if user in members: return
-
-    print(f"    adding {user} to the video group (takes effect next login)")
-    run(["usermod", "-aG", "video", user], sudo=True, check=False)
+    add_user_to_group("video")
 
 
 def _remind_kwallet_pam() -> None:
