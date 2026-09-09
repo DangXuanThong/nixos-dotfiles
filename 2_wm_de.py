@@ -164,7 +164,7 @@ DE_PACKAGES = [
     Package("hyprland", config_dir="config/hypr"),  # Wayland compositor
     Package("hyprpolkitagent", services=[Service("hyprpolkitagent.service", is_user_service=True)]), # Polkit auth agent
     Package("hypridle", services=[Service("hypridle.service", is_user_service=True)]), # Idle management (lock/DPMS)
-    Package("hyprpaper"),           # Wallpaper daemon
+    Package("hyprpaper", services=[Service("hyprpaper.service", is_user_service=True)]), # Wallpaper daemon
     Package("hyprlauncher"),        # App launcher
     Package("hyprlock"),            # Screen locker
     Package("hyprshot-rs"),         # Screenshot tool
