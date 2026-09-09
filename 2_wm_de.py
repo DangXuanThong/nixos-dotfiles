@@ -20,24 +20,27 @@ from utils.snapper import run_with_snapper_wrapped
 # ---------------------------------------------------------------------------
 # post_install helpers
 # ---------------------------------------------------------------------------
-def _add_user_to_group(group: str) -> None:
-    """Add the current user to `group` if not already a member. Needed for
+def _configure_fish() -> None:
+    """Change the default shell to `fish`"""
+    run(["chsh", "-s", "/usr/bin/fish"], check=False)
+
+
+def _configure_brightnessctl() -> None:
+    """Add the current user to `video` if not already a member. Needed for
     brightnessctl's udev rule (grants brightness control to the `video`
     group) to actually take effect — installing the package alone only
     gets you the udev rule, not membership. Takes effect on next login."""
     user = getpass.getuser()
     try:
-        members = grp.getgrnam(group).gr_mem
+        members = grp.getgrnam("video").gr_mem
     except KeyError:
-        print(f"    group '{group}' does not exist, skipping")
+        print(f"    group video does not exist, skipping")
         return
 
-    if user in members:
-        print(f"    {user} is already in the '{group}' group")
-        return
+    if user in members: return
 
-    print(f"    adding {user} to the '{group}' group (takes effect next login)")
-    run(["usermod", "-aG", group, user], sudo=True, check=False)
+    print(f"    adding {user} to the video group (takes effect next login)")
+    run(["usermod", "-aG", "video", user], sudo=True, check=False)
 
 
 def _remind_kwallet_pam() -> None:
@@ -73,8 +76,8 @@ DE_PACKAGES = [
 
     # Hypr* family
     Package("hyprland", config_dir="config/hypr"),  # Wayland compositor
-    Package("hyprpolkitagent", services=[Service("hyprpolkitagent.service", is_user_service=True)]),  # Polkit auth agent
-    Package("hypridle", services=[Service("hypridle.service", is_user_service=True)]),  # Idle management (lock/DPMS)
+    Package("hyprpolkitagent", services=[Service("hyprpolkitagent.service", is_user_service=True)]), # Polkit auth agent
+    Package("hypridle", services=[Service("hypridle.service", is_user_service=True)]), # Idle management (lock/DPMS)
     Package("hyprpaper"),           # Wallpaper daemon
     Package("hyprlauncher"),        # App launcher
     Package("hyprlock"),            # Screen locker
@@ -98,24 +101,20 @@ DE_PACKAGES = [
 ]
 
 TERMINAL_PACKAGES = [
-    Package(
-        "fish",
-        config_dir="config/fish",
-        post_install=lambda: run(["chsh", "-s", "/usr/bin/fish"], check=False), # type: ignore
-    ),
+    Package("fish", config_dir="config/fish", post_install=_configure_fish),
     Package("kitty"),               # Terminal emulator
     Package("fastfetch-git", config_dir="config/fastfetch"),
     Package("eza"),                 # Alternative to `ls`
     Package("bat"),                 # Better `cat` (content at file)
     Package("jq"),                  # CLI json processor
     Package("libnotify"),           # Provide `notify-send`
-    Package("brightnessctl", post_install=lambda: _add_user_to_group("video")),  # Control brightness
+    Package("brightnessctl", post_install=_configure_brightnessctl),  # Control brightness
     Package("wl-clipboard"),        # Clipboard
 ]
 
 FONT_PACKAGES = [
     Package("inter-font"),           # UI font
-    Package("ttf-jetbrains-mono-nerd"),  # Monospace/terminal font with icon glyphs
+    Package("ttf-jetbrains-mono-nerd"), # Monospace/terminal font with icon glyphs
     Package("noto-fonts-cjk"),       # Chinese/Japanese/Korean glyph coverage
     Package("noto-fonts-emoji"),     # Emoji glyph coverage
     Package("ttf-ms-fonts"),         # Metric-compatible with common MS fonts (doc/web compatibility)
