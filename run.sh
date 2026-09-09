@@ -18,6 +18,7 @@ STAGE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STAGES=(
   "1_hardware.py"
   "2_wm_de.py"
+  "3_virtualization.py"
 )
 
 # ---------------------------------------------------------------------------
