@@ -21,6 +21,7 @@ STAGES=(
   "3_virtualization.py"
   "4_dev_tools.py"
   "5_gaming.py"
+  "6_user_packages.py"
 )
 
 # ---------------------------------------------------------------------------
