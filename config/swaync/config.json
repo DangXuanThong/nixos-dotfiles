@@ -1,0 +1,8 @@
+{
+  "$schema": "/etc/xdg/swaync/configSchema.json",
+
+  "positionX": "left",
+  "positionY": "top",
+  "notification-icon-size": 64,
+  "layer-shell": true
+}

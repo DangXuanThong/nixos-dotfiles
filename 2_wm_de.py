@@ -155,7 +155,11 @@ DE_PACKAGES = [
     Package("xdg-desktop-portal-hyprland"),
 
     Package("quickshell", config_dir="config/quickshell"),  # Custom status bar (QtQuick-based)
-    Package("swaync", services=[Service("swaync.service", is_user_service=True)]), # Notification daemon
+    Package(
+        "swaync",
+        config_dir="config/swaync",
+        services=[Service("swaync.service", is_user_service=True)]
+    ), # Notification daemon
     Package("dconf"),               # Config for GNOME apps
     Package("dolphin"),             # KDE file manager
     Package("gvfs"),                # Provides trash, smb, mtp...
