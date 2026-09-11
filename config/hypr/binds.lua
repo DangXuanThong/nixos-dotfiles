@@ -2,7 +2,7 @@
 
 -- Set programs that you use
 local terminal = "kitty"
-local fileManager = "nautilus"
+local fileManager = "dolphin"
 local menu = "hyprlauncher"
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
