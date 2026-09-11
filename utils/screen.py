@@ -1,7 +1,7 @@
 import shutil
 import sys
 
-from ansi import Ansi
+from .ansi import Ansi
 
 
 # ---------------------------------------------------------------------------

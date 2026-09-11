@@ -7,7 +7,7 @@ from pathlib import Path
 from subprocess import CompletedProcess
 from typing import Optional, Sequence
 
-from utils.package import Package
+from .package import Package
 
 
 # utils/command_runner.py -> parent (utils/) -> parent (repo root)

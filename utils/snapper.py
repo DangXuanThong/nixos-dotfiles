@@ -1,7 +1,7 @@
 import sys
 from typing import Callable
 
-from command_runner import run
+from .command_runner import run
 
 
 DEFAULT_CONFIG = "root"
