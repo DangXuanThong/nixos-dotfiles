@@ -8,8 +8,8 @@
 # source /nix/store/85jcp4jrs1nmpj3i4yljpjv8vda2pr8g-hm-session-vars.fish/etc/profile.d/hm-session-vars.fish
 
 # Source handler functions
-source /home/penguin/.config/fish/functions/__notify_long_cmd.fish
-source /home/penguin/.config/fish/functions/__notify_long_cmd_preexec.fish
+source $XDG_CONFIG_HOME/fish/functions/__notify_long_cmd_preexec.fish
+source $XDG_CONFIG_HOME/fish/functions/__notify_long_cmd.fish
 
 if status is-login
     # Source /etc/profile on login. Copied from https://wiki.archlinux.org/title/Fish#Source_/etc/profile_on_login
@@ -24,7 +24,7 @@ if status is-login
     set -e __sourced_profile
 
     # put your other configs below
-    
+
 end
 
 if status is-interactive
@@ -52,7 +52,7 @@ if status is-interactive
 
     # Interactive shell initialisation
     if test "$TERM" = xterm-kitty
-        # Run fastfetch only when term is kitty (exclude vscode, ides, ...)
+        # Run fastfetch only when term is kitty (that means exclude vscode, ides, ...)
         fastfetch
     end
 

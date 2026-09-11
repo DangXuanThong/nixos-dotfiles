@@ -1,5 +1,5 @@
 # Raise notification after long-running command completes (post hook)
-# Written specifically for hyprland
+# Written specifically for hyprland. Requires: hyprland, jq, libnotify
 function __notify_long_cmd --on-event="fish_postexec"
     function __format_duration
         set -l total_ms $argv[1]
