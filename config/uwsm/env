@@ -1,0 +1,9 @@
+# Cursor env variables
+export HYPRCURSOR_THEME=MacTahoeCursor
+export HYPRCURSOR_SIZE=36
+export XCURSOR_THEME=MacTahoeCursor
+export XCURSOR_SIZE=36
+
+# Set DOCKER_HOST for rootless docker
+export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
+export JAVA_HOME=/usr/lib/jvm/default

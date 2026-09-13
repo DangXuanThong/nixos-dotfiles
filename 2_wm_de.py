@@ -141,7 +141,7 @@ WM_PACKAGES = [
 ]
 
 DE_PACKAGES = [
-    Package("uwsm"),                # For using hyprland with uwsm
+    Package("uwsm", config_dir="config/uwsm"), # For using hyprland with uwsm
     Package("libnewt"),             # For using hyprland with uwsm
 
     # Hypr* family

@@ -81,5 +81,3 @@ abbr --add -- untar 'tar -zxvf'
 
 # Aliases
 alias eza 'eza --icons=always --color=always --group-directories-first --header'
-
-set -gx DOCKER_HOST unix://$XDG_RUNTIME_DIR/docker.sock
