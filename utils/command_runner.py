@@ -94,13 +94,13 @@ def create_config_symlink(config_dir: str, overwrite: bool = False) -> None:
     try:
         # check for both existance and is symlink, because a dangling symlink will report as not exist
         if dest.exists() or dest.is_symlink():
-            print(f"    config directory already exists at: {dest.resolve()}")
+            print(f"    config directory already exists at: {dest.absolute()}")
             if not overwrite: dest.rename(dest.with_name(dest.name + ".bak"))
             elif dest.is_symlink(): dest.unlink()
             else: shutil.rmtree(dest)
         dest.symlink_to(src.resolve(), target_is_directory=True)
     except Exception:
-        print(f"    error symlinking config directory to {dest.resolve()}")
+        print(f"    error symlinking config directory to {dest.absolute()}")
 
 
 def enable_services(pkg: Package) -> None:
